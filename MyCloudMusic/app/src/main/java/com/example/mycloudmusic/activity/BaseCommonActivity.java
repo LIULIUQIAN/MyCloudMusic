@@ -5,7 +5,17 @@ import android.os.Build;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.example.mycloudmusic.util.PreferenceUtil;
+
 public class BaseCommonActivity extends BaseActivity {
+
+    protected PreferenceUtil sp;
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+        sp = PreferenceUtil.getInstance(getMainActivity());
+    }
 
     /*
      * 全屏

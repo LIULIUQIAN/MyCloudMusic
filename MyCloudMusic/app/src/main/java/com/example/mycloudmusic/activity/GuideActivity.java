@@ -41,9 +41,11 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.bt_login_or_register:
                 startActivityAfterFinishThis(LoginOrRegisterActivity.class);
+                sp.setShowGuide(false);
                 break;
             case R.id.bt_enter:
                 startActivityAfterFinishThis(MainActivity.class);
+                sp.setShowGuide(false);
                 break;
         }
     }
