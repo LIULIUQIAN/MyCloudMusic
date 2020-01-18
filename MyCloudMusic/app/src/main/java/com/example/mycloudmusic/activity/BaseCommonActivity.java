@@ -9,9 +9,19 @@ import android.view.WindowManager;
 
 import com.example.mycloudmusic.util.PreferenceUtil;
 
+import butterknife.ButterKnife;
+
 public class BaseCommonActivity extends BaseActivity {
 
     protected PreferenceUtil sp;
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+
+        /*初始化ButterKnife*/
+        ButterKnife.bind(this);
+    }
 
     @Override
     protected void initDatum() {

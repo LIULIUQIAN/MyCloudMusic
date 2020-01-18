@@ -8,11 +8,10 @@ import android.widget.Button;
 
 import com.example.mycloudmusic.R;
 
-public class LoginOrRegisterActivity extends BaseCommonActivity implements View.OnClickListener {
+import butterknife.OnClick;
 
+public class LoginOrRegisterActivity extends BaseCommonActivity {
 
-    private Button bt_login;
-    private Button bt_register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,32 +22,18 @@ public class LoginOrRegisterActivity extends BaseCommonActivity implements View.
     @Override
     protected void initViews() {
         super.initViews();
-        bt_login = findViewById(R.id.bt_login);
-        bt_register = findViewById(R.id.bt_register);
 
         lightStatusBar();
     }
 
-    @Override
-    protected void initListeners() {
-        super.initListeners();
 
-        bt_login.setOnClickListener(this);
-        bt_register.setOnClickListener(this);
+    @OnClick(R.id.bt_login)
+    public void onLoginClick(){
+        startActivity(LoginActivity.class);
     }
 
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()){
-            case R.id.bt_login:
-                startActivity(LoginActivity.class);
-                break;
-            case R.id.bt_register:
-                startActivity(RegisterActivity.class);
-                break;
-
-        }
-
+    @OnClick(R.id.bt_register)
+    public void onRegisterClick(){
+        startActivity(RegisterActivity.class);
     }
 }
