@@ -3,6 +3,7 @@ package com.example.mycloudmusic.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +29,8 @@ public class SplashActivity extends AppCompatActivity {
         }
     };
     private void next() {
-        System.out.println("aaaaaaaaaaaaa");
+
+        startActivityAfterFinishThis(GuideActivity.class);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,5 +66,21 @@ public class SplashActivity extends AppCompatActivity {
 
         }
     }
-
+    /**
+     * 启动界面
+     * @param clazz
+     */
+    protected void startActivity(Class<?> clazz){
+        Intent intent = new Intent(this,GuideActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    /**
+     * 启动界面并关闭当前界面
+     * @param clazz
+     */
+    protected void startActivityAfterFinishThis(Class<?> clazz){
+        startActivity(clazz);
+        finish();
+    }
 }

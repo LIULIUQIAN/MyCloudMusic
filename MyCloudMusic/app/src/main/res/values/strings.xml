@@ -280,4 +280,5 @@
     <string name="error_message_login">登录聊天服务器失败，请稍后再试！</string>
     <string name="hint_enter_message">请输入你要发送消息.</string>
     <string name="error_send_message">发送失败，请稍后再试！</string>
+    <string name="experience_immediately">立即体验</string>
 </resources>
