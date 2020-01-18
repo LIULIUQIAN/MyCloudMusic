@@ -46,7 +46,7 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
     @Override
     protected void initDatum() {
         super.initDatum();
-        adapter = new GuideAdapter(getSupportFragmentManager());
+        adapter = new GuideAdapter(getMainActivity(),getSupportFragmentManager());
         vp.setAdapter(adapter);
 
         indicator.setViewPager(vp);
