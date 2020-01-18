@@ -10,6 +10,7 @@ import com.example.mycloudmusic.R;
 
 public class LoginOrRegisterActivity extends BaseCommonActivity implements View.OnClickListener {
 
+
     private Button bt_login;
     private Button bt_register;
 
@@ -24,6 +25,8 @@ public class LoginOrRegisterActivity extends BaseCommonActivity implements View.
         super.initViews();
         bt_login = findViewById(R.id.bt_login);
         bt_register = findViewById(R.id.bt_register);
+
+        lightStatusBar();
     }
 
     @Override
