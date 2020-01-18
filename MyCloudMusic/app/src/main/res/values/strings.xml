@@ -1,3 +1,283 @@
 <resources>
-    <string name="app_name">MyCloudMusic</string>
+    <string name="app_name">我的云音乐</string>
+
+    <!--activity标题-->
+    <string name="activity_forget_password">找回密码</string>
+    <string name="activity_sheet_detail">歌单详情</string>
+    <string name="activity_comment">评论</string>
+    <string name="activity_user_detail">用户详情</string>
+    <string name="activity_simple_player">简单播放器</string>
+    <string name="activity_share_lyric_image">歌词图片</string>
+    <string name="activity_select_lyric">选择歌词</string>
+    <string name="activity_topic_detail">话题详情</string>
+    <string name="activity_select_topic">选择话题</string>
+    <string name="activity_select_friend">选择好友</string>
+    <string name="activity_download">下载管理</string>
+    <string name="activity_publish_feed">发动态</string>
+
+    <!--版本文本-->
+    <string name="copyright">Copyright © 2019 Ixuea. All Rights Reserved</string>
+
+    <!--登录/注册-->
+    <string name="login_or_register">登录/注册</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="other_login">其他登录方式</string>
+    <string name="enter_username">请输入手机号/邮箱</string>
+    <string name="enter_password">请输入密码(6~15位)</string>
+    <string name="forget_password">忘记密码?</string>
+    <string name="login_success">登录成功!</string>
+    <string name="error_username_format">用户名格式不正确!</string>
+    <string name="error_password_format">密码格式不正确!</string>
+    <string name="enter_nickname">请输入昵称(2~10位)</string>
+    <string name="enter_phone">请输入手机号</string>
+    <string name="enter_email">请输入邮箱</string>
+    <string name="enter_confirm_password">请输入确认密码</string>
+    <string name="error_nickname_format">昵称格式不正确!</string>
+    <string name="error_phone_format">手机号格式不正确!</string>
+    <string name="error_email_format">邮箱格式不正确!</string>
+    <string name="error_confirm_password_format">确认密码格式不正确!</string>
+    <string name="error_confirm_password">两次密码不正确!</string>
+    <string name="register2">补充资料</string>
+    <string name="complete_register">完成注册</string>
+    <string name="send_code">发送验证码</string>
+    <string name="enter_code">请输入验证码</string>
+    <string name="error_code_format">验证码格式不正确!</string>
+    <string name="count_second">%1$ds</string>
+    <string name="hint_agreement">注册就代表同意《用户协议》</string>
+    <string name="hint_logout">您的帐号在另一地点登录，您已被迫下线！</string>
+
+    <!--网络相关-->
+    <string name="error_network_unknown_host">找不到服务器,请稍后再试!</string>
+    <string name="error_network_connect">连接失败,请稍后再试!</string>
+    <string name="error_network_timeout">连接超时,请稍后再试!</string>
+    <string name="error_network_not_auth">登录信息过期,请重新登录!</string>
+    <string name="error_network_not_permission">你没有权限访问!</string>
+    <string name="error_network_not_found">你访问的内容不存在!</string>
+    <string name="error_network_server">服务器错误,请稍后再试!</string>
+    <string name="error_network_unknown">未知错误,请稍后再试!</string>
+    <string name="loading">拼命加载中.</string>
+
+    <!--侧滑相关-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="my_code">我的二维码</string>
+    <string name="scan">扫一扫</string>
+    <string name="my_message">我的消息</string>
+    <string name="my_friend">我的好友</string>
+    <string name="my_fans">我的粉丝</string>
+    <string name="shop">商城</string>
+    <string name="my_order">我的订单</string>
+    <string name="my_new_order">我的订单（接口签名和加密）</string>
+    <string name="online_music_free">在线听歌免流量</string>
+    <string name="nearby">附近的人</string>
+    <string name="theme">个性换肤</string>
+    <string name="recognition_music">听歌识曲</string>
+    <string name="time_stop">定时停止播放</string>
+    <string name="night_model">夜间模式</string>
+    <string name="setting">设置</string>
+    <string name="logout">退出</string>
+
+    <!--主界面相关-->
+    <string name="me">我的</string>
+    <string name="discovery">发现</string>
+    <string name="friend">朋友</string>
+    <string name="video">视频</string>
+    <string name="person_fm">私人FM</string>
+    <string name="rank">排行榜</string>
+    <string name="day_recommend">每日推荐</string>
+
+    <!--歌单详情-->
+    <string name="sheet">歌单</string>
+    <string name="play_all">播放全部</string>
+    <string name="music_count">(共%1$d首)</string>
+    <string name="download">下载</string>
+    <string name="select">多选</string>
+    <string name="cancel_collection">取消(%1$d)</string>
+    <string name="collection">收藏(%1$d)</string>
+    <string name="cancel_success">取消成功</string>
+    <string name="collection_success">收藏成功</string>
+    <string name="search">搜索</string>
+    <string name="sort">排序</string>
+    <string name="report">举报</string>
+
+    <!--简单播放界面-->
+    <string name="not_play_music">没有可播放的音乐!</string>
+    <string name="collection_all">收藏全部</string>
+
+    <!--音乐更多对话框-->
+    <string name="next_play">下一首播放</string>
+    <string name="collect_to_sheet">收藏到歌单</string>
+    <string name="comment_count">评论(%1$d)</string>
+    <string name="share">分享</string>
+    <string name="singer_name">歌手：%1$s</string>
+    <string name="delete_in_sheet">从歌单中删除</string>
+    <string name="lyric_empty">当前音乐没有歌词!</string>
+    <string name="lock_lyric_title">桌面歌词已经锁定！</string>
+    <string name="lock_lyric_content">点击解锁</string>
+    <string name="permission_hint">我们需要获取权限，请同意，否则无法使用！</string>
+    <string name="allow">授权</string>
+    <string name="deny">拒绝</string>
+    <string name="save_image">保存图片</string>
+
+    <!--歌词-->
+    <string name="share_lyric">分享歌词</string>
+    <string name="lyric_image">歌词图片</string>
+    <string name="lyric_video">歌词视频</string>
+    <string name="hint_select_lyric">请选择歌词！</string>
+    <string name="share_song_name">—— %1$s · %2$s</string>
+    <string name="error_share_failed">分享失败,请稍候再试!</string>
+
+    <!--评论-->
+    <string name="hint_comment">人生苦短，我们只做好课！</string>
+    <string name="send">发送</string>
+    <string name="enter_comment">请输入评论内容!</string>
+    <string name="comment_create_success">评论发布成功!</string>
+    <string name="reply_comment">\@%1$s: %2$s</string>
+    <string name="reply_hint">回复%1$s: </string>
+    <string name="copy_success">拷贝成功!</string>
+
+    <!--话题-->
+    <string name="join_count">%1$d人参与</string>
+
+    <!--好友-->
+    <string name="hint_search_user">昵称，拼音，首字母</string>
+    <string name="song_count">%1$d首</string>
+    <string name="hint_enter_sheet_name">请输入歌单名称</string>
+    <string name="create_sheet">创建歌单</string>
+    <string name="confirm">确认</string>
+    <string name="success_create_sheet">歌单创建成功!</string>
+    <string name="success_collect_song_to_sheet">歌曲收藏到歌单成功!</string>
+    <string name="success_delete_song_in_sheet">从歌单中删除音乐成功!</string>
+    <string name="local_music">本地音乐</string>
+    <string name="download_manager">下载管理</string>
+    <string name="play_history">最近播放</string>
+    <string name="my_radio">我的电台</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="sati">Sati 空间</string>
+
+    <!--本地音乐-->
+    <string name="scan_local_music">扫描本地音乐</string>
+    <string name="batch_edit">批量编辑</string>
+    <string name="start_scan">开始扫描</string>
+    <string name="found_music_count">找到%1$d首音乐</string>
+    <string name="to_my_music">回到我的本地音乐</string>
+    <string name="stop_scan">停止扫描</string>
+    <string name="select_all">全选</string>
+    <string name="cancel_select_all">取消全选</string>
+    <string name="delete">删除</string>
+    <string name="cancel_edit">取消编辑</string>
+    <string name="tips">提示</string>
+    <string name="cancel">取消</string>
+    <string name="confirm_message">是否确认?</string>
+
+    <!--下载-->
+    <string name="click_download">已暂停，点击继续下载</string>
+    <string name="download_failed">下载失败，点击重试</string>
+    <string name="download_progress">%1$s/%2$s</string>
+    <string name="wait_download">等待下载</string>
+    <string name="pause_all">全部暂停</string>
+    <string name="download_all">全部开始</string>
+    <string name="delete_all">全部删除</string>
+    <string name="error_not_download">没有下载任务!</string>
+
+    <!--用户详细-->
+    <string name="music">音乐</string>
+    <string name="feed">动态</string>
+    <string name="about_ta">关于TA</string>
+    <string name="user_friend_info">关注 %1$d | 粉丝 %2$d</string>
+    <string name="follow">关注用户</string>
+    <string name="cancel_follow">取消关注</string>
+    <string name="send_message">发送消息</string>
+    <string name="person_info">个人信息</string>
+    <string name="nickname_value">昵称：%1$s</string>
+    <string name="gender_value">性别：%1$s</string>
+    <string name="birthday_value">生日：%1$s</string>
+    <string name="area_value">地区：%1$s</string>
+    <string name="area_value2">%1$s-%2$s-%3$s</string>
+    <string name="more_info">更多信息</string>
+    <string name="description_value">个人描述：%1$s</string>
+
+    <!--视频-->
+    <string name="video_info">%1$s, by %2$s</string>
+    <string name="video_created_at">发布：%1$s</string>
+    <string name="video_clicks_count">播放：%1$d</string>
+    <string name="play_failed_time_out">播放超时，请稍候再试！</string>
+    <string name="play_failed">播放失败，请稍候再试！</string>
+    <string name="play_completion">播放完毕，点击重新播放！</string>
+    <string name="publish">发布</string>
+    <string name="hint_feed">请输入你想说的.</string>
+    <string name="current_position">当前位置：%1$s-%2$s</string>
+    <string name="hint_current_position">当前位置：</string>
+    <string name="hint_count">0/140</string>
+    <string name="error_content_length">内容不能超过140字符.</string>
+    <string name="feed_count">%1$d/140</string>
+    <string name="error_upload_image">上传图片出错，请稍后再试!</string>
+
+    <!--我的资料-->
+    <string name="edit">编辑</string>
+    <string name="my_profile">我的资料</string>
+    <string name="save">保存</string>
+    <string name="avatar">头像</string>
+    <string name="nickname">昵称</string>
+    <string name="gender">性别</string>
+    <string name="birthday">生日</string>
+    <string name="area">地区</string>
+    <string name="description">个人介绍</string>
+    <string name="hint_description">请向大家介绍下自己吧！</string>
+    <string name="phone">手机号</string>
+    <string name="email">邮箱</string>
+    <string name="third_account">第三方账号</string>
+    <string name="qq">QQ</string>
+    <string name="bind">绑定</string>
+    <string name="unbind">解绑</string>
+    <string name="weibo">微博</string>
+    <string name="select_gender">请选择性别</string>
+    <string name="success_bind">绑定成功!</string>
+    <string name="confirm_unbind">你确定解绑吗？</string>
+    <string name="success_unbind">解绑成功!</string>
+    <string name="add">添加</string>
+
+    <!--二维码-->
+    <string name="hint_scan_my_code">使用我的云音乐扫描即可关注我</string>
+    <string name="hint_scan_code">将二维码放入框内即可扫描</string>
+    <string name="error_not_support_qrcode_format">不支持该格式!</string>
+
+    <!--商品/订单-->
+    <string name="price">￥%1$.2f</string>
+    <string name="activity_shop_detail">商品详情</string>
+    <string name="go_buy">立即购买</string>
+    <string name="go_study">立即学习</string>
+    <string name="success_buy">已经购买了!</string>
+    <string name="activity_order_detail">订单详情</string>
+    <string name="order_status_value">订单状态：%1$s</string>
+    <string name="order_number_value">订单编号：%1$s</string>
+    <string name="order_created_value">下单日期：%1$s</string>
+    <string name="order_source_value">订单来源：%1$s</string>
+    <string name="origin_source_value">支付平台：%1$s</string>
+    <string name="order_channel_value">支付渠道：%1$s</string>
+    <string name="alipay">支付宝</string>
+    <string name="wechat">微信</string>
+    <string name="go_pay">立即支付</string>
+    <string name="error_pay_channel">支付渠道错误，请稍后再试!</string>
+    <string name="hint_pay_wait">支付确认中，请稍后！</string>
+    <string name="error_pay_failed">支付失败，请稍后再试！</string>
+    <string name="network">网络</string>
+    <string name="play_mobile_network">使用移动网络播放</string>
+    <string name="play_mobile_network_summary">这是更多描述</string>
+    <string name="about_music">关于我的云音乐（可视化布局）</string>
+    <string name="about_code_music">关于我的云音乐（代码布局）</string>
+    <string name="hint_network_play_disable">已经禁用移动网络播放，可以设置界面打开！</string>
+    <string name="current_version">当前版本</string>
+    <string name="version_value">V%1$s.%2$d</string>
+    <string name="my_cloud_music_guide">我的云音乐新手指南</string>
+    <string name="about_ixuea">关于爱学啊</string>
+    <string name="error_response_sign">接口签名错误，请稍后再试！</string>
+    <string name="error_response_decrypt">接口解密错误，请稍后再试！</string>
+
+    <!--聊天-->
+    <string name="error_message_register">注册聊天服务器失败，请稍后再试！</string>
+    <string name="error_message_login">登录聊天服务器失败，请稍后再试！</string>
+    <string name="hint_enter_message">请输入你要发送消息.</string>
+    <string name="error_send_message">发送失败，请稍后再试！</string>
 </resources>
