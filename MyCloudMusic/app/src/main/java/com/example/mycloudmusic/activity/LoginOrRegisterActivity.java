@@ -39,10 +39,10 @@ public class LoginOrRegisterActivity extends BaseCommonActivity implements View.
 
         switch (v.getId()){
             case R.id.bt_login:
-                System.out.println("================1111111");
+                startActivity(LoginActivity.class);
                 break;
             case R.id.bt_register:
-                System.out.println("================222222");
+                startActivity(RegisterActivity.class);
                 break;
 
         }
