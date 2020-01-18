@@ -1,12 +1,10 @@
 package com.example.mycloudmusic.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 
+import com.example.mycloudmusic.MainActivity;
 import com.example.mycloudmusic.R;
 
 public class GuideActivity extends BaseCommonActivity implements View.OnClickListener {
@@ -42,10 +40,10 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_login_or_register:
-                System.out.println("bt_login_or_register");
+                startActivityAfterFinishThis(LoginOrRegisterActivity.class);
                 break;
             case R.id.bt_enter:
-                System.out.println("bt_enter");
+                startActivityAfterFinishThis(MainActivity.class);
                 break;
         }
     }

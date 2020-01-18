@@ -37,9 +37,8 @@ public class BaseCommonActivity extends BaseActivity {
      * @param clazz
      */
     protected void startActivity(Class<?> clazz){
-        Intent intent = new Intent(getMainActivity(),GuideActivity.class);
+        Intent intent = new Intent(getMainActivity(),clazz);
         startActivity(intent);
-        finish();
     }
     /**
      * 启动界面并关闭当前界面
