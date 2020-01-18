@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.example.mycloudmusic.R;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseCommonActivity {
 
     private static final int MESSAGE_NEXT = 100;
     private static final int DEFAULT_DELAY_TIME = 3000;
@@ -66,21 +66,5 @@ public class SplashActivity extends AppCompatActivity {
 
         }
     }
-    /**
-     * 启动界面
-     * @param clazz
-     */
-    protected void startActivity(Class<?> clazz){
-        Intent intent = new Intent(this,GuideActivity.class);
-        startActivity(intent);
-        finish();
-    }
-    /**
-     * 启动界面并关闭当前界面
-     * @param clazz
-     */
-    protected void startActivityAfterFinishThis(Class<?> clazz){
-        startActivity(clazz);
-        finish();
-    }
+
 }
