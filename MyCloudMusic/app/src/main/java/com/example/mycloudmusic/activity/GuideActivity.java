@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import com.example.mycloudmusic.MainActivity;
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.fragment.GuideFragment;
 
 public class GuideActivity extends BaseCommonActivity implements View.OnClickListener {
 
@@ -27,6 +28,11 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
 
         bt_login_or_register = findViewById(R.id.bt_login_or_register);
         bt_enter = findViewById(R.id.bt_enter);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_fm, GuideFragment.newInstance(R.drawable.guide1))
+                .commit();
     }
 
     @Override
@@ -34,6 +40,7 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
         super.initListeners();
         bt_login_or_register.setOnClickListener(this);
         bt_enter.setOnClickListener(this);
+
     }
 
     @Override

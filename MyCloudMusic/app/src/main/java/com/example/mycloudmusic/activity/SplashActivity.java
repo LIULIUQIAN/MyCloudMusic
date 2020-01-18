@@ -26,11 +26,12 @@ public class SplashActivity extends BaseCommonActivity {
     };
     private void next() {
 
-        if (sp.isShowGuide()){
-            startActivityAfterFinishThis(GuideActivity.class);
-        }else {
-            startActivityAfterFinishThis(LoginOrRegisterActivity.class);
-        }
+        startActivityAfterFinishThis(GuideActivity.class);
+//        if (sp.isShowGuide()){
+//            startActivityAfterFinishThis(GuideActivity.class);
+//        }else {
+//            startActivityAfterFinishThis(LoginOrRegisterActivity.class);
+//        }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
