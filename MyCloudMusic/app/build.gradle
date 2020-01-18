@@ -49,4 +49,13 @@ dependencies {
     //https://github.com/JakeWharton/butterknife
     implementation 'com.jakewharton:butterknife:10.2.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+
+    //apache common lang3工具包
+    //提供了StringUtils等这样的类
+    //http://commons.apache.org/proper/commons-lang/
+    implementation 'org.apache.commons:commons-lang3:3.9'
+
+    //toast工具类
+    //https://github.com/GrenderG/Toasty
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
 }
