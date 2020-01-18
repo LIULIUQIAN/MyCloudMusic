@@ -4,14 +4,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.mycloudmusic.MainActivity;
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.adapter.GuideAdapter;
 import com.example.mycloudmusic.fragment.GuideFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuideActivity extends BaseCommonActivity implements View.OnClickListener {
 
     private Button bt_login_or_register;
     private Button bt_enter;
+    private GuideAdapter adapter;
+    private ViewPager vp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +33,25 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
         super.initViews();
         //隐藏状态栏
         hideStatusBar();
-
+        vp = findViewById(R.id.vp);
         bt_login_or_register = findViewById(R.id.bt_login_or_register);
         bt_enter = findViewById(R.id.bt_enter);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_fm, GuideFragment.newInstance(R.drawable.guide1))
-                .commit();
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+        adapter = new GuideAdapter(getSupportFragmentManager());
+        vp.setAdapter(adapter);
+
+        List<Integer> datas = new ArrayList<>();
+        datas.add(R.drawable.guide1);
+        datas.add(R.drawable.guide2);
+        datas.add(R.drawable.guide3);
+        datas.add(R.drawable.guide4);
+        datas.add(R.drawable.guide5);
+        adapter.setDatum(datas);
     }
 
     @Override
