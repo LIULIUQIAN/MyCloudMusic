@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
@@ -38,8 +39,18 @@ public class LoginActivity extends BaseTitleActivity {
             return;
         }
 
+        if (!(StringUtil.isPhone(userName) || StringUtil.isEmail(userName))){
+            ToastUtil.errorShortToast(R.string.error_username_format);
+            return;
+        }
+
         if (StringUtils.isEmpty(password)){
             ToastUtil.errorShortToast(R.string.enter_password);
+            return;
+        }
+
+        if (!StringUtil.isPassword(password)){
+            ToastUtil.errorShortToast(R.string.error_password_format);
             return;
         }
 
