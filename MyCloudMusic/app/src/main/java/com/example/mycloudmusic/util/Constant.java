@@ -1,6 +1,10 @@
 package com.example.mycloudmusic.util;
 
+import com.example.mycloudmusic.BuildConfig;
+
 public class Constant {
+
+    public static final String ENDPOINT = BuildConfig.ENDPOINT;
 
     public static final String ID = "ID";
 
