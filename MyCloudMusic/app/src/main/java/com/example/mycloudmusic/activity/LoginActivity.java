@@ -113,15 +113,15 @@ public class LoginActivity extends BaseTitleActivity {
 //                });
 
 
-        Api.getInstance()
-                .sheets()
-                .subscribe(new ObserverAdapter<ListResponse<Sheet>>() {
-                    @Override
-                    public void onNext(ListResponse<Sheet> sheetListResponse) {
-                        super.onNext(sheetListResponse);
-                        System.out.println("======" + sheetListResponse.getData().size());
-                    }
-                });
+//        Api.getInstance()
+//                .sheets()
+//                .subscribe(new ObserverAdapter<ListResponse<Sheet>>() {
+//                    @Override
+//                    public void onNext(ListResponse<Sheet> sheetListResponse) {
+//                        super.onNext(sheetListResponse);
+//                        System.out.println("======" + sheetListResponse.getData().size());
+//                    }
+//                });
 
 //        Api.getInstance()
 //                .sheetDetail("1")
@@ -134,7 +134,7 @@ public class LoginActivity extends BaseTitleActivity {
 //                });
 
         Api.getInstance()
-                .sheetDetail("-11111")
+                .sheetDetail("1")
                 .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(),true) {
                     @Override
                     public void onSucceeded(DetailResponse<Sheet> data) {
