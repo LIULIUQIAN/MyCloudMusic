@@ -1,11 +1,25 @@
 package com.example.mycloudmusic.listener;
 
+import com.example.mycloudmusic.activity.BaseCommonActivity;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.util.HttpUtil;
+import com.example.mycloudmusic.util.LoadingUtil;
 
+import io.reactivex.disposables.Disposable;
 import retrofit2.Response;
 
 public abstract class HttpObserver<T> extends ObserverAdapter<T> {
+
+    private boolean isShowLoading;
+    private BaseCommonActivity activity;
+
+    public HttpObserver() {
+    }
+
+    public HttpObserver(BaseCommonActivity activity, boolean isShowLoading) {
+        this.isShowLoading = isShowLoading;
+        this.activity = activity;
+    }
 
     /*
      * 请求成功
@@ -20,13 +34,23 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
     }
 
     @Override
+    public void onSubscribe(Disposable d) {
+        super.onSubscribe(d);
+        if (isShowLoading) {
+            LoadingUtil.showLoading(activity);
+        }
+    }
+
+    @Override
     public void onNext(T t) {
         super.onNext(t);
 
-        if (isSucceeded(t)){
+        LoadingUtil.hideLoading();
+
+        if (isSucceeded(t)) {
             onSucceeded(t);
-        }else {
-            handlerRequest(t,null);
+        } else {
+            handlerRequest(t, null);
         }
 
     }
@@ -34,7 +58,9 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
     @Override
     public void onError(Throwable e) {
         super.onError(e);
-        handlerRequest(null,e);
+        handlerRequest(null, e);
+
+        LoadingUtil.hideLoading();
     }
 
     /*
@@ -49,8 +75,8 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
                 return true;
             }
 
-        }else if (t instanceof BaseResponse){
-            BaseResponse response = (BaseResponse)t;
+        } else if (t instanceof BaseResponse) {
+            BaseResponse response = (BaseResponse) t;
             return response.getStatus() == 0;
         }
 
@@ -58,16 +84,17 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
     }
 
     /*
-    * 处理错误网络请求
-    * */
-    private void handlerRequest(T data, Throwable error){
+     * 处理错误网络请求
+     * */
+    private void handlerRequest(T data, Throwable error) {
 
-        if (onFailed(data, error)){
+        if (onFailed(data, error)) {
             //返回true就表示外部手动处理错误
-        }else {
+        } else {
             HttpUtil.handlerRequest(data, error);
         }
 
     }
+
 
 }

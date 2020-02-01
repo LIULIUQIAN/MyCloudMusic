@@ -134,18 +134,14 @@ public class LoginActivity extends BaseTitleActivity {
 //                });
 
         Api.getInstance()
-                .sheetDetail("-1222222")
-                .subscribe(new HttpObserver<DetailResponse<Sheet>>() {
+                .sheetDetail("-11111")
+                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(),true) {
                     @Override
                     public void onSucceeded(DetailResponse<Sheet> data) {
                         System.out.println("请求成功====" + data.getData().getTitle());
                     }
 
-                    @Override
-                    public boolean onFailed(DetailResponse<Sheet> data, Throwable e) {
-                        System.out.println("请求失败====");
-                        return true;
-                    }
+
                 });
 
     }
