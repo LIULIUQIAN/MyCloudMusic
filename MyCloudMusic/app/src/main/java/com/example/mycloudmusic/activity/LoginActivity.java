@@ -8,6 +8,7 @@ import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
+import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.listener.ObserverAdapter;
 import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.ToastUtil;
@@ -111,29 +112,6 @@ public class LoginActivity extends BaseTitleActivity {
 //                    }
 //                });
 
-//        Api.getInstance()
-//                .sheetDetail("1")
-//                .subscribe(new Observer<DetailResponse>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(DetailResponse detailResponse) {
-//                        System.out.println("请求成功====" + detailResponse.getData().getTitle());
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
 
         Api.getInstance()
                 .sheets()
@@ -145,13 +123,28 @@ public class LoginActivity extends BaseTitleActivity {
                     }
                 });
 
+//        Api.getInstance()
+//                .sheetDetail("1")
+//                .subscribe(new ObserverAdapter<DetailResponse<Sheet>>() {
+//                    @Override
+//                    public void onNext(DetailResponse<Sheet> sheetDetailResponse) {
+//                        super.onNext(sheetDetailResponse);
+//                        System.out.println("请求成功====" + sheetDetailResponse.getData().getTitle());
+//                    }
+//                });
+
         Api.getInstance()
-                .sheetDetail("1")
-                .subscribe(new ObserverAdapter<DetailResponse<Sheet>>() {
+                .sheetDetail("-1222222")
+                .subscribe(new HttpObserver<DetailResponse<Sheet>>() {
                     @Override
-                    public void onNext(DetailResponse<Sheet> sheetDetailResponse) {
-                        super.onNext(sheetDetailResponse);
-                        System.out.println("请求成功====" + sheetDetailResponse.getData().getTitle());
+                    public void onSucceeded(DetailResponse<Sheet> data) {
+                        System.out.println("请求成功====" + data.getData().getTitle());
+                    }
+
+                    @Override
+                    public boolean onFailed(DetailResponse<Sheet> data, Throwable e) {
+                        System.out.println("请求失败====");
+                        return true;
                     }
                 });
 
