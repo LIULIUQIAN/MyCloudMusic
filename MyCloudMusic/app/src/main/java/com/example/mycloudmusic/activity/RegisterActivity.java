@@ -47,6 +47,11 @@ public class RegisterActivity extends BaseLoginActivity {
     Button bt_register;
 
 
+    /**
+     * 第三方登录完成后的用户信息
+     */
+    private User data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +62,7 @@ public class RegisterActivity extends BaseLoginActivity {
     protected void initDatum() {
         super.initDatum();
 
-        User data = (User) getIntent().getSerializableExtra(Constant.DATA);
+        data = (User) getIntent().getSerializableExtra(Constant.DATA);
         if (data != null && (!TextUtils.isEmpty(data.getQq_id()) || !TextUtils.isEmpty(data.getWeibo_id()))){
             setTitle(R.string.register2);
             et_nickname.setText(data.getNickname());
@@ -126,7 +131,7 @@ public class RegisterActivity extends BaseLoginActivity {
             return;
         }
 
-        User data = new User();
+        User data = getData();
         data.setNickname(nickname);
         data.setPhone(phone);
         data.setEmail(email);
@@ -144,5 +149,10 @@ public class RegisterActivity extends BaseLoginActivity {
                 });
     }
 
-
+    public User getData() {
+        if (data == null){
+            data = new User();
+        }
+        return data;
+    }
 }

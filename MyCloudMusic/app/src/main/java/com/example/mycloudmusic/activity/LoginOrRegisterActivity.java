@@ -7,10 +7,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.mycloudmusic.AppContext;
+import com.example.mycloudmusic.MainActivity;
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.api.Api;
+import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.event.LoginSuccessEvent;
+import com.example.mycloudmusic.domain.response.DetailResponse;
+import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.ToastUtil;
 import com.mob.commons.SHARESDK;
 
 import org.greenrobot.eventbus.EventBus;
@@ -85,9 +92,11 @@ public class LoginOrRegisterActivity extends BaseCommonActivity {
         data = new User();
         data.setNickname("qq模拟登录");
         data.setAvatar("http://a4.att.hudong.com/21/09/01200000026352136359091694357.jpg");
-        data.setQq_id("qq-test-id");
-        toRegister();
+        data.setQq_id("qq-test-id2");
+
+        continueLogin();
     }
+
 
     @OnClick(R.id.iv_weibo)
     public void onWeiboClick() {
@@ -140,6 +149,40 @@ public class LoginOrRegisterActivity extends BaseCommonActivity {
         });
 
         platform.showUser(null);
+    }
+
+    /*
+     * 第三方登录过后验证是登录还是补充资料
+     * */
+    private void continueLogin() {
+
+        Api.getInstance()
+                .login(data)
+                .subscribe(new HttpObserver<DetailResponse<Session>>(getMainActivity(),true) {
+                    @Override
+                    public void onSucceeded(DetailResponse<Session> data) {
+                        //把登录成功的事件通知到AppContext
+                        AppContext.getInstance().login(data.getData());
+
+                        ToastUtil.successShortToast(R.string.login_success);
+                        //关闭当前界面并启动主界面
+                        startActivityAfterFinishThis(MainActivity.class);
+                    }
+
+                    @Override
+                    public boolean onFailed(DetailResponse<Session> data, Throwable e) {
+
+                        if (data != null) {
+                            if (data.getStatus() == 1010) {
+                                //跳转到补充用户资料界面
+                                toRegister();
+
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                });
     }
 
     /*
