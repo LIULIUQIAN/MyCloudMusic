@@ -3,7 +3,9 @@ package com.example.mycloudmusic.api;
 import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.BuildConfig;
+import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
+import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.util.Constant;
@@ -69,6 +71,12 @@ public class Api {
 
     public Observable<DetailResponse<Sheet>> sheetDetail(String id) {
         return service.sheetDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<DetailResponse<Session>> login(User data) {
+        return service.login(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

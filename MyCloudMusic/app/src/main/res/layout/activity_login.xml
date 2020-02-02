@@ -19,13 +19,15 @@
             android:id="@+id/et_username"
             style="@style/EditText"
             android:hint="@string/enter_username"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:text="ixueaedu@163.com"/>
 
         <EditText
             android:id="@+id/et_password"
             style="@style/EditText"
             android:hint="@string/enter_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:text="ixueaedu"/>
 
         <Button
             android:id="@+id/bt_login"
