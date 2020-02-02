@@ -31,7 +31,7 @@ public class SplashActivity extends BaseCommonActivity {
         if (sp.isShowGuide()) {
             startActivityAfterFinishThis(GuideActivity.class);
         } else if (sp.isLogin()) {
-            startActivityAfterFinishThis(MainActivity.class);
+            startActivityAfterFinishThis(AdActivity.class);
         } else {
             startActivityAfterFinishThis(LoginOrRegisterActivity.class);
         }
