@@ -6,9 +6,12 @@ import android.content.Context;
 import androidx.multidex.MultiDex;
 
 import com.example.mycloudmusic.domain.Session;
+import com.example.mycloudmusic.domain.event.LoginSuccessEvent;
 import com.example.mycloudmusic.util.PreferenceUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 import com.facebook.stetho.Stetho;
+
+import org.greenrobot.eventbus.EventBus;
 
 import es.dmoral.toasty.Toasty;
 
@@ -67,6 +70,9 @@ public class AppContext extends Application {
         sp.setUserId(data.getUser());
 
         onLogin();
+
+        //发送登录成功通知
+        EventBus.getDefault().post(new LoginSuccessEvent());
     }
 
     /**

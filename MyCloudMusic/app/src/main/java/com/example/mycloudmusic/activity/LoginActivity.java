@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 import com.example.mycloudmusic.AppContext;
+import com.example.mycloudmusic.MainActivity;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Session;
@@ -79,6 +80,9 @@ public class LoginActivity extends BaseTitleActivity {
 
                         AppContext.getInstance().login(data.getData());
                         ToastUtil.successShortToast(R.string.login_success);
+
+                        //跳转到主界面
+                        startActivityAfterFinishThis(MainActivity.class);
                     }
                 });
 

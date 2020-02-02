@@ -2,6 +2,7 @@ package com.example.mycloudmusic.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 public class PreferenceUtil {
 
@@ -86,6 +87,13 @@ public class PreferenceUtil {
      */
     public String getUserId() {
         return preference.getString(USER_ID, null);
+    }
+
+    /*
+     * 判断用户是否登录
+     * */
+    public boolean isLogin() {
+        return !TextUtils.isEmpty(getSession());
     }
 
 

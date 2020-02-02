@@ -44,7 +44,6 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
     @Override
     public void onNext(T t) {
         super.onNext(t);
-
         LoadingUtil.hideLoading();
 
         if (isSucceeded(t)) {
@@ -58,9 +57,10 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
     @Override
     public void onError(Throwable e) {
         super.onError(e);
+        LoadingUtil.hideLoading();
+
         handlerRequest(null, e);
 
-        LoadingUtil.hideLoading();
     }
 
     /*
