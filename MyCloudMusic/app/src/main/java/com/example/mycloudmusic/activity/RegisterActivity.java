@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.mycloudmusic.R;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseTitleActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
