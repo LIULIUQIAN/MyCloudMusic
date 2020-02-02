@@ -3,6 +3,7 @@ package com.example.mycloudmusic.api;
 import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.BuildConfig;
+import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.User;
@@ -21,6 +22,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 public class Api {
 
@@ -39,7 +42,7 @@ public class Api {
 
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
 
-        if (BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             //创建okhttp日志拦截器
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
@@ -75,6 +78,19 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 注册
+     */
+
+    public Observable<DetailResponse<BaseModel>> register(User data) {
+        return service.register(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /*
+     * 登录
+     * */
     public Observable<DetailResponse<Session>> login(User data) {
         return service.login(data)
                 .subscribeOn(Schedulers.io())

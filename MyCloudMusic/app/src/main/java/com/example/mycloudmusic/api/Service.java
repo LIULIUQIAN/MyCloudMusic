@@ -1,6 +1,7 @@
 package com.example.mycloudmusic.api;
 
 
+import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.User;
@@ -34,6 +35,15 @@ public interface Service {
     @GET("v1/sheets/{id}")
     Observable<DetailResponse<Sheet>> sheetDetail(@Path("id") String id);
 
+
+    /**
+     * 注册
+     *
+     * @param data
+     * @return
+     */
+    @POST("v1/users")
+    Observable<DetailResponse<BaseModel>> register(@Body User data);
 
     /**
      * 登录

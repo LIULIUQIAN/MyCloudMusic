@@ -2,6 +2,10 @@ package com.example.mycloudmusic.domain;
 
 public class User extends BaseModel {
 
+    /*
+     * 昵称
+     * */
+    private String nickname;
     /**
      * 手机号
      */
@@ -40,5 +44,13 @@ public class User extends BaseModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

@@ -7,6 +7,11 @@ import android.text.TextUtils;
 import android.widget.EditText;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.api.Api;
+import com.example.mycloudmusic.domain.BaseModel;
+import com.example.mycloudmusic.domain.User;
+import com.example.mycloudmusic.domain.response.DetailResponse;
+import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 
@@ -39,66 +44,80 @@ public class RegisterActivity extends BaseTitleActivity {
     }
 
     /*
-    * 注册按钮
-    * */
+     * 注册按钮
+     * */
     @OnClick(R.id.bt_register)
-    public void onRegisterClick(){
+    public void onRegisterClick() {
 
         String nickname = et_nickname.getText().toString().trim();
-        if (TextUtils.isEmpty(nickname)){
+        if (TextUtils.isEmpty(nickname)) {
             ToastUtil.errorShortToast(R.string.enter_nickname);
             return;
         }
 
-        if (!StringUtil.isNickname(nickname)){
+        if (!StringUtil.isNickname(nickname)) {
             ToastUtil.errorShortToast(R.string.error_nickname_format);
             return;
         }
 
         String phone = et_phone.getText().toString().trim();
-        if (TextUtils.isEmpty(phone)){
+        if (TextUtils.isEmpty(phone)) {
             ToastUtil.errorShortToast(R.string.enter_phone);
             return;
         }
 
-        if (!StringUtil.isPhone(phone)){
+        if (!StringUtil.isPhone(phone)) {
             ToastUtil.errorShortToast(R.string.error_phone_format);
             return;
         }
 
         String email = et_email.getText().toString().trim();
-        if (TextUtils.isEmpty(email)){
+        if (TextUtils.isEmpty(email)) {
             ToastUtil.errorShortToast(R.string.enter_email);
             return;
         }
 
-        if (!StringUtil.isEmail(email)){
+        if (!StringUtil.isEmail(email)) {
             ToastUtil.errorShortToast(R.string.error_email_format);
             return;
         }
 
         String password = et_password.getText().toString().trim();
-        if (TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             ToastUtil.errorShortToast(R.string.enter_password);
             return;
         }
 
-        if (!StringUtil.isPassword(password)){
+        if (!StringUtil.isPassword(password)) {
             ToastUtil.errorShortToast(R.string.error_password_format);
             return;
         }
 
         String confirm_password = et_confirm_password.getText().toString().trim();
-        if (TextUtils.isEmpty(confirm_password)){
+        if (TextUtils.isEmpty(confirm_password)) {
             ToastUtil.errorShortToast(R.string.enter_confirm_password);
             return;
         }
 
-        if (!password.equals(confirm_password)){
+        if (!password.equals(confirm_password)) {
             ToastUtil.errorShortToast(R.string.error_confirm_password);
             return;
         }
 
-        ToastUtil.successShortToast("注册成功");
+        User data = new User();
+        data.setNickname(nickname);
+        data.setPhone(phone);
+        data.setEmail(email);
+        data.setPassword(password);
+
+        Api.getInstance()
+                .register(data)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>(getMainActivity(), true) {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        ToastUtil.successShortToast("注册成功");
+                        System.out.println("注册成功==+" + data.getData().getId());
+                    }
+                });
     }
 }
