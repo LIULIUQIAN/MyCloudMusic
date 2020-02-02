@@ -21,7 +21,7 @@ import com.example.mycloudmusic.util.ToastUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class RegisterActivity extends BaseTitleActivity {
+public class RegisterActivity extends BaseLoginActivity {
 
 
     @BindView(R.id.et_nickname)
@@ -125,27 +125,5 @@ public class RegisterActivity extends BaseTitleActivity {
                 });
     }
 
-    /*
-    * 登录
-    * */
-    private void login(String phone, String email, String password){
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPhone(phone);
-        user.setPassword(password);
-
-        Api.getInstance()
-                .login(user)
-                .subscribe(new HttpObserver<DetailResponse<Session>>(getMainActivity(), true) {
-                    @Override
-                    public void onSucceeded(DetailResponse<Session> data) {
-
-                        AppContext.getInstance().login(data.getData());
-
-                        //跳转到主界面
-                        startActivityAfterFinishThis(MainActivity.class);
-                    }
-                });
-    }
 }

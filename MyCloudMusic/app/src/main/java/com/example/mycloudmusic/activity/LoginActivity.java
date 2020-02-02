@@ -26,7 +26,7 @@ import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class LoginActivity extends BaseTitleActivity {
+public class LoginActivity extends BaseLoginActivity {
 
     @BindView(R.id.et_username)
     EditText et_username;
@@ -66,25 +66,7 @@ public class LoginActivity extends BaseTitleActivity {
             return;
         }
 
-
-        User user = new User();
-        user.setEmail(userName);
-        user.setPhone(userName);
-        user.setPassword(password);
-
-        Api.getInstance()
-                .login(user)
-                .subscribe(new HttpObserver<DetailResponse<Session>>(getMainActivity(), true) {
-                    @Override
-                    public void onSucceeded(DetailResponse<Session> data) {
-
-                        AppContext.getInstance().login(data.getData());
-                        ToastUtil.successShortToast(R.string.login_success);
-
-                        //跳转到主界面
-                        startActivityAfterFinishThis(MainActivity.class);
-                    }
-                });
+      login(userName,userName,password);
 
     }
 
