@@ -55,13 +55,13 @@ android {
     //配置不同的环境
     productFlavors {
         //开发环境
-        dev{
-            buildConfigField('String','ENDPOINT','"http://dev-my-cloud-music-api-rails.ixuea.com/"')
+        dev {
+            buildConfigField('String', 'ENDPOINT', '"http://dev-my-cloud-music-api-rails.ixuea.com/"')
             dimension = minSdkVersion
         }
         //正式环境
-        prod{
-            buildConfigField('String','ENDPOINT','"http://api-courses-misuc.ixuea.com/"')
+        prod {
+            buildConfigField('String', 'ENDPOINT', '"http://api-courses-misuc.ixuea.com/"')
             dimension = minSdkVersion
         }
     }

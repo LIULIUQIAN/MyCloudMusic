@@ -73,6 +73,7 @@ public class LoginActivity extends BaseLoginActivity {
     @OnClick(R.id.bt_forget_password)
     public void onForgetPasswordClick() {
 
+        startActivity(ForgetPasswordActivity.class);
 
     }
 
