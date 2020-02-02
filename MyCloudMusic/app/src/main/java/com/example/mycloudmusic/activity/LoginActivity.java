@@ -3,6 +3,7 @@ package com.example.mycloudmusic.activity;
 import android.os.Bundle;
 import android.widget.EditText;
 
+import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Session;
@@ -75,9 +76,9 @@ public class LoginActivity extends BaseTitleActivity {
                 .subscribe(new HttpObserver<DetailResponse<Session>>(getMainActivity(), true) {
                     @Override
                     public void onSucceeded(DetailResponse<Session> data) {
-                        ToastUtil.successShortToast(R.string.login_success);
 
-                        System.out.println("data.toString==="+data.toString());
+                        AppContext.getInstance().login(data.getData());
+                        ToastUtil.successShortToast(R.string.login_success);
                     }
                 });
 
@@ -86,7 +87,7 @@ public class LoginActivity extends BaseTitleActivity {
     @OnClick(R.id.bt_forget_password)
     public void onForgetPasswordClick() {
 
-    
+
     }
 
 }
