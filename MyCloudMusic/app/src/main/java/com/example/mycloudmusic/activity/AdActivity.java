@@ -2,12 +2,14 @@ package com.example.mycloudmusic.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
 
 import com.example.mycloudmusic.MainActivity;
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.util.Constant;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -60,7 +62,12 @@ public class AdActivity extends BaseCommonActivity {
         if (downTimer != null) {
             downTimer.cancel();
         }
-        WebViewActivity.start(getMainActivity(),"广告详情","https://www.baidu.com");
+
+        Intent intent = new Intent(getMainActivity(),MainActivity.class);
+        intent.putExtra(Constant.URL,"https://www.baidu.com");
+        intent.setAction(Constant.ACTION_AD);
+        startActivity(intent);
+        finish();
     }
 
     /*

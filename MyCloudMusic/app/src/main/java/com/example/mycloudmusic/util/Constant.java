@@ -27,4 +27,8 @@ public class Constant {
     public static final String DATA = "DATA";
     public static final String TITLE = "TITLE";
     public static final String URL = "URL";
+    /*
+    * 广告点击
+    * */
+    public static final String ACTION_AD = "com.example.mycloudmusic.ACTION_AD";
 }
