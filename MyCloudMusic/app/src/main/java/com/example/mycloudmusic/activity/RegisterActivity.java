@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
 
+import com.example.mycloudmusic.AppContext;
+import com.example.mycloudmusic.MainActivity;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.BaseModel;
+import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
@@ -116,7 +119,32 @@ public class RegisterActivity extends BaseTitleActivity {
                     @Override
                     public void onSucceeded(DetailResponse<BaseModel> data) {
                         ToastUtil.successShortToast("注册成功");
-                        System.out.println("注册成功==+" + data.getData().getId());
+
+                        login(phone,email,password);
+                    }
+                });
+    }
+
+    /*
+    * 登录
+    * */
+    private void login(String phone, String email, String password){
+
+        User user = new User();
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setPassword(password);
+
+        Api.getInstance()
+                .login(user)
+                .subscribe(new HttpObserver<DetailResponse<Session>>(getMainActivity(), true) {
+                    @Override
+                    public void onSucceeded(DetailResponse<Session> data) {
+
+                        AppContext.getInstance().login(data.getData());
+
+                        //跳转到主界面
+                        startActivityAfterFinishThis(MainActivity.class);
                     }
                 });
     }
