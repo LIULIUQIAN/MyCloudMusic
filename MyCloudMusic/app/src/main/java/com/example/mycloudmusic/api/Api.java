@@ -107,5 +107,22 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 发送短信验证码
+     */
+    public Observable<DetailResponse<BaseModel>> sendSMSCode(User data) {
+        return service.sendSMSCode(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    /**
+     * 发送邮箱验证码
+     */
+    public Observable<DetailResponse<BaseModel>> sendEmailCode(User data) {
+        return service.sendEmailCode(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
 }

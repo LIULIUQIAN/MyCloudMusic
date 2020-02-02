@@ -66,7 +66,13 @@ public class LoginActivity extends BaseLoginActivity {
             return;
         }
 
-      login(userName,userName,password);
+        if (StringUtil.isPhone(userName)) {
+            login(userName,null,password);
+        }else {
+            login(null,userName,password);
+        }
+
+
 
     }
 

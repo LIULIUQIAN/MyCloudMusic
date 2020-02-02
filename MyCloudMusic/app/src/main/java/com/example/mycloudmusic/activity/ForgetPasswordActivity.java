@@ -52,7 +52,54 @@ public class ForgetPasswordActivity extends BaseLoginActivity {
     @OnClick(R.id.bt_send_code)
     public void onSendCodeClick() {
 
-        startCountDown();
+        String userName = et_username.getText().toString().trim();
+        if (StringUtils.isEmpty(userName)) {
+            ToastUtil.errorShortToast(R.string.enter_username);
+            return;
+        }
+
+        if (StringUtil.isPhone(userName)) {
+            sendSMSCode(userName);
+        } else if (StringUtil.isEmail(userName)) {
+            sendEmailCode(userName);
+        } else {
+            ToastUtil.errorShortToast(R.string.error_username_format);
+            return;
+        }
+    }
+
+    /*
+     * 发送短信验证码
+     * */
+    private void sendSMSCode(String value) {
+        User data = new User();
+        data.setPhone(value);
+
+        Api.getInstance()
+                .sendSMSCode(data)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        startCountDown();
+                    }
+                });
+    }
+
+    /*
+     * 发送邮件验证码
+     * */
+    private void sendEmailCode(String value) {
+        User data = new User();
+        data.setEmail(value);
+
+        Api.getInstance()
+                .sendEmailCode(data)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        startCountDown();
+                    }
+                });
     }
 
 
@@ -144,7 +191,7 @@ public class ForgetPasswordActivity extends BaseLoginActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (downTimer != null){
+        if (downTimer != null) {
             downTimer.cancel();
         }
     }
