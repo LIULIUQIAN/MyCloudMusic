@@ -34,4 +34,11 @@ public class StringUtil {
     public static boolean isPassword(String value){
         return value.trim().length() >=6 && value.trim().length() <=15;
     }
+
+    /**
+     * 是否符合昵称格式
+     */
+    public static boolean isNickname(String value) {
+        return value.length() >= 2 && value.length() <= 10;
+    }
 }
