@@ -17,10 +17,36 @@ android {
         //渠道相关
         flavorDimensions "versionCode"
     }
+
+    //签名配置
+    signingConfigs {
+        release {
+            //签名文件路径
+            storeFile file("../config/courses.jks")
+            //key密码
+            storePassword "8J7rHtXNNjhD9aD"
+            //别名
+            keyAlias "a1"
+            //签名密码
+            keyPassword "ehXs7fRAK6m82z4"
+        }
+
+    }
+
     buildTypes {
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //签名配置
+            signingConfig signingConfigs.release
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //签名配置
+            signingConfig signingConfigs.release
         }
     }
     //配置不同的环境
