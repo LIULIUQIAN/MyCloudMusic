@@ -3,6 +3,7 @@ package com.example.mycloudmusic.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +40,8 @@ public class ForgetPasswordActivity extends BaseLoginActivity {
     @BindView(R.id.et_confirm_password)
     EditText et_confirm_password;
 
+    //倒计时
+    private CountDownTimer downTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +51,10 @@ public class ForgetPasswordActivity extends BaseLoginActivity {
 
     @OnClick(R.id.bt_send_code)
     public void onSendCodeClick() {
-        System.out.println("onSendCodeClick");
+
+        startCountDown();
     }
+
 
     @OnClick(R.id.bt_forget_password)
     public void onForgetPasswordClick() {
@@ -111,5 +116,36 @@ public class ForgetPasswordActivity extends BaseLoginActivity {
                         finish();
                     }
                 });
+    }
+
+    /*
+     * 开始倒计时
+     * */
+    private void startCountDown() {
+
+        downTimer = new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                bt_send_code.setText(getString(R.string.count_second, millisUntilFinished / 1000));
+            }
+
+            @Override
+            public void onFinish() {
+                bt_send_code.setEnabled(true);
+                bt_send_code.setText(R.string.send_code);
+            }
+        };
+
+        downTimer.start();
+        bt_send_code.setEnabled(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (downTimer != null){
+            downTimer.cancel();
+        }
     }
 }
