@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.mycloudmusic.AppContext;
@@ -15,8 +16,11 @@ import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.ToastUtil;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -39,11 +43,26 @@ public class RegisterActivity extends BaseLoginActivity {
     @BindView(R.id.et_confirm_password)
     EditText et_confirm_password;
 
+    @BindView(R.id.bt_register)
+    Button bt_register;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        User data = (User) getIntent().getSerializableExtra(Constant.DATA);
+        if (data != null && (!TextUtils.isEmpty(data.getQq_id()) || !TextUtils.isEmpty(data.getWeibo_id()))){
+            setTitle(R.string.register2);
+            et_nickname.setText(data.getNickname());
+            bt_register.setText(R.string.complete_register);
+        }
     }
 
     /*

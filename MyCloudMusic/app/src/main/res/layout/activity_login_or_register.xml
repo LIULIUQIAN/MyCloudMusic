@@ -79,6 +79,7 @@
             <include layout="@layout/fill" />
 
             <ImageView
+                android:id="@+id/iv_wechat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_login_wechat"
@@ -87,6 +88,7 @@
             <include layout="@layout/fill" />
 
             <ImageView
+                android:id="@+id/iv_qq"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_login_qq"
@@ -95,6 +97,7 @@
             <include layout="@layout/fill" />
 
             <ImageView
+                android:id="@+id/iv_weibo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_login_weibo"
@@ -102,13 +105,6 @@
 
             <include layout="@layout/fill" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/selector_login_netease"
-                android:clickable="true" />
-
-            <include layout="@layout/fill" />
 
         </LinearLayout>
 

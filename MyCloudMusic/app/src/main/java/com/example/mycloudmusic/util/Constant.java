@@ -21,5 +21,8 @@ public class Constant {
      * 邮箱正则表达式
      */
     public static final String REGEX_EMAIL = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$";
-
+    /**
+     * 传递data key
+     */
+    public static final String DATA = "DATA";
 }
