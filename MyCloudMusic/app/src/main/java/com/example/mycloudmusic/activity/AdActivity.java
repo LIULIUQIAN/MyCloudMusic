@@ -3,8 +3,10 @@ package com.example.mycloudmusic.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.widget.Button;
 
+import com.example.mycloudmusic.MainActivity;
 import com.example.mycloudmusic.R;
 
 import butterknife.BindView;
@@ -14,6 +16,8 @@ public class AdActivity extends BaseCommonActivity {
 
     @BindView(R.id.bt_skip_ad)
     Button bt_skip_ad;
+
+    private CountDownTimer downTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +32,59 @@ public class AdActivity extends BaseCommonActivity {
         fullScreen();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startCountDown();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (downTimer != null) {
+            downTimer.cancel();
+        }
+    }
+
     @OnClick(R.id.bt_skip_ad)
     public void onSkipAd() {
-        System.out.println("aaaaaa");
+        if (downTimer != null) {
+            downTimer.cancel();
+        }
+        next();
     }
 
     @OnClick(R.id.bt_ad)
     public void onAdClick() {
-        System.out.println("aaaaaabbb");
+
+        if (downTimer != null) {
+            downTimer.cancel();
+        }
+        WebViewActivity.start(getMainActivity(),"广告详情","https://www.baidu.com");
+    }
+
+    /*
+     * 广告倒计时
+     * */
+    private void startCountDown() {
+
+        downTimer = new CountDownTimer(5000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                bt_skip_ad.setText(getString(R.string.count_second, millisUntilFinished / 1000 + 1));
+            }
+
+            @Override
+            public void onFinish() {
+                next();
+            }
+        };
+
+        downTimer.start();
+    }
+
+    private void next() {
+
+        startActivityAfterFinishThis(MainActivity.class);
     }
 }

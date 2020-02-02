@@ -25,4 +25,6 @@ public class Constant {
      * 传递data key
      */
     public static final String DATA = "DATA";
+    public static final String TITLE = "TITLE";
+    public static final String URL = "URL";
 }
