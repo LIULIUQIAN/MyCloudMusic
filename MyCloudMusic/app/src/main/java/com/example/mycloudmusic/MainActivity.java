@@ -6,6 +6,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.mycloudmusic.activity.BaseCommonActivity;
 import com.example.mycloudmusic.activity.BaseTitleActivity;
@@ -13,11 +15,21 @@ import com.example.mycloudmusic.activity.WebViewActivity;
 import com.example.mycloudmusic.util.Constant;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseTitleActivity {
 
     @BindView(R.id.dl)
     DrawerLayout dl;
+
+    @BindView(R.id.iv_avatar)
+    ImageView iv_avatar;
+
+    @BindView(R.id.tv_nickname)
+    TextView tv_nickname;
+
+    @BindView(R.id.tv_description)
+    TextView tv_description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +53,7 @@ public class MainActivity extends BaseTitleActivity {
         super.initViews();
 
         //侧滑配置
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, dl,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, dl, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         dl.addDrawerListener(toggle);
         toggle.syncState();
     }
@@ -55,5 +67,13 @@ public class MainActivity extends BaseTitleActivity {
         if (Constant.ACTION_AD.equals(intent.getAction())) {
             WebViewActivity.start(getMainActivity(), "广告详情", intent.getStringExtra(Constant.URL));
         }
+    }
+
+    /*
+     * 用户信息点击
+     * */
+    @OnClick(R.id.ll_user)
+    public void onUserClick() {
+        System.out.println("=============用户信息点击");
     }
 }
