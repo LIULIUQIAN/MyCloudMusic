@@ -34,7 +34,7 @@ public class MainActivity extends BaseCommonActivity {
     private void processIntent(Intent intent) {
 
         //广告点击
-        if (intent.getAction().equals(Constant.ACTION_AD)) {
+        if (Constant.ACTION_AD.equals(intent.getAction())) {
             WebViewActivity.start(getMainActivity(), "广告详情", intent.getStringExtra(Constant.URL));
         }
     }
