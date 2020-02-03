@@ -4,6 +4,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,18 +18,27 @@ import com.example.mycloudmusic.activity.BaseCommonActivity;
 import com.example.mycloudmusic.activity.BaseTitleActivity;
 import com.example.mycloudmusic.activity.SettingActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
+import com.example.mycloudmusic.adapter.MainAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.DetailResponse;
+import com.example.mycloudmusic.fragment.DiscoveryFragment;
+import com.example.mycloudmusic.fragment.FeedFragment;
+import com.example.mycloudmusic.fragment.MeFragment;
+import com.example.mycloudmusic.fragment.VideoFragment;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseTitleActivity {
 
+    //抽屉 view
     @BindView(R.id.dl)
     DrawerLayout dl;
 
@@ -39,6 +50,10 @@ public class MainActivity extends BaseTitleActivity {
 
     @BindView(R.id.tv_description)
     TextView tv_description;
+
+    //滑动view
+    @BindView(R.id.vp)
+    ViewPager vp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +88,18 @@ public class MainActivity extends BaseTitleActivity {
 
         fetchUserData();
 
+        //缓存页面数量
+        vp.setOffscreenPageLimit(4);
+
+        MainAdapter adapter = new MainAdapter(this, getSupportFragmentManager());
+        vp.setAdapter(adapter);
+
+        List<Fragment> pageList = new ArrayList<>();
+        pageList.add(MeFragment.newInstance());
+        pageList.add(DiscoveryFragment.newInstance());
+        pageList.add(FeedFragment.newInstance());
+        pageList.add(VideoFragment.newInstance());
+        adapter.setDatum(pageList);
     }
 
     /*
@@ -95,7 +122,7 @@ public class MainActivity extends BaseTitleActivity {
      * 设置用户信息
      * */
     private void setUserInfo(User data) {
-        ImageUtil.showCircleAvatar(this,iv_avatar,data.getAvatar());
+        ImageUtil.showCircleAvatar(this, iv_avatar, data.getAvatar());
         tv_nickname.setText(data.getNickname());
         tv_description.setText(data.getDescriptionFormat());
     }
@@ -120,15 +147,15 @@ public class MainActivity extends BaseTitleActivity {
     }
 
     /*
-    * 点击设置
-    * */
+     * 点击设置
+     * */
     @OnClick(R.id.ll_setting)
-    public void onSettingClick(){
+    public void onSettingClick() {
         startActivity(SettingActivity.class);
         closeDrawer();
     }
 
-    private void closeDrawer(){
+    private void closeDrawer() {
         dl.closeDrawer(GravityCompat.START);
     }
 }
