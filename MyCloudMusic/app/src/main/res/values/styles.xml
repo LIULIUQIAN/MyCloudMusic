@@ -14,6 +14,11 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <!--状态栏透明-->
+    <style name="AppTheme.NoActionBar.StatusBarTransparent">
+
+    </style>
+
     <style name="TextSmall">
         <item name="android:textColor">@color/light_grey</item>
         <item name="android:textSize">@dimen/text_small</item>

@@ -1,15 +1,23 @@
 package com.example.mycloudmusic;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.mycloudmusic.activity.BaseCommonActivity;
+import com.example.mycloudmusic.activity.BaseTitleActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
 import com.example.mycloudmusic.util.Constant;
 
-public class MainActivity extends BaseCommonActivity {
+import butterknife.BindView;
+
+public class MainActivity extends BaseTitleActivity {
+
+    @BindView(R.id.dl)
+    DrawerLayout dl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +34,16 @@ public class MainActivity extends BaseCommonActivity {
         super.onNewIntent(intent);
 
         processIntent(intent);
+    }
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+
+        //侧滑配置
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, dl,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        dl.addDrawerListener(toggle);
+        toggle.syncState();
     }
 
     /*
