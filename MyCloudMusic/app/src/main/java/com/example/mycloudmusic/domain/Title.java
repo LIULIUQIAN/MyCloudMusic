@@ -1,10 +1,14 @@
 package com.example.mycloudmusic.domain;
 
-import static com.example.mycloudmusic.util.Constant.TYPE_SHEET;
+import static com.example.mycloudmusic.util.Constant.TYPE_TITLE;
 
-public class Sheet extends BaseMultiItemEntity {
+public class Title extends BaseMultiItemEntity {
 
     private String title;
+
+    public Title(String title) {
+        this.title = title;
+    }
 
     public String getTitle() {
         return title;
@@ -16,15 +20,6 @@ public class Sheet extends BaseMultiItemEntity {
 
     @Override
     public int getItemType() {
-        return TYPE_SHEET;
+        return TYPE_TITLE;
     }
-
-    /**
-     * 占多少列
-     */
-    @Override
-    public int getSpanSize() {
-        return 1;
-    }
-
 }
