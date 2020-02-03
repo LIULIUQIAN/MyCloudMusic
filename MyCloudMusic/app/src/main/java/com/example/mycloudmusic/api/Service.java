@@ -10,12 +10,14 @@ import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.QueryMap;
 
 public interface Service {
 
@@ -72,5 +74,11 @@ public interface Service {
      */
     @POST("v1/codes/request_email_code")
     Observable<DetailResponse<BaseModel>> sendEmailCode(@Body User data);
+
+    /**
+     * 用户详情
+     */
+    @GET("v1/users/{id}")
+    Observable<DetailResponse<User>> userDetail(@Path("id") String id,@QueryMap Map<String, String> data);
 
 }

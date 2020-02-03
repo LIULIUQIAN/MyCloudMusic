@@ -1,5 +1,7 @@
 package com.example.mycloudmusic.domain;
 
+import android.text.TextUtils;
+
 public class User extends BaseModel {
 
     /*
@@ -41,6 +43,11 @@ public class User extends BaseModel {
      * 只有找回密码的时候才会用到
      */
     private String code;
+
+    /**
+     * 描述
+     */
+    private String description;
 
 
     public String getPhone() {
@@ -106,4 +113,27 @@ public class User extends BaseModel {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    ////
+    /**
+     * 格式化后的描述
+     *
+     * @return
+     */
+    public String getDescriptionFormat() {
+        if (TextUtils.isEmpty(description)) {
+            return "这个人很懒，没有填写个人介绍!";
+        }
+
+        return description;
+    }
+
 }

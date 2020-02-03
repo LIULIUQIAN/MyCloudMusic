@@ -31,4 +31,8 @@ public class Constant {
     * 广告点击
     * */
     public static final String ACTION_AD = "com.example.mycloudmusic.ACTION_AD";
+    /**
+     * 用户详情昵称查询字段
+     */
+    public static final String NICKNAME = "nickname";
 }

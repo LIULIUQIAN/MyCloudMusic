@@ -13,7 +13,11 @@ import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.util.Constant;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,7 +28,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.QueryMap;
 
 public class Api {
 
@@ -124,5 +131,27 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 用户详情
+     */
+    public Observable<DetailResponse<User>> userDetail(String id, String nickname) {
+
+        //添加查询参数
+        HashMap<String, String> data = new HashMap<>();
+
+        if (StringUtils.isNotBlank(nickname)) {
+            data.put(Constant.NICKNAME, nickname);
+        }
+        return service.userDetail(id,data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 用户详情
+     */
+    public Observable<DetailResponse<User>> userDetail(String id) {
+        return userDetail(id,null);
+    }
 
 }
