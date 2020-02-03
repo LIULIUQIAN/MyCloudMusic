@@ -1,9 +1,12 @@
 package com.example.mycloudmusic.fragment;
 
 import android.content.Intent;
+import android.view.View;
 
 import com.example.mycloudmusic.activity.BaseCommonActivity;
 import com.example.mycloudmusic.util.PreferenceUtil;
+
+import butterknife.ButterKnife;
 
 public abstract class BaseCommonFragment extends BaseFragment {
 
@@ -11,6 +14,13 @@ public abstract class BaseCommonFragment extends BaseFragment {
      * 偏好设置工具类
      */
     protected PreferenceUtil sp;
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+        /*初始化ButterKnife*/
+        ButterKnife.bind(this, getView());
+    }
 
     @Override
     protected void initDatum() {
