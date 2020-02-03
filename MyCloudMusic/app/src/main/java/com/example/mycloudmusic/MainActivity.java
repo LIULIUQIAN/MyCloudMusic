@@ -7,9 +7,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +32,14 @@ import com.example.mycloudmusic.fragment.VideoFragment;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
+
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +66,11 @@ public class MainActivity extends BaseTitleActivity {
     @BindView(R.id.vp)
     ViewPager vp;
 
+    //指示器
+    @BindView(R.id.magic_indicator)
+    MagicIndicator magic_indicator;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,13 +96,6 @@ public class MainActivity extends BaseTitleActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, dl, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         dl.addDrawerListener(toggle);
         toggle.syncState();
-    }
-
-    @Override
-    protected void initDatum() {
-        super.initDatum();
-
-        fetchUserData();
 
         //缓存页面数量
         vp.setOffscreenPageLimit(4);
@@ -100,6 +109,50 @@ public class MainActivity extends BaseTitleActivity {
         pageList.add(FeedFragment.newInstance());
         pageList.add(VideoFragment.newInstance());
         adapter.setDatum(pageList);
+
+        CommonNavigator commonNavigator = new CommonNavigator(getMainActivity());
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+            @Override
+            public int getCount() {
+                return pageList.size();
+            }
+
+            @Override
+            public IPagerTitleView getTitleView(Context context, int index) {
+
+                SimplePagerTitleView titleView = new SimplePagerTitleView(context);
+                titleView.setNormalColor(getResources().getColor(R.color.tab_normal));
+                titleView.setSelectedColor(getResources().getColor(R.color.white));
+                titleView.setText(adapter.getPageTitle(index));
+                titleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        vp.setCurrentItem(index, false);
+                    }
+                });
+                return titleView;
+            }
+
+            @Override
+            public IPagerIndicator getIndicator(Context context) {
+                return null;
+            }
+        });
+
+        magic_indicator.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(magic_indicator, vp);
+        //是否自动调整
+        commonNavigator.setAdjustMode(true);
+
+        vp.setCurrentItem(1, false);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        fetchUserData();
+
     }
 
     /*
