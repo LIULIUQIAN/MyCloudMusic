@@ -6,6 +6,8 @@ public class Constant {
 
     public static final String ENDPOINT = BuildConfig.ENDPOINT;
 
+    public static final String RESOURCE_ENDPOINT = BuildConfig.RESOURCE_ENDPOINT;
+
     public static final String ID = "ID";
 
     /**

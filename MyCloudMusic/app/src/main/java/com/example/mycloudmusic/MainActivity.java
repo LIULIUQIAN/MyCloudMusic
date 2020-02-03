@@ -6,9 +6,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.mycloudmusic.activity.BaseCommonActivity;
 import com.example.mycloudmusic.activity.BaseTitleActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
@@ -17,6 +19,7 @@ import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.ImageUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -90,7 +93,7 @@ public class MainActivity extends BaseTitleActivity {
      * 设置用户信息
      * */
     private void setUserInfo(User data) {
-        //TODO 设置头像
+        ImageUtil.showCircleAvatar(this,iv_avatar,data.getAvatar());
         tv_nickname.setText(data.getNickname());
         tv_description.setText(data.getDescriptionFormat());
     }
