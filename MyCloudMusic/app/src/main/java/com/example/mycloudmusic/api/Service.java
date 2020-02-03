@@ -4,6 +4,7 @@ package com.example.mycloudmusic.api;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
+import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
@@ -23,8 +24,6 @@ public interface Service {
 
     /**
      * 歌单列表
-     *
-     * @return
      */
     @GET("v1/sheets")
     Observable<ListResponse<Sheet>> sheets();
@@ -80,5 +79,11 @@ public interface Service {
      */
     @GET("v1/users/{id}")
     Observable<DetailResponse<User>> userDetail(@Path("id") String id,@QueryMap Map<String, String> data);
+
+    /**
+     * 单曲
+     */
+    @GET("v1/songs")
+    Observable<ListResponse<Song>> songs();
 
 }

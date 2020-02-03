@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.DiscoveryAdapter;
+import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.BaseMultiItemEntity;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.Title;
+import com.example.mycloudmusic.domain.response.ListResponse;
+import com.example.mycloudmusic.listener.HttpObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +58,8 @@ public class DiscoveryFragment extends BaseCommonFragment {
         super.initDatum();
 
         adapter = new DiscoveryAdapter();
+        //设置列宽度
+        adapter.setSpanSizeLookup((gridLayoutManager, i) -> adapter.getItem(i).getSpanSize());
         recyclerView.setAdapter(adapter);
 
         fetchData();
@@ -66,24 +72,29 @@ public class DiscoveryFragment extends BaseCommonFragment {
     private void fetchData() {
 
         List<BaseMultiItemEntity> datum = new ArrayList<>();
-        //添加标题
         datum.add(new Title("推荐歌单"));
 
         //添加歌单数据
-        for (int i = 0; i < 9; i++) {
-            datum.add(new Sheet());
-        }
+        Api.getInstance()
+                .sheets()
+                .subscribe(new HttpObserver<ListResponse<Sheet>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Sheet> data) {
+                        datum.addAll(data.getData());
 
-        //添加标题
-        datum.add(new Title("推荐单曲"));
+                        Api.getInstance()
+                                .songs()
+                                .subscribe(new HttpObserver<ListResponse<Song>>() {
+                                    @Override
+                                    public void onSucceeded(ListResponse<Song> data) {
+                                        datum.add(new Title("推荐单曲"));
+                                        datum.addAll(data.getData());
 
-        //添加单曲数据
-        for (int i = 0; i < 9; i++) {
-            datum.add(new Song());
-        }
-
-        //将数据设置（替换）到适配器
-        adapter.replaceData(datum);
-
+                                        adapter.replaceData(datum);
+                                    }
+                                });
+                    }
+                });
+        
     }
 }
