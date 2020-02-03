@@ -2,6 +2,7 @@ package com.example.mycloudmusic;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.mycloudmusic.activity.BaseCommonActivity;
 import com.example.mycloudmusic.activity.BaseTitleActivity;
+import com.example.mycloudmusic.activity.SettingActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.User;
@@ -115,5 +117,18 @@ public class MainActivity extends BaseTitleActivity {
     @OnClick(R.id.ll_user)
     public void onUserClick() {
         System.out.println("=============用户信息点击");
+    }
+
+    /*
+    * 点击设置
+    * */
+    @OnClick(R.id.ll_setting)
+    public void onSettingClick(){
+        startActivity(SettingActivity.class);
+        closeDrawer();
+    }
+
+    private void closeDrawer(){
+        dl.closeDrawer(GravityCompat.START);
     }
 }
