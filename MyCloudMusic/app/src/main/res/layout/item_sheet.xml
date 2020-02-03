@@ -1,12 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#00f">
+    android:layout_marginLeft="@dimen/padding_meddle"
+    android:layout_marginRight="@dimen/padding_meddle"
+    android:orientation="vertical">
+
+
+    <com.example.mycloudmusic.view.SquareLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--CardView
+            cardCornerRadius：圆角尺寸
+            cardElevation：阴影高度-->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="@dimen/radius_small"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/iv_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder" />
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_small">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_headset" />
+
+                <TextView
+                    android:id="@+id/tv_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_small" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </com.example.mycloudmusic.view.SquareLinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="这是歌单"/>
+        android:layout_marginTop="@dimen/padding_meddle"
+        android:layout_marginBottom="@dimen/padding_meddle"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="@dimen/line_spacing_multiplier"
+        android:maxLines="2"
+        android:text="描述描述描述描述描述描述描述述描述描述描述描述描述描述述描述描述描述描述描述描述述描述描述描述描述描述描述述描述描述描述描述描述描述述描述描述描述描述描述描述述描述描述描述描述描述描述述描述描述描述描述描述描述述描述描述描述描述描述描述述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述"
+        android:textColor="@color/text" />
 
 </LinearLayout>

@@ -75,15 +75,13 @@ public class DiscoveryFragment extends BaseCommonFragment {
         datum.add(new Title("推荐歌单"));
 
         //添加歌单数据
-        Api.getInstance()
-                .sheets()
+        Api.getInstance().sheets()
                 .subscribe(new HttpObserver<ListResponse<Sheet>>() {
                     @Override
                     public void onSucceeded(ListResponse<Sheet> data) {
                         datum.addAll(data.getData());
 
-                        Api.getInstance()
-                                .songs()
+                        Api.getInstance().songs()
                                 .subscribe(new HttpObserver<ListResponse<Song>>() {
                                     @Override
                                     public void onSucceeded(ListResponse<Song> data) {
@@ -95,6 +93,6 @@ public class DiscoveryFragment extends BaseCommonFragment {
                                 });
                     }
                 });
-        
+
     }
 }
