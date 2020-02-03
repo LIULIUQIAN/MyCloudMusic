@@ -1,6 +1,7 @@
 package com.example.mycloudmusic.api;
 
 
+import com.example.mycloudmusic.domain.Advert;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
@@ -85,5 +86,11 @@ public interface Service {
      */
     @GET("v1/songs")
     Observable<ListResponse<Song>> songs();
+
+    /**
+     * 广告列表
+     */
+    @GET("v1/ads")
+    Observable<ListResponse<Advert>> adverts();
 
 }

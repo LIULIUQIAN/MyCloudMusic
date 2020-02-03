@@ -24,11 +24,10 @@
             app:cardCornerRadius="@dimen/radius_small"
             app:cardElevation="0dp">
 
-            <ImageView
+            <com.youth.banner.Banner
+                android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/banner_height"
-                android:scaleType="centerCrop"
-                android:src="@drawable/placeholder" />
+                android:layout_height="@dimen/banner_height" />
 
         </androidx.cardview.widget.CardView>
 
@@ -73,10 +72,25 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageView
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/selector_day" />
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/selector_day" />
+
+                    <TextView
+                        android:id="@+id/tv_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="18dp"
+                        android:textColor="@drawable/selector_text_color_primary" />
+
+                </RelativeLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"

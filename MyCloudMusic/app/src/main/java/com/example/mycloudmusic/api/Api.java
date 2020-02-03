@@ -3,6 +3,7 @@ package com.example.mycloudmusic.api;
 import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.BuildConfig;
+import com.example.mycloudmusic.domain.Advert;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
@@ -26,6 +27,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
 
 
 public class Api {
@@ -154,6 +156,15 @@ public class Api {
      */
     public Observable<ListResponse<Song>> songs() {
         return service.songs()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 广告列表
+     */
+    public Observable<ListResponse<Advert>> adverts() {
+        return service.adverts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
