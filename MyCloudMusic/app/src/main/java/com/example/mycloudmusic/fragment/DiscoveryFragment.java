@@ -53,6 +53,16 @@ public class DiscoveryFragment extends BaseCommonFragment {
         recyclerView.setHasFixedSize(true);
     }
 
+    /**
+     * 创建头部布局
+     *
+     * @return
+     */
+    private View createHeaderView() {
+        View view = getLayoutInflater().inflate(R.layout.header_discovery, (ViewGroup) recyclerView.getParent(), false);
+        return view;
+    }
+
     @Override
     protected void initDatum() {
         super.initDatum();
@@ -60,6 +70,7 @@ public class DiscoveryFragment extends BaseCommonFragment {
         adapter = new DiscoveryAdapter();
         //设置列宽度
         adapter.setSpanSizeLookup((gridLayoutManager, i) -> adapter.getItem(i).getSpanSize());
+        adapter.setHeaderView(createHeaderView());
         recyclerView.setAdapter(adapter);
 
         fetchData();
