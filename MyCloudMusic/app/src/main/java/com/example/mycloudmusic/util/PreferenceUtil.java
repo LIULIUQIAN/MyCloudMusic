@@ -96,6 +96,13 @@ public class PreferenceUtil {
         return !TextUtils.isEmpty(getSession());
     }
 
+    /*
+    * 退出
+    * */
+    public void logout() {
+        delete(USER_ID);
+        delete(SESSION);
+    }
 
     //辅助方法
 
@@ -140,6 +147,8 @@ public class PreferenceUtil {
     private void putInt(String key, int data) {
         preference.edit().putInt(key, data).apply();
     }
+
+
 
     //end 辅助方法
 

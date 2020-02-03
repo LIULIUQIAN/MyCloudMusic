@@ -2,9 +2,11 @@ package com.example.mycloudmusic;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.multidex.MultiDex;
 
+import com.example.mycloudmusic.activity.LoginOrRegisterActivity;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.event.LoginSuccessEvent;
 import com.example.mycloudmusic.util.PreferenceUtil;
@@ -14,6 +16,10 @@ import com.mob.MobSDK;
 
 import org.greenrobot.eventbus.EventBus;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
 import es.dmoral.toasty.Toasty;
 
 public class AppContext extends Application {
@@ -57,6 +63,7 @@ public class AppContext extends Application {
 
     /**
      * 获取当前上下文
+     *
      * @return
      */
     public static AppContext getInstance() {
@@ -68,7 +75,7 @@ public class AppContext extends Application {
      *
      * @param data
      */
-    public void login(Session data){
+    public void login(Session data) {
 
         sp.setSession(data.getSession());
         sp.setUserId(data.getUser());
@@ -84,5 +91,31 @@ public class AppContext extends Application {
      */
     private void onLogin() {
 
+    }
+
+    /*
+     * 退出
+     * */
+    public void logout() {
+
+        sp.logout();
+
+        otherLogout(QQ.NAME);
+        otherLogout(SinaWeibo.NAME);
+
+        Intent intent = new Intent(getApplicationContext(), LoginOrRegisterActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+    }
+
+    /**
+     * 第三方平台退出
+     */
+    private void otherLogout(String name) {
+        Platform platform = ShareSDK.getPlatform(name);
+        if (platform.isAuthValid()) {
+            platform.removeAccount(true);
+        }
     }
 }
