@@ -151,9 +151,7 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
                 Object item = adapter.getItem(position);
                 if (item instanceof Sheet){
                     Sheet sheet = (Sheet) item;
-                    Intent intent = new Intent(getMainActivity(), SheetDetailActivity.class);
-                    intent.putExtra(Constant.ID,sheet.getId());
-                    startActivity(intent);
+                    startActivityExtraId(SheetDetailActivity.class,sheet.getId());
                 }
             }
         });

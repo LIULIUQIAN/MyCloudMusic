@@ -3,10 +3,12 @@ package com.example.mycloudmusic.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.PreferenceUtil;
 
 import butterknife.ButterKnife;
@@ -90,6 +92,31 @@ public class BaseCommonActivity extends BaseActivity {
     protected void startActivityAfterFinishThis(Class<?> clazz){
         startActivity(clazz);
         finish();
+    }
+
+    /**
+     * 启动界面，可以传递一个字符串参数
+     */
+    protected void startActivityExtraId(Class<?> clazz, String id) {
+        Intent intent = new Intent(getMainActivity(), clazz);
+        if (!TextUtils.isEmpty(id)) {
+            intent.putExtra(Constant.ID, id);
+        }
+        startActivity(intent);
+    }
+
+    /**
+     * 获取字符串类型Id
+     */
+    protected String extraId() {
+        return extraString(Constant.ID);
+    }
+
+    /**
+     * 获取字符串
+     */
+    protected String extraString(String key) {
+        return getIntent().getStringExtra(key);
     }
 
     /**
