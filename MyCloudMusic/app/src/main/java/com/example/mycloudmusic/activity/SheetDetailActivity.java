@@ -13,6 +13,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.SongAdapter;
 import com.example.mycloudmusic.api.Api;
@@ -96,6 +99,13 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         recyclerView.setAdapter(adapter);
 
         fetchData();
+
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SimplePlayerActivity.start(getMainActivity());
+            }
+        });
     }
 
     /*
@@ -253,5 +263,28 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
                 }
             });
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_sheet_detail,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_search){
+            System.out.println("============1");
+            return true;
+        }else if (id == R.id.action_sort){
+            System.out.println("============2");
+            return true;
+        }else if (id == R.id.action_report){
+            System.out.println("============3");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

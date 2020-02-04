@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+   每一个Item就是按钮
+       orderInCategory：排序；越小约靠前
+       showAsAction：显示方式
+       always：不折叠，始终显示；显示图标
+       collapseActionView：折叠到更多；折叠的只显示标题-->
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search"
+        android:orderInCategory="1"
+        android:title="@string/search"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_search"
+        android:orderInCategory="2"
+        android:title="@string/sort"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/action_report"
+        android:icon="@drawable/ic_search"
+        android:orderInCategory="3"
+        android:title="@string/report"
+        app:showAsAction="collapseActionView" />
+
+</menu>
