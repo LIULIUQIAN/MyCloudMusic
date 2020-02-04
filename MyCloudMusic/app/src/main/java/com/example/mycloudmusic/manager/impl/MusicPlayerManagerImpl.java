@@ -4,9 +4,14 @@ import android.content.Context;
 import android.media.MediaPlayer;
 
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.listener.Consumer;
+import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
+import com.example.mycloudmusic.util.ListUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MusicPlayerManagerImpl implements MusicPlayerManager {
 
@@ -15,10 +20,34 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
     private final MediaPlayer player;
     private Song data;
 
+    List<MusicPlayerListener> listeners = new ArrayList<>();
+
     private MusicPlayerManagerImpl(Context context) {
         this.context = context;
 
         player = new MediaPlayer();
+
+
+        initListeners();
+    }
+
+    /*
+     * 设置播放器监听
+     * */
+    private void initListeners() {
+
+        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            /**
+             * 播放器准备开始播放
+             * 这里可以获取到音乐时长
+             */
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                data.setDuration(mp.getDuration());
+                ListUtil.eachListener(listeners, listener -> listener.onPrepared(mp,data));
+            }
+        });
     }
 
     public static synchronized MusicPlayerManagerImpl getInstance(Context context) {
@@ -41,6 +70,9 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
             player.setDataSource(uri);
             player.prepare();
             player.start();
+
+            ListUtil.eachListener(listeners, listener -> listener.onPlaying(data));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,6 +88,8 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
 
         if (isPlaying()) {
             player.pause();
+
+            ListUtil.eachListener(listeners, listener -> listener.onPaused(data));
         }
     }
 
@@ -64,6 +98,28 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
 
         if (!isPlaying()) {
             player.start();
+
+            ListUtil.eachListener(listeners, listener -> listener.onPlaying(data));
         }
+    }
+
+    @Override
+    public void addMusicPlayerListener(MusicPlayerListener listener) {
+
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    @Override
+    public void removeMusicPlayerListener(MusicPlayerListener listener) {
+        if (listeners.contains(listener)) {
+            listeners.remove(listener);
+        }
+    }
+
+    @Override
+    public Song getData() {
+        return data;
     }
 }
