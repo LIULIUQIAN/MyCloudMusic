@@ -273,4 +273,11 @@ dependencies {
     //https://github.com/square/leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
 
+    //palette（调色板）
+    implementation 'androidx.palette:palette:1.0.0'
+
+    //更方便的使用glide和palette
+    //https://github.com/florent37/GlidePalette
+    implementation 'com.github.florent37:glidepalette:2.1.2'
+
 }

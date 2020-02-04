@@ -13,6 +13,7 @@ import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.PreferenceUtil;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +24,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -46,6 +48,21 @@ public class Api {
     public Api() {
 
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+
+        //公共请求参数
+        okHttpClientBuilder.addNetworkInterceptor(chain -> {
+            PreferenceUtil sp = PreferenceUtil.getInstance(AppContext.getInstance());
+
+            Request request = chain.request();
+            if (sp.isLogin()){
+                request = request.newBuilder()
+                        .addHeader("User",sp.getUserId())
+                        .addHeader("Authorization",sp.getSession())
+                        .build();
+            }
+            return chain.proceed(request);
+
+        });
 
         if (BuildConfig.DEBUG) {
             //创建okhttp日志拦截器
