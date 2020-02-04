@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.manager.ListManager;
+import com.example.mycloudmusic.manager.MusicPlayerManager;
+import com.example.mycloudmusic.service.MusicPlayerService;
+import com.example.mycloudmusic.util.Constant;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,11 +16,19 @@ public class ListManagerImpl implements ListManager {
 
     private static ListManagerImpl instance;
     private final Context context;
+    private final MusicPlayerManager musicPlayerManager;
 
     List<Song> datum = new LinkedList<>();
+    private Song data;
+
+    /**
+     * 是否播放了
+     */
+    private boolean isPlay;
 
     private ListManagerImpl(Context context) {
         this.context = context;
+        musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
     }
 
     public static synchronized ListManager getInstance(Context context) {
@@ -41,16 +52,30 @@ public class ListManagerImpl implements ListManager {
 
     @Override
     public void play(Song data) {
-        System.out.println("============play");
+
+        this.data = data;
+
+        String uri = data.getUri();
+        if (!uri.startsWith("http")) {
+            uri = String.format(Constant.RESOURCE_ENDPOINT, uri);
+        }
+        musicPlayerManager.play(uri, data);
+        //标记已经播放了
+        isPlay = true;
     }
 
     @Override
     public void pause() {
-        System.out.println("============pause");
+        musicPlayerManager.pause();
     }
 
     @Override
     public void resume() {
-        System.out.println("============resume");
+        if (isPlay){
+            musicPlayerManager.resume();
+        }else {
+            play(data);
+        }
     }
+
 }
