@@ -31,8 +31,11 @@ import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.SongAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Sheet;
+import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+import com.example.mycloudmusic.manager.ListManager;
+import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.ToastUtil;
@@ -76,6 +79,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     private Sheet data;
 
     private SongAdapter adapter;
+    private ListManager listManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +98,8 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     protected void initDatum() {
         super.initDatum();
 
+        listManager = MusicPlayerService.getListManager(getMainActivity());
+
         adapter = new SongAdapter(R.layout.item_song_detail);
         adapter.setHeaderView(createHeaderView());
         recyclerView.setAdapter(adapter);
@@ -103,10 +109,23 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                SimplePlayerActivity.start(getMainActivity());
+//                SimplePlayerActivity.start(getMainActivity());
+                play(position);
             }
         });
     }
+
+    /**
+     * 播放当前位置的音乐
+     */
+    private void play(int position) {
+        Song item = adapter.getItem(position);
+        listManager.setDatum(adapter.getData());
+        listManager.play(item);
+
+        SimplePlayerActivity.start(getMainActivity());
+    }
+
 
     /*
      * 头部 view
@@ -228,10 +247,10 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
                 processCollectionClick();
                 break;
             case R.id.ll_comment_container:
-                CommentActivity.start(getMainActivity(),extraId());
+                CommentActivity.start(getMainActivity(), extraId());
                 break;
             case R.id.ll_user:
-                startActivityExtraId(UserDetailActivity.class,data.getUser().getId());
+                startActivityExtraId(UserDetailActivity.class, data.getUser().getId());
                 break;
 
         }
@@ -252,7 +271,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
                     showCollectionStatus();
                 }
             });
-        }else {
+        } else {
             Api.getInstance().collect(extraId()).subscribe(new HttpObserver<Response<Void>>() {
                 @Override
                 public void onSucceeded(Response<Void> item) {
@@ -267,20 +286,20 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_sheet_detail,menu);
+        getMenuInflater().inflate(R.menu.menu_sheet_detail, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_search){
+        if (id == R.id.action_search) {
             System.out.println("============1");
             return true;
-        }else if (id == R.id.action_sort){
+        } else if (id == R.id.action_sort) {
             System.out.println("============2");
             return true;
-        }else if (id == R.id.action_report){
+        } else if (id == R.id.action_report) {
             System.out.println("============3");
             return true;
         }

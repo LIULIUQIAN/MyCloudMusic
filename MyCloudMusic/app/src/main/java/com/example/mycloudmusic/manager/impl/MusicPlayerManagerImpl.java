@@ -37,9 +37,15 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
         this.context = context;
 
         player = new MediaPlayer();
-
-
         initListeners();
+    }
+
+    public static synchronized MusicPlayerManagerImpl getInstance(Context context) {
+
+        if (instance == null) {
+            instance = new MusicPlayerManagerImpl(context);
+        }
+        return instance;
     }
 
     /*
@@ -60,15 +66,6 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
             }
         });
     }
-
-    public static synchronized MusicPlayerManagerImpl getInstance(Context context) {
-
-        if (instance == null) {
-            instance = new MusicPlayerManagerImpl(context);
-        }
-        return instance;
-    }
-
 
     @Override
     public void play(String uri, Song data) {
