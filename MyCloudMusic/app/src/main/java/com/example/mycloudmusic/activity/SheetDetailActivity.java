@@ -66,6 +66,8 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
      */
     private Button bt_collection;
 
+    private LinearLayout ll_user;
+
 
     //歌单详情数据
     private Sheet data;
@@ -113,8 +115,10 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         //评论数据
         tv_comment_count = view.findViewById(R.id.tv_comment_count);
         bt_collection = view.findViewById(R.id.bt_collection);
+        ll_user = view.findViewById(R.id.ll_user);
         bt_collection.setOnClickListener(this);
         ll_comment_container.setOnClickListener(this);
+        ll_user.setOnClickListener(this);
         return view;
     }
 
@@ -214,9 +218,11 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
                 processCollectionClick();
                 break;
             case R.id.ll_comment_container:
-                startActivityExtraId(CommentActivity.class,extraId());
+                CommentActivity.start(getMainActivity(),extraId());
                 break;
-
+            case R.id.ll_user:
+                startActivityExtraId(UserDetailActivity.class,data.getUser().getId());
+                break;
 
         }
     }
