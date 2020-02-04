@@ -32,10 +32,12 @@ import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
+import com.example.mycloudmusic.util.ToastUtil;
 
 import butterknife.BindView;
+import retrofit2.Response;
 
-public class SheetDetailActivity extends BaseTitleActivity {
+public class SheetDetailActivity extends BaseTitleActivity implements View.OnClickListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -111,7 +113,7 @@ public class SheetDetailActivity extends BaseTitleActivity {
         //评论数据
         tv_comment_count = view.findViewById(R.id.tv_comment_count);
         bt_collection = view.findViewById(R.id.bt_collection);
-
+        bt_collection.setOnClickListener(this);
         return view;
     }
 
@@ -193,14 +195,51 @@ public class SheetDetailActivity extends BaseTitleActivity {
     @SuppressLint("ResourceType")
     private void showCollectionStatus() {
 
-        if (data.isCollection()){
-            bt_collection.setText(getResources().getString(R.string.cancel_collection,data.getCollections_count()));
+        if (data.isCollection()) {
+            bt_collection.setText(getResources().getString(R.string.cancel_collection, data.getCollections_count()));
             bt_collection.setBackground(null);
             bt_collection.setTextColor(getResources().getColor(R.color.light_grey));
-        }else {
-            bt_collection.setText(getResources().getString(R.string.collection,data.getCollections_count()));
+        } else {
+            bt_collection.setText(getResources().getString(R.string.collection, data.getCollections_count()));
             bt_collection.setBackgroundResource(R.drawable.selector_color_primary);
             bt_collection.setTextColor(getResources().getColorStateList(R.drawable.selector_text_color_primary_reverse));
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_collection:
+                processCollectionClick();
+                break;
+        }
+    }
+
+    /**
+     * 处理收藏和取消收藏逻辑
+     */
+    private void processCollectionClick() {
+
+        if (data.isCollection()) {
+            Api.getInstance().deleteCollect(extraId()).subscribe(new HttpObserver<Response<Void>>() {
+                @Override
+                public void onSucceeded(Response<Void> item) {
+                    ToastUtil.successShortToast(R.string.cancel_success);
+                    data.setCollection_id(null);
+                    data.setCollections_count(data.getCollections_count() - 1);
+                    showCollectionStatus();
+                }
+            });
+        }else {
+            Api.getInstance().collect(extraId()).subscribe(new HttpObserver<Response<Void>>() {
+                @Override
+                public void onSucceeded(Response<Void> item) {
+                    ToastUtil.successShortToast(R.string.collection_success);
+                    data.setCollection_id(1);
+                    data.setCollections_count(data.getCollections_count() + 1);
+                    showCollectionStatus();
+                }
+            });
         }
     }
 }

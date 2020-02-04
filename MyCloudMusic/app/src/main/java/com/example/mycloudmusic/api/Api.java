@@ -26,10 +26,16 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 
 public class Api {
@@ -54,10 +60,10 @@ public class Api {
             PreferenceUtil sp = PreferenceUtil.getInstance(AppContext.getInstance());
 
             Request request = chain.request();
-            if (sp.isLogin()){
+            if (sp.isLogin()) {
                 request = request.newBuilder()
-                        .addHeader("User",sp.getUserId())
-                        .addHeader("Authorization",sp.getSession())
+                        .addHeader("User", sp.getUserId())
+                        .addHeader("Authorization", sp.getSession())
                         .build();
             }
             return chain.proceed(request);
@@ -136,6 +142,7 @@ public class Api {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
     /**
      * 发送邮箱验证码
      */
@@ -156,7 +163,7 @@ public class Api {
         if (StringUtils.isNotBlank(nickname)) {
             data.put(Constant.NICKNAME, nickname);
         }
-        return service.userDetail(id,data)
+        return service.userDetail(id, data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -165,7 +172,7 @@ public class Api {
      * 用户详情
      */
     public Observable<DetailResponse<User>> userDetail(String id) {
-        return userDetail(id,null);
+        return userDetail(id, null);
     }
 
     /**
@@ -182,6 +189,24 @@ public class Api {
      */
     public Observable<ListResponse<Advert>> adverts() {
         return service.adverts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 收藏歌单
+     */
+    public Observable<Response<Void>> collect(String id) {
+        return service.collect(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 取消收藏歌单
+     */
+    public Observable<Response<Void>> deleteCollect(String id) {
+        return service.deleteCollect(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
