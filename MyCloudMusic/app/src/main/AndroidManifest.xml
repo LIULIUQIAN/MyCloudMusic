@@ -13,8 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.SheetDetailActivity"
-            android:label="歌单详情"></activity>
+        <activity android:name=".activity.CommentActivity"
+            android:label="@string/activity_comment"></activity>
+        <activity
+            android:name=".activity.SheetDetailActivity"
+            android:label="歌单详情" />
         <activity
             android:name=".activity.SettingActivity"
             android:label="@string/setting" />

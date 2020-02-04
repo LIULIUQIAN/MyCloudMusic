@@ -114,6 +114,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         tv_comment_count = view.findViewById(R.id.tv_comment_count);
         bt_collection = view.findViewById(R.id.bt_collection);
         bt_collection.setOnClickListener(this);
+        ll_comment_container.setOnClickListener(this);
         return view;
     }
 
@@ -212,6 +213,11 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
             case R.id.bt_collection:
                 processCollectionClick();
                 break;
+            case R.id.ll_comment_container:
+                startActivityExtraId(CommentActivity.class,extraId());
+                break;
+
+
         }
     }
 
