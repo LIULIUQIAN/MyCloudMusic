@@ -57,4 +57,9 @@ public class Constant {
      * 歌单 id
      */
     public static final String SHEET_ID = "SHEET_ID";
+
+    /**
+     * 播放进度通知
+     */
+    public static final int MESSAGE_PROGRESS = 0;
 }

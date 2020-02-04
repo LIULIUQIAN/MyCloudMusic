@@ -2,6 +2,11 @@ package com.example.mycloudmusic.manager.impl;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+
+import androidx.annotation.NonNull;
 
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.listener.Consumer;
@@ -12,6 +17,10 @@ import com.example.mycloudmusic.util.ListUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static com.example.mycloudmusic.util.Constant.MESSAGE_PROGRESS;
 
 public class MusicPlayerManagerImpl implements MusicPlayerManager {
 
@@ -21,6 +30,8 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
     private Song data;
 
     List<MusicPlayerListener> listeners = new ArrayList<>();
+    private TimerTask timerTask;
+    private Timer timer;
 
     private MusicPlayerManagerImpl(Context context) {
         this.context = context;
@@ -73,6 +84,8 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
 
             ListUtil.eachListener(listeners, listener -> listener.onPlaying(data));
 
+            startPublishProgress();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,6 +104,7 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
 
             ListUtil.eachListener(listeners, listener -> listener.onPaused(data));
         }
+        stopPublishProgress();
     }
 
     @Override
@@ -100,6 +114,8 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
             player.start();
 
             ListUtil.eachListener(listeners, listener -> listener.onPlaying(data));
+
+            startPublishProgress();
         }
     }
 
@@ -109,6 +125,8 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
         if (!listeners.contains(listener)) {
             listeners.add(listener);
         }
+
+        startPublishProgress();
     }
 
     @Override
@@ -122,4 +140,75 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
     public Song getData() {
         return data;
     }
+
+    @Override
+    public void seekTo(int progress) {
+        player.seekTo(progress);
+    }
+
+    /**
+     * 启动播放进度通知
+     */
+    private void startPublishProgress() {
+
+        if (isEmptyListeners()){
+            return;
+        }
+        if (!isPlaying()){
+            return;
+        }
+        if (timerTask != null){
+            return;
+        }
+
+        timerTask = new TimerTask(){
+            @Override
+            public void run() {
+                if (isEmptyListeners()){
+                    stopPublishProgress();
+                    return;
+                }
+                handler.sendEmptyMessage(MESSAGE_PROGRESS);
+            }
+        };
+        timer = new Timer();
+        timer.schedule(timerTask,0,16);
+    }
+
+    /**
+     * 停止播放进度通知
+     */
+    private void stopPublishProgress() {
+
+        if (timerTask != null){
+            timerTask.cancel();
+            timerTask = null;
+        }
+        if (timer != null){
+            timer.cancel();
+            timer = null;
+        }
+    }
+    /**
+     * 是否没有进度监听器
+     *
+     * @return
+     */
+    private boolean isEmptyListeners() {
+        return listeners.size() == 0;
+    }
+
+    Handler handler = new Handler(Looper.getMainLooper()){
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case MESSAGE_PROGRESS:
+                    data.setProgress(player.getCurrentPosition());
+                    ListUtil.eachListener(listeners, listener -> listener.onProgress(data));
+                    break;
+            }
+        }
+    };
 }

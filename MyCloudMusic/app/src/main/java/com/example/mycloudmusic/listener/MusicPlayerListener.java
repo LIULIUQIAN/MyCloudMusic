@@ -20,4 +20,9 @@ public interface MusicPlayerListener {
      * 播放器准备完毕了
      */
     void onPrepared(MediaPlayer mp, Song data);
+
+    /**
+     * 播放进度回调
+     */
+    void onProgress(Song data);
 }

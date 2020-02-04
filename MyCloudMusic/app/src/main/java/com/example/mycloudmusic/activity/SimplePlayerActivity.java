@@ -23,7 +23,7 @@ import com.example.mycloudmusic.util.NotificationUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlayerListener {
+public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
@@ -58,8 +58,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     }
 
     /*
-    * 界面可见
-    * */
+     * 界面可见
+     * */
     @Override
     protected void onResume() {
         super.onResume();
@@ -68,8 +68,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     }
 
     /*
-    * 界面不可见
-    * */
+     * 界面不可见
+     * */
     @Override
     protected void onPause() {
         super.onPause();
@@ -87,8 +87,15 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
 
         Song song = new Song();
         song.setUri(songUrl);
-        musicPlayerManager.play(songUrl,song);
+        musicPlayerManager.play(songUrl, song);
 
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        sb_progress.setOnSeekBarChangeListener(this);
     }
 
     @OnClick(R.id.bt_previous)
@@ -98,9 +105,9 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
 
     @OnClick(R.id.bt_play)
     public void onPlayClick() {
-        if (musicPlayerManager.isPlaying()){
+        if (musicPlayerManager.isPlaying()) {
             musicPlayerManager.pause();
-        }else {
+        } else {
             musicPlayerManager.resume();
         }
     }
@@ -132,17 +139,51 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
         showDuration();
     }
 
+    @Override
+    public void onProgress(Song data) {
+        showProgress();
+    }
+
     /*
-    * 显示时长
-    * */
+     * 显示时长
+     * */
     private void showDuration() {
 
         long duration = musicPlayerManager.getData().getDuration();
         tv_end.setText(TimeUtil.formatMinuteSecond((int) duration));
-
         sb_progress.setMax((int) duration);
+    }
 
+    /**
+     * 显示播放进度
+     */
+    private void showProgress() {
+        long progress = musicPlayerManager.getData().getProgress();
+        sb_progress.setProgress((int) progress);
+        tv_start.setText(TimeUtil.formatMinuteSecond((int) progress));
+    }
+
+    //end音乐播放器回调
+
+
+    //SeekBar
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+        if (fromUser) {
+            musicPlayerManager.seekTo(progress);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
 
     }
-    //end音乐播放器回调
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    //end SeekBar
 }
