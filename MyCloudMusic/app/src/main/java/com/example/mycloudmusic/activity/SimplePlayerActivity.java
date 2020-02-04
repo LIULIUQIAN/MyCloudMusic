@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.NotificationUtil;
@@ -34,6 +35,7 @@ public class SimplePlayerActivity extends BaseTitleActivity {
 
     @BindView(R.id.tv_title)
     TextView tv_title;
+    private MusicPlayerManager musicPlayerManager;
 
 
     public static void start(Activity activity) {
@@ -47,31 +49,40 @@ public class SimplePlayerActivity extends BaseTitleActivity {
         setContentView(R.layout.activity_simple_player);
     }
 
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
+        String songUrl = "http://dev-courses-misuc.ixuea.com/assets/wangbiliaodewenrou_andongyang.mp3";
+
+        Song song = new Song();
+        song.setUri(songUrl);
+        musicPlayerManager.play(songUrl,song);
+
+    }
+
     @OnClick(R.id.bt_previous)
     public void onPreviousClick() {
-        System.out.println("=============onPreviousClick");
 
-        MusicPlayerManager m1 = MusicPlayerService.getMusicPlayerManager(getMainActivity());
-        MusicPlayerManager m2 = MusicPlayerService.getMusicPlayerManager(getMainActivity());
-
-        System.out.println("=============onPreviousClick:"+(m1==m2));
     }
 
     @OnClick(R.id.bt_play)
     public void onPlayClick() {
-        System.out.println("=============onPlayClick");
-
-        Notification notification = NotificationUtil.getServiceForeground(getApplicationContext());
-        NotificationUtil.showNotification(100,notification);
+        if (musicPlayerManager.isPlaying()){
+            musicPlayerManager.pause();
+        }else {
+            musicPlayerManager.resume();
+        }
     }
 
     @OnClick(R.id.bt_next)
     public void onNextClick() {
-        System.out.println("=============onNextClick");
+
     }
 
     @OnClick(R.id.bt_loop_model)
     public void onLoopClick() {
-        System.out.println("=============onLoopClick");
+
     }
 }

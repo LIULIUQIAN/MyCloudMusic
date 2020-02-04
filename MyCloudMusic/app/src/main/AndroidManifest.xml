@@ -23,7 +23,13 @@
 
         <activity
             android:name=".activity.SimplePlayerActivity"
-            android:label="@string/activity_simple_player" />
+            android:label="@string/activity_simple_player" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.UserDetailActivity"
             android:label="@string/activity_user_detail" />
@@ -61,11 +67,11 @@
             android:label=""
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar.StatusBarTransparent">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
     </application>
 
