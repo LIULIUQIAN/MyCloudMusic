@@ -143,6 +143,11 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
         player.seekTo(progress);
     }
 
+    @Override
+    public void setLooping(boolean looping) {
+        player.setLooping(looping);
+    }
+
     /**
      * 启动播放进度通知
      */

@@ -108,7 +108,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
 
     @OnClick(R.id.bt_previous)
     public void onPreviousClick() {
-
+        Song song = listManager.previous();
+        listManager.play(song);
     }
 
     @OnClick(R.id.bt_play)
@@ -123,6 +124,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     @OnClick(R.id.bt_next)
     public void onNextClick() {
 
+        Song song = listManager.next();
+        listManager.play(song);
     }
 
     @OnClick(R.id.bt_loop_model)
@@ -160,6 +163,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
         long duration = musicPlayerManager.getData().getDuration();
         tv_end.setText(TimeUtil.formatMinuteSecond((int) duration));
         sb_progress.setMax((int) duration);
+
+        tv_title.setText(musicPlayerManager.getData().getTitle());
     }
 
     /**

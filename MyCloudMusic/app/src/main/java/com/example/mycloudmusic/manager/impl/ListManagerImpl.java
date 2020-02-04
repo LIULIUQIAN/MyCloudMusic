@@ -10,6 +10,11 @@ import com.example.mycloudmusic.util.Constant;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_LIST;
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_ONE;
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_RANDOM;
 
 public class ListManagerImpl implements ListManager {
 
@@ -25,6 +30,12 @@ public class ListManagerImpl implements ListManager {
      * 是否播放了
      */
     private boolean isPlay;
+
+    /**
+     * 循环模式
+     * 默认列表循环
+     */
+    private int model = MODEL_LOOP_LIST;
 
     private ListManagerImpl(Context context) {
         this.context = context;
@@ -71,11 +82,80 @@ public class ListManagerImpl implements ListManager {
 
     @Override
     public void resume() {
-        if (isPlay){
+        if (isPlay) {
             musicPlayerManager.resume();
-        }else {
+        } else {
             play(data);
         }
+    }
+
+    @Override
+    public Song previous() {
+
+        int index = 0;
+
+        switch (model) {
+            case MODEL_LOOP_RANDOM:
+                index = new Random().nextInt(datum.size());
+                break;
+            default:
+                index = datum.indexOf(data);
+                if (index != -1) {
+                    if (index == 0) {
+                        index = datum.size() - 1;
+                    } else {
+                        index--;
+                    }
+                } else {
+                    throw new IllegalArgumentException("Cant't find current song");
+                }
+                break;
+        }
+        return datum.get(index);
+    }
+
+    @Override
+    public Song next() {
+        int index = 0;
+
+        switch (model) {
+            case MODEL_LOOP_RANDOM:
+                index = new Random().nextInt(datum.size());
+                break;
+            default:
+                index = datum.indexOf(data);
+                if (index != -1) {
+                    if (index == datum.size() - 1) {
+                        index = 0;
+                    } else {
+                        index++;
+                    }
+                } else {
+                    throw new IllegalArgumentException("Cant't find current song");
+                }
+                break;
+        }
+        return datum.get(index);
+    }
+
+    @Override
+    public int changeLoopModel() {
+        model++;
+        if (model > MODEL_LOOP_RANDOM) {
+            model = MODEL_LOOP_LIST;
+        }
+
+        if (model == MODEL_LOOP_ONE) {
+            musicPlayerManager.setLooping(true);
+        } else {
+            musicPlayerManager.setLooping(false);
+        }
+        return model;
+    }
+
+    @Override
+    public int getLoopModel() {
+        return model;
     }
 
 }

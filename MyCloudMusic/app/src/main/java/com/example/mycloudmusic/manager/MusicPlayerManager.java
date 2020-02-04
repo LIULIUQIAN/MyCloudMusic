@@ -44,4 +44,8 @@ public interface MusicPlayerManager {
      * 从指定位置播放(单位:毫秒)
      */
     void seekTo(int progress);
+    /**
+     * 设置是否单曲循环
+     */
+    void setLooping(boolean looping);
 }

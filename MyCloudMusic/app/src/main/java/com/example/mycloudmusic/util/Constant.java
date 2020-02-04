@@ -62,4 +62,21 @@ public class Constant {
      * 播放进度通知
      */
     public static final int MESSAGE_PROGRESS = 0;
+
+
+    /**
+     * 列表循环
+     */
+    public static final int MODEL_LOOP_LIST = 0;
+
+    /**
+     * 单曲循环
+     */
+    public static final int MODEL_LOOP_ONE = 1;
+
+    /**
+     * 随机循环
+     */
+    public static final int MODEL_LOOP_RANDOM = 2;
+
 }
