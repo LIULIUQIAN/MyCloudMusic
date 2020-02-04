@@ -24,6 +24,10 @@ import com.example.mycloudmusic.util.NotificationUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_LIST;
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_ONE;
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_RANDOM;
+
 public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener {
 
     @BindView(R.id.recycler_view)
@@ -43,6 +47,9 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
 
     @BindView(R.id.bt_play)
     Button bt_play;
+
+    @BindView(R.id.bt_loop_model)
+    Button bt_loop_model;
 
     private MusicPlayerManager musicPlayerManager;
     private ListManager listManager;
@@ -71,6 +78,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
         showDuration();
         //显示播放进度
         showProgress();
+        //循环模式
+        showLoopModel();
     }
 
     /*
@@ -131,6 +140,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     @OnClick(R.id.bt_loop_model)
     public void onLoopClick() {
 
+        listManager.changeLoopModel();
+        showLoopModel();
     }
 
     //音乐播放器回调
@@ -176,6 +187,25 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
         tv_start.setText(TimeUtil.formatMinuteSecond((int) progress));
     }
 
+    /**
+     * 显示循环模式
+     */
+    private void showLoopModel() {
+
+        int model = listManager.getLoopModel();
+        switch (model){
+            case MODEL_LOOP_LIST:
+                bt_loop_model.setText("列表循环");
+                break;
+            case MODEL_LOOP_ONE:
+                bt_loop_model.setText("单曲循环");
+                break;
+            case MODEL_LOOP_RANDOM:
+                bt_loop_model.setText("随机循环");
+                break;
+        }
+
+    }
     //end音乐播放器回调
 
 
