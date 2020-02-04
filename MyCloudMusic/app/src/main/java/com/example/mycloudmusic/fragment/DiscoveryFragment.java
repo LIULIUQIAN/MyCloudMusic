@@ -1,6 +1,7 @@
 package com.example.mycloudmusic.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.activity.SheetDetailActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
 import com.example.mycloudmusic.adapter.DiscoveryAdapter;
 import com.example.mycloudmusic.api.Api;
@@ -26,6 +28,7 @@ import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.Title;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
@@ -136,6 +139,24 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
         fetchData();
         fetchBannerData();
 
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                Object item = adapter.getItem(position);
+                if (item instanceof Sheet){
+                    Sheet sheet = (Sheet) item;
+                    Intent intent = new Intent(getMainActivity(), SheetDetailActivity.class);
+                    intent.putExtra(Constant.ID,sheet.getId());
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     /*

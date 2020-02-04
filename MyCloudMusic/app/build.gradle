@@ -269,4 +269,8 @@ dependencies {
     //https://github.com/youth5201314/banner
     implementation 'com.youth.banner:banner:1.4.10'
 
+    //内存泄漏检测工具
+    //https://github.com/square/leakcanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
+
 }

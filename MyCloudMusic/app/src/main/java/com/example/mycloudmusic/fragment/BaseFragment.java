@@ -48,8 +48,8 @@ public abstract class BaseFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews();
-        initListeners();
         initDatum();
+        initListeners();
     }
 
     public final <T extends View> T findViewById(@IdRes int id){
