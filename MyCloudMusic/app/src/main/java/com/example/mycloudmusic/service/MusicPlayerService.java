@@ -1,12 +1,15 @@
 package com.example.mycloudmusic.service;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.manager.impl.MusicPlayerManagerImpl;
+import com.example.mycloudmusic.util.NotificationUtil;
 import com.example.mycloudmusic.util.ServiceUtil;
 
 public class MusicPlayerService extends Service {
@@ -29,6 +32,8 @@ public class MusicPlayerService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        //停止前台服务
+        stopForeground(true);
         System.out.println("MusicPlayerService-onDestroy");
     }
 
@@ -38,6 +43,12 @@ public class MusicPlayerService extends Service {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //设置service为前台service,提高应用的优先级,8.0新特性
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification notification = NotificationUtil.getServiceForeground(getApplicationContext());
+            //Id写0：这个通知就不会显示
+            NotificationUtil.showNotification(0, notification);
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.SeekBar;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
+import com.example.mycloudmusic.util.NotificationUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -58,6 +60,9 @@ public class SimplePlayerActivity extends BaseTitleActivity {
     @OnClick(R.id.bt_play)
     public void onPlayClick() {
         System.out.println("=============onPlayClick");
+
+        Notification notification = NotificationUtil.getServiceForeground(getApplicationContext());
+        NotificationUtil.showNotification(100,notification);
     }
 
     @OnClick(R.id.bt_next)
