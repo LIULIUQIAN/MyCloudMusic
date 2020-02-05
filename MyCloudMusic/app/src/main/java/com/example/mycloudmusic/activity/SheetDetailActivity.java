@@ -2,7 +2,6 @@ package com.example.mycloudmusic.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +21,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -34,13 +32,8 @@ import com.example.mycloudmusic.adapter.SongAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
-import com.example.mycloudmusic.domain.TimeUtil;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
-import com.example.mycloudmusic.listener.MusicPlayerListener;
-import com.example.mycloudmusic.manager.ListManager;
-import com.example.mycloudmusic.manager.MusicPlayerManager;
-import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.ToastUtil;
@@ -48,14 +41,10 @@ import com.example.mycloudmusic.util.ToastUtil;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import retrofit2.Response;
 
-import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_LIST;
-import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_ONE;
-import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_RANDOM;
 
-public class SheetDetailActivity extends BaseTitleActivity implements View.OnClickListener, MusicPlayerListener {
+public class SheetDetailActivity extends BaseMusicPlayerActivity implements View.OnClickListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -66,43 +55,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     private TextView tv_nickname;
     private TextView tv_count;
 
-    ///
-    /**
-     * 迷你播放控制器 容器
-     */
-    @BindView(R.id.ll_play_control_small)
-    LinearLayout ll_play_control_small;
 
-    /**
-     * 迷你播放控制器 封面
-     */
-    @BindView(R.id.iv_banner_small_control)
-    ImageView iv_banner_small_control;
-
-    /**
-     * 迷你播放控制器 标题
-     */
-    @BindView(R.id.tv_title_small_control)
-    TextView tv_title_small_control;
-
-    /**
-     * 迷你播放控制器 歌词控件
-     */
-    @BindView(R.id.llv_small_control)
-    TextView llv;
-
-    /**
-     * 迷你播放控制器 播放暂停按钮
-     */
-    @BindView(R.id.iv_play_small_control)
-    ImageView iv_play_small_control;
-
-    /**
-     * 迷你播放控制器 进度条
-     */
-    @BindView(R.id.pb_progress_small_control)
-    ProgressBar pb_progress_small_control;
-    ///
     /**
      * 评论容器
      */
@@ -124,13 +77,10 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
     private LinearLayout ll_user;
 
-
     //歌单详情数据
     private Sheet data;
-
     private SongAdapter adapter;
-    private ListManager listManager;
-    private MusicPlayerManager musicPlayerManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,34 +94,20 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-
-        musicPlayerManager.addMusicPlayerListener(this);
-        //显示迷你播放控制器数据
-        showSmallPlayControlData();
-
         scrollPosition();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        musicPlayerManager.removeMusicPlayerListener(this);
     }
 
     @Override
     protected void initViews() {
         super.initViews();
 
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getMainActivity()));
     }
 
     @Override
     protected void initDatum() {
         super.initDatum();
-
-        musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
-        listManager = MusicPlayerService.getListManager(getApplicationContext());
-        musicPlayerManager.addMusicPlayerListener(this);
 
         adapter = new SongAdapter(R.layout.item_song_detail);
         adapter.setHeaderView(createHeaderView());
@@ -182,7 +118,6 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                SimplePlayerActivity.start(getMainActivity());
                 play(position);
             }
         });
@@ -198,7 +133,6 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
         SimplePlayerActivity.start(getMainActivity());
     }
-
 
     /*
      * 头部 view
@@ -249,7 +183,6 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
             tv_count.setText(getResources().getString(R.string.music_count, 0));
         }
 
-//        ImageUtil.showAvatar(this, iv_banner, sheet.getBanner());
         tv_title.setText(sheet.getTitle());
         ImageUtil.showCircleAvatar(this, iv_avatar, sheet.getUser().getAvatar());
         tv_nickname.setText(sheet.getUser().getNickname());
@@ -299,7 +232,6 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     /**
      * 显示收藏状态
      */
-
     @SuppressLint("ResourceType")
     private void showCollectionStatus() {
 
@@ -380,123 +312,12 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
         return super.onOptionsItemSelected(item);
     }
-    /////////////////////////////////////////////////////////////////
-
-    /**
-     * 迷你播放控制器 容器点击
-     */
-    @OnClick(R.id.ll_play_control_small)
-    public void onPlayControlSmallClick() {
-        SimplePlayerActivity.start(getMainActivity());
-    }
-
-    /**
-     * 迷你播放控制器 播放暂停按钮点击
-     */
-    @OnClick(R.id.iv_play_small_control)
-    public void onPlaySmallClick() {
-
-        if (musicPlayerManager.isPlaying()) {
-            listManager.pause();
-        } else {
-            listManager.resume();
-        }
-    }
-
-    /**
-     * 迷你播放控制器 下一曲按钮点击
-     */
-    @OnClick(R.id.iv_next_small_control)
-    public void onNextSmallClick() {
-
-        listManager.play(listManager.next());
-    }
-
-    /**
-     * 迷你播放控制器 播放列表按钮点击
-     */
-    @OnClick(R.id.iv_list_small_control)
-    public void onListSmallClick() {
-        System.out.println("onListSmallClick");
-
-    }
-
-    /*
-     * 显示迷你播放控制器数据
-     * */
-    private void showSmallPlayControlData() {
-
-        if (listManager.getDatum() != null && listManager.getDatum().size() > 0) {
-            ll_play_control_small.setVisibility(View.VISIBLE);
-            Song data = listManager.getData();
-            if (data == null) {
-                return;
-            }
-            showInitData(data);
-            showDuration(data);
-            showProgress(data);
-            showMusicPlayStatus();
-
-        } else {
-            ll_play_control_small.setVisibility(View.GONE);
-        }
-
-    }
-
-    /*
-     * 显示播放状态
-     * */
-    private void showMusicPlayStatus() {
-        iv_play_small_control.setSelected(musicPlayerManager.isPlaying());
-    }
-
-    /*
-     * 显示播放进度
-     * */
-    private void showProgress(Song data) {
-        pb_progress_small_control.setProgress((int) data.getProgress());
-    }
-
-    /*
-     * 显示音乐时长
-     * */
-    private void showDuration(Song data) {
-        pb_progress_small_control.setMax((int) data.getDuration());
-    }
-
-    /*
-     * 显示初始化数据
-     * */
-    private void showInitData(Song data) {
-        ImageUtil.showAvatar(getMainActivity(), iv_banner_small_control, data.getBanner());
-        tv_title_small_control.setText(data.getTitle());
-
-    }
-
-    //音乐播放器回调
-    @Override
-    public void onPaused(Song data) {
-        showMusicPlayStatus();
-    }
-
-    @Override
-    public void onPlaying(Song data) {
-        showMusicPlayStatus();
-        showInitData(data);
-    }
 
     @Override
     public void onPrepared(MediaPlayer mp, Song data) {
-        showDuration(data);
+        super.onPrepared(mp, data);
         scrollPosition();
     }
-
-    @Override
-    public void onProgress(Song data) {
-        showProgress(data);
-    }
-
-    //end音乐播放器回调
 
     /**
      * 选中当前音乐
