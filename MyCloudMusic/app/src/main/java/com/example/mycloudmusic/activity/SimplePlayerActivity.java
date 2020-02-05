@@ -1,6 +1,7 @@
 package com.example.mycloudmusic.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
@@ -13,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.adapter.SimplePlayerAdapter;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.TimeUtil;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
@@ -53,6 +55,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
 
     private MusicPlayerManager musicPlayerManager;
     private ListManager listManager;
+    private SimplePlayerAdapter adapter;
 
 
     public static void start(Activity activity) {
@@ -93,6 +96,15 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     }
 
     @Override
+    protected void initViews() {
+        super.initViews();
+
+        recycler_view.setHasFixedSize(true);
+
+        recycler_view.setLayoutManager(new LinearLayoutManager(getMainActivity()));
+    }
+
+    @Override
     protected void initDatum() {
         super.initDatum();
 
@@ -105,6 +117,10 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
 //        Song song = new Song();
 //        song.setUri(songUrl);
 //        musicPlayerManager.play(songUrl, song);
+
+        adapter = new SimplePlayerAdapter(android.R.layout.simple_list_item_1);
+        recycler_view.setAdapter(adapter);
+        adapter.replaceData(listManager.getDatum());
 
     }
 
