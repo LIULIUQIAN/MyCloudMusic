@@ -382,7 +382,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
      */
     @OnClick(R.id.ll_play_control_small)
     public void onPlayControlSmallClick() {
-        System.out.println("onPlayControlSmallClick");
+        SimplePlayerActivity.start(getMainActivity());
     }
 
     /**
@@ -390,7 +390,12 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
      */
     @OnClick(R.id.iv_play_small_control)
     public void onPlaySmallClick() {
-        System.out.println("onPlaySmallClick");
+
+        if (musicPlayerManager.isPlaying()){
+            listManager.pause();
+        }else {
+            listManager.resume();
+        }
     }
 
     /**
@@ -398,7 +403,8 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
      */
     @OnClick(R.id.iv_next_small_control)
     public void onNextSmallClick() {
-        System.out.println("onNextSmallClick");
+
+        listManager.play(listManager.next());
     }
 
     /**
@@ -469,6 +475,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     @Override
     public void onPlaying(Song data) {
         showMusicPlayStatus();
+        showInitData(data);
     }
 
     @Override
