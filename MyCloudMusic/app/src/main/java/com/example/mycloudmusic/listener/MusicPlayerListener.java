@@ -9,25 +9,31 @@ public interface MusicPlayerListener {
     /**
      * 已经暂停了
      */
-    void onPaused(Song data);
+    default void onPaused(Song data) {
+    }
 
     /**
      * 已经播放了
      */
-    void onPlaying(Song data);
+    default void onPlaying(Song data) {
+    }
 
     /**
      * 播放器准备完毕了
      */
-    void onPrepared(MediaPlayer mp, Song data);
+    default void onPrepared(MediaPlayer mp, Song data) {
+    }
 
     /**
      * 播放进度回调
      */
-    void onProgress(Song data);
+    default void onProgress(Song data) {
+    }
 
     /**
      * 播放完毕
      */
-    void onCompletion(MediaPlayer mp);
+    default void onCompletion(MediaPlayer mp) {
+    }
+
 }

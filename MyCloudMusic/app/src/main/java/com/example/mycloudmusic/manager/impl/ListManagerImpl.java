@@ -163,25 +163,6 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
 
     // 播放器回调
-    @Override
-    public void onPaused(Song data) {
-
-    }
-
-    @Override
-    public void onPlaying(Song data) {
-
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mp, Song data) {
-
-    }
-
-    @Override
-    public void onProgress(Song data) {
-
-    }
 
     @Override
     public void onCompletion(MediaPlayer mp) {

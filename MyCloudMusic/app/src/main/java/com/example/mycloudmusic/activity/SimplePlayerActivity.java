@@ -194,12 +194,6 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
         showProgress();
     }
 
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-
-        System.out.println("播放完成");
-    }
-
     /*
      * 显示时长
      * */
