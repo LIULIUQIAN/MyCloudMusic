@@ -1,7 +1,6 @@
 package com.example.mycloudmusic;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -9,16 +8,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.example.mycloudmusic.activity.BaseCommonActivity;
-import com.example.mycloudmusic.activity.BaseTitleActivity;
+import com.example.mycloudmusic.activity.BaseMusicPlayerActivity;
 import com.example.mycloudmusic.activity.SettingActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
 import com.example.mycloudmusic.adapter.MainAdapter;
@@ -47,7 +42,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseTitleActivity {
+public class MainActivity extends BaseMusicPlayerActivity {
 
     //抽屉 view
     @BindView(R.id.dl)

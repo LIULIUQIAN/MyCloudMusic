@@ -7,9 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
-import com.example.mycloudmusic.adapter.SongAdapter;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
