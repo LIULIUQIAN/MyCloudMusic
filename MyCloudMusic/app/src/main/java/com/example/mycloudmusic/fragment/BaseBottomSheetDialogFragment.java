@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.activity.BaseCommonActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import butterknife.ButterKnife;
@@ -56,5 +57,13 @@ public abstract class BaseBottomSheetDialogFragment extends BottomSheetDialogFra
         initListeners();
     }
 
+    /**
+     * 获取activity
+     *
+     * @return
+     */
+    protected BaseCommonActivity getMainActivity() {
+        return (BaseCommonActivity) getActivity();
+    }
 
 }

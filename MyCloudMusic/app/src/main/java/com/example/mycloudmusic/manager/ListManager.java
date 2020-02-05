@@ -63,5 +63,10 @@ public interface ListManager {
      */
     void delete(int index);
 
+    /**
+     * 删除所有音乐
+     */
+    void deleteAll();
+
 
 }

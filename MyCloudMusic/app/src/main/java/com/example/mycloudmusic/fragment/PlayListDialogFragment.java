@@ -113,6 +113,9 @@ public class PlayListDialogFragment extends BaseBottomSheetDialogFragment {
     @OnClick(R.id.ib_delete_all)
     public void onDeleteAllClick() {
         dismiss();
+
+        listManager.deleteAll();
+        EventBus.getDefault().post(new PlayListChangedEvent());
     }
 
 }

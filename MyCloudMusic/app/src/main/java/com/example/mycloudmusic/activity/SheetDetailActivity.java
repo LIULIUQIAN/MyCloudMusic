@@ -33,6 +33,7 @@ import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.response.DetailResponse;
+import com.example.mycloudmusic.fragment.SongMoreDialogFragment;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
@@ -119,6 +120,16 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 play(position);
+            }
+        });
+
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
+                Song song = (Song) adapter.getItem(position);
+
+                SongMoreDialogFragment.show(getSupportFragmentManager(),data,song);
             }
         });
     }

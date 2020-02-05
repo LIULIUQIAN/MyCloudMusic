@@ -184,6 +184,14 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         datum.remove(song);
     }
 
+    @Override
+    public void deleteAll() {
+        if (musicPlayerManager.isPlaying()){
+            pause();
+        }
+        datum.clear();
+    }
+
 
     // 播放器回调
     @Override

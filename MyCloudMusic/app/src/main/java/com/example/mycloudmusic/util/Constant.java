@@ -79,4 +79,15 @@ public class Constant {
      */
     public static final int MODEL_LOOP_RANDOM = 2;
 
+    /**
+     * 歌单
+     */
+    public static final String SHEET = "SHEET";
+
+    /**
+     * 音乐
+     */
+    public static final String SONG = "SONG";
+
+
 }
