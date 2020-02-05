@@ -9,7 +9,7 @@ import com.example.mycloudmusic.domain.Song;
 
 public class SimplePlayerAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
 
-    private Integer selectIndex = -1;
+    private int selectIndex = -1;
     public SimplePlayerAdapter(int layoutResId) {
         super(layoutResId);
     }

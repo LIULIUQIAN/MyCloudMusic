@@ -45,6 +45,8 @@ import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import retrofit2.Response;
@@ -146,6 +148,8 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         musicPlayerManager.addMusicPlayerListener(this);
         //显示迷你播放控制器数据
         showSmallPlayControlData();
+
+        scrollPosition();
     }
 
     @Override
@@ -288,6 +292,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
             });
         }
 
+        scrollPosition();
 
     }
 
@@ -391,9 +396,9 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     @OnClick(R.id.iv_play_small_control)
     public void onPlaySmallClick() {
 
-        if (musicPlayerManager.isPlaying()){
+        if (musicPlayerManager.isPlaying()) {
             listManager.pause();
-        }else {
+        } else {
             listManager.resume();
         }
     }
@@ -432,29 +437,29 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
             showProgress(data);
             showMusicPlayStatus();
 
-        }else {
+        } else {
             ll_play_control_small.setVisibility(View.GONE);
         }
 
     }
 
     /*
-    * 显示播放状态
-    * */
+     * 显示播放状态
+     * */
     private void showMusicPlayStatus() {
         iv_play_small_control.setSelected(musicPlayerManager.isPlaying());
     }
 
     /*
-    * 显示播放进度
-    * */
+     * 显示播放进度
+     * */
     private void showProgress(Song data) {
         pb_progress_small_control.setProgress((int) data.getProgress());
     }
 
     /*
-    * 显示音乐时长
-    * */
+     * 显示音乐时长
+     * */
     private void showDuration(Song data) {
         pb_progress_small_control.setMax((int) data.getDuration());
     }
@@ -483,6 +488,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     @Override
     public void onPrepared(MediaPlayer mp, Song data) {
         showDuration(data);
+        scrollPosition();
     }
 
     @Override
@@ -491,6 +497,41 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     }
 
     //end音乐播放器回调
+
+    /**
+     * 选中当前音乐
+     */
+    private void scrollPosition() {
+
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (data == null || data.getSongs() == null || data.getSongs().size() == 0) {
+                    return;
+                }
+
+                List<Song> datum = data.getSongs();
+                //当前播放音乐
+                Song song = listManager.getData();
+                if (song == null) {
+                    return;
+                }
+                int index = -1;
+                for (int i = 0; i < datum.size(); i++) {
+                    if (song.getId().equals(datum.get(i).getId())) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index != -1) {
+                    adapter.setSelectIndex(index + 1);
+                } else {
+                    adapter.setSelectIndex(-1);
+                }
+            }
+        });
+    }
 
 
 }
