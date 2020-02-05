@@ -104,6 +104,11 @@ public class Constant {
     public static final String ACTION_LYRIC = "com.example.mycloudmusic.ACTION_LYRIC";
     public static final String ACTION_UNLOCK_LYRIC = "com.example.mycloudmusic.ACTION_UNLOCK_LYRIC";
 
+    /**
+     * 音乐播放通知 点击
+     */
+    public static final String ACTION_MUSIC_PLAY_CLICK = "com.example.mycloudmusic.ACTION_MUSIC_PLAY_CLICK";
+
 
 
 }

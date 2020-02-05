@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.mycloudmusic.MainActivity;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Song;
 
@@ -137,12 +138,23 @@ public class NotificationUtil {
         setClick(context, contentView);
         setClick(context, contentBigView);
 
+        //设置通知点击后启动的界面
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setAction(Constant.ACTION_MUSIC_PLAY_CLICK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent contentPendingIntent = PendingIntent.getActivity(context,
+                Constant.ACTION_MUSIC_PLAY_CLICK.hashCode(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, IMPORTANCE_LOW_CHANNEL_ID)
                 .setAutoCancel(false)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setCustomContentView(contentView)
-                .setCustomBigContentView(contentBigView);
+                .setCustomBigContentView(contentBigView)
+                .setContentIntent(contentPendingIntent);
 
         getNotificationManager(context);
         notificationManager.notify(NOTIFICATION_MUSIC_ID, builder.build());
