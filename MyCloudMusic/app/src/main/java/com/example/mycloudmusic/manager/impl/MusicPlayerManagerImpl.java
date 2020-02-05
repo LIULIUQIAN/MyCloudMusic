@@ -62,7 +62,17 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 data.setDuration(mp.getDuration());
-                ListUtil.eachListener(listeners, listener -> listener.onPrepared(mp,data));
+                ListUtil.eachListener(listeners, listener -> listener.onPrepared(mp, data));
+            }
+        });
+
+        /*
+         * 播放完成监听
+         * */
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                ListUtil.eachListener(listeners, listener -> listener.onCompletion(mp));
             }
         });
     }
@@ -153,20 +163,20 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
      */
     private void startPublishProgress() {
 
-        if (isEmptyListeners()){
+        if (isEmptyListeners()) {
             return;
         }
-        if (!isPlaying()){
+        if (!isPlaying()) {
             return;
         }
-        if (timerTask != null){
+        if (timerTask != null) {
             return;
         }
 
-        timerTask = new TimerTask(){
+        timerTask = new TimerTask() {
             @Override
             public void run() {
-                if (isEmptyListeners()){
+                if (isEmptyListeners()) {
                     stopPublishProgress();
                     return;
                 }
@@ -174,7 +184,7 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
             }
         };
         timer = new Timer();
-        timer.schedule(timerTask,0,16);
+        timer.schedule(timerTask, 0, 16);
     }
 
     /**
@@ -182,15 +192,16 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
      */
     private void stopPublishProgress() {
 
-        if (timerTask != null){
+        if (timerTask != null) {
             timerTask.cancel();
             timerTask = null;
         }
-        if (timer != null){
+        if (timer != null) {
             timer.cancel();
             timer = null;
         }
     }
+
     /**
      * 是否没有进度监听器
      *
@@ -200,12 +211,12 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
         return listeners.size() == 0;
     }
 
-    Handler handler = new Handler(Looper.getMainLooper()){
+    Handler handler = new Handler(Looper.getMainLooper()) {
 
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case MESSAGE_PROGRESS:
                     data.setProgress(player.getCurrentPosition());
                     ListUtil.eachListener(listeners, listener -> listener.onProgress(data));

@@ -25,4 +25,9 @@ public interface MusicPlayerListener {
      * 播放进度回调
      */
     void onProgress(Song data);
+
+    /**
+     * 播放完毕
+     */
+    void onCompletion(MediaPlayer mp);
 }

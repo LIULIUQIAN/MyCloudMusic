@@ -48,4 +48,5 @@ public interface MusicPlayerManager {
      * 设置是否单曲循环
      */
     void setLooping(boolean looping);
+
 }

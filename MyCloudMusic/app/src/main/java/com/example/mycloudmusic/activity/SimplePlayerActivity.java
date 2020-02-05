@@ -166,6 +166,12 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
         showProgress();
     }
 
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+
+        System.out.println("播放完成");
+    }
+
     /*
      * 显示时长
      * */
@@ -193,7 +199,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     private void showLoopModel() {
 
         int model = listManager.getLoopModel();
-        switch (model){
+        switch (model) {
             case MODEL_LOOP_LIST:
                 bt_loop_model.setText("列表循环");
                 break;

@@ -1,8 +1,10 @@
 package com.example.mycloudmusic.manager.impl;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
@@ -16,7 +18,7 @@ import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_LIST;
 import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_ONE;
 import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_RANDOM;
 
-public class ListManagerImpl implements ListManager {
+public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
 
     private static ListManagerImpl instance;
@@ -40,6 +42,7 @@ public class ListManagerImpl implements ListManager {
     private ListManagerImpl(Context context) {
         this.context = context;
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
+        musicPlayerManager.addMusicPlayerListener(this);
     }
 
     public static synchronized ListManager getInstance(Context context) {
@@ -158,4 +161,39 @@ public class ListManagerImpl implements ListManager {
         return model;
     }
 
+
+    // 播放器回调
+    @Override
+    public void onPaused(Song data) {
+
+    }
+
+    @Override
+    public void onPlaying(Song data) {
+
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp, Song data) {
+
+    }
+
+    @Override
+    public void onProgress(Song data) {
+
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        //自动播放下一首音乐
+        if (getLoopModel() != MODEL_LOOP_ONE) {
+            Song song = next();
+            if (song != null) {
+                play(song);
+            }
+        }
+
+    }
+
+    //end播放器回调
 }
