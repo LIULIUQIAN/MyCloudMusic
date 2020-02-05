@@ -94,5 +94,16 @@ public class Constant {
      */
     public static final int NOTIFICATION_MUSIC_ID = 10000;
 
+    /**
+     * 音乐播放通知-播放
+     */
+    public static final String ACTION_PLAY = "com.example.mycloudmusic.ACTION_PLAY";
+    public static final String ACTION_PREVIOUS = "com.example.mycloudmusic.ACTION_PREVIOUS";
+    public static final String ACTION_NEXT = "com.example.mycloudmusic.ACTION_NEXT";
+    public static final String ACTION_LIKE = "com.example.mycloudmusic.ACTION_LIKE";
+    public static final String ACTION_LYRIC = "com.example.mycloudmusic.ACTION_LYRIC";
+    public static final String ACTION_UNLOCK_LYRIC = "com.example.mycloudmusic.ACTION_UNLOCK_LYRIC";
+
+
 
 }

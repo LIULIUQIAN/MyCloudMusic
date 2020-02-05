@@ -3,7 +3,9 @@ package com.example.mycloudmusic.util;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -119,6 +121,22 @@ public class NotificationUtil {
         setData(data, contentView, isPlaying, banner);
         setData(data, contentBigView, isPlaying, banner);
 
+        //点赞
+        PendingIntent likePendingIntent = PendingIntent.getBroadcast(context,
+                Constant.ACTION_LIKE.hashCode(),
+                new Intent(Constant.ACTION_LIKE),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        contentBigView.setOnClickPendingIntent(R.id.iv_like, likePendingIntent);
+        //上一曲
+        PendingIntent previousPendingIntent = PendingIntent.getBroadcast(context,
+                Constant.ACTION_PREVIOUS.hashCode(),
+                new Intent(Constant.ACTION_PREVIOUS),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        contentBigView.setOnClickPendingIntent(R.id.iv_previous, previousPendingIntent);
+
+        setClick(context, contentView);
+        setClick(context, contentBigView);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, IMPORTANCE_LOW_CHANNEL_ID)
                 .setAutoCancel(false)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -142,5 +160,32 @@ public class NotificationUtil {
         int playButtonResourceId = isPlaying ? R.drawable.ic_music_notification_pause : R.drawable.ic_music_notification_play;
         contentView.setImageViewResource(R.id.iv_play, playButtonResourceId);
         contentView.setImageViewBitmap(R.id.iv_banner, banner);
+    }
+
+    /*
+     * 设置通知点击事件
+     * */
+    private static void setClick(Context context, RemoteViews contentView) {
+
+        //播放
+        PendingIntent playPendingIntent = PendingIntent.getBroadcast(context,
+                Constant.ACTION_PLAY.hashCode(),
+                new Intent(Constant.ACTION_PLAY),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        contentView.setOnClickPendingIntent(R.id.iv_play, playPendingIntent);
+
+        //下一曲
+        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context,
+                Constant.ACTION_NEXT.hashCode(),
+                new Intent(Constant.ACTION_NEXT),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        contentView.setOnClickPendingIntent(R.id.iv_next, nextPendingIntent);
+        //歌词
+        PendingIntent lyricPendingIntent = PendingIntent.getBroadcast(context,
+                Constant.ACTION_LYRIC.hashCode(),
+                new Intent(Constant.ACTION_LYRIC),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        contentView.setOnClickPendingIntent(R.id.iv_lyric, lyricPendingIntent);
+
     }
 }

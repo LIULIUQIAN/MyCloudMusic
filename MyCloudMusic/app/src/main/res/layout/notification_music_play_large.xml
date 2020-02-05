@@ -56,6 +56,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/iv_like"
                     android:layout_width="@dimen/icon_height"
                     android:layout_height="@dimen/icon_height"
                     android:src="@drawable/ic_like_selected" />
@@ -69,6 +70,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/iv_previous"
                     android:layout_width="@dimen/icon_height"
                     android:layout_height="@dimen/icon_height"
                     android:src="@drawable/ic_music_notification_previous" />
@@ -96,7 +98,7 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/iv_next_small_control"
+                    android:id="@+id/iv_next"
                     android:layout_width="@dimen/icon_height"
                     android:layout_height="@dimen/icon_height"
                     android:src="@drawable/ic_music_notification_next" />
