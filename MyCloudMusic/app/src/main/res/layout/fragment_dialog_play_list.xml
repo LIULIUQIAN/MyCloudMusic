@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_song_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/padding_meddle"
+            android:src="@drawable/ic_play_grey" />
+
+        <TextView
+            android:id="@+id/tv_loop_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_meddle"
+            android:text="列表循环"
+            android:textColor="@color/text" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="(0)"
+            android:textColor="@color/text" />
+
+        <Button
+            android:id="@+id/bt_collection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/padding_large"
+            android:background="@null"
+            android:drawableLeft="@drawable/ic_add_grey"
+            android:text="@string/collection_all" />
+
+        <include layout="@layout/divider_small_vertical" />
+
+        <ImageButton
+            android:id="@+id/ib_delete_all"
+            android:layout_width="@dimen/item_song_height"
+            android:layout_height="@dimen/item_song_height"
+            android:background="@null"
+            android:src="@drawable/ic_remove" />
+
+    </LinearLayout>
+
+    <include layout="@layout/divider_small"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

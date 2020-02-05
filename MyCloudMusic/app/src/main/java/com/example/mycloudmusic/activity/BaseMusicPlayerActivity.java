@@ -9,11 +9,17 @@ import android.widget.TextView;
 
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.event.PlayListChangedEvent;
+import com.example.mycloudmusic.fragment.PlayListDialogFragment;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.ImageUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -67,6 +73,7 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
     protected void onResume() {
         super.onResume();
 
+        EventBus.getDefault().register(this);
         musicPlayerManager.addMusicPlayerListener(this);
         //显示迷你播放控制器数据
         showSmallPlayControlData();
@@ -77,7 +84,9 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
     protected void onPause() {
         super.onPause();
         musicPlayerManager.removeMusicPlayerListener(this);
+        EventBus.getDefault().unregister(this);
     }
+
 
     @Override
     protected void initDatum() {
@@ -86,9 +95,7 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
         listManager = MusicPlayerService.getListManager(getApplicationContext());
         musicPlayerManager.addMusicPlayerListener(this);
-
     }
-
 
     /**
      * 迷你播放控制器 容器点击
@@ -125,7 +132,8 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
      */
     @OnClick(R.id.iv_list_small_control)
     public void onListSmallClick() {
-        System.out.println("onListSmallClick");
+
+        PlayListDialogFragment.show(getSupportFragmentManager());
 
     }
 
@@ -203,5 +211,15 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
         showProgress(data);
     }
     //end音乐播放器回调
+
+    /*
+    * 删除音乐事件
+    * */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayListChangedEvent(PlayListChangedEvent event){
+
+        showSmallPlayControlData();
+
+    }
 
 }
