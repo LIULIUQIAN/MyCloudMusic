@@ -2,6 +2,7 @@ package com.example.mycloudmusic.manager;
 
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
+import com.example.mycloudmusic.manager.impl.MusicNotificationManager;
 
 public interface MusicPlayerManager {
 
@@ -48,5 +49,4 @@ public interface MusicPlayerManager {
      * 设置是否单曲循环
      */
     void setLooping(boolean looping);
-
 }

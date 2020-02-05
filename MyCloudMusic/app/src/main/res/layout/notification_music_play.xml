@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iv_banner"
+        android:layout_width="@dimen/banner_height_small"
+        android:layout_height="@dimen/banner_height_small"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_small"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="标题"
+            android:textColor="@color/text" />
+
+        <TextView
+            android:id="@+id/tv_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="歌词"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_small" />
+    </LinearLayout>
+
+    <!--播放按钮-->
+    <ImageView
+        android:id="@+id/iv_play"
+        android:scaleType="center"
+        android:src="@drawable/ic_music_notification_play"
+        android:layout_width="@dimen/button_height"
+        android:layout_height="@dimen/button_height" />
+
+    <!--下一首-->
+    <ImageView
+        android:id="@+id/iv_next"
+        android:scaleType="center"
+        android:src="@drawable/ic_music_notification_next"
+        android:layout_width="@dimen/button_height"
+        android:layout_height="@dimen/button_height" />
+
+    <!--歌词-->
+    <ImageView
+        android:id="@+id/iv_lyric"
+        android:scaleType="center"
+        android:src="@drawable/ic_music_notification_lyric"
+        android:layout_width="@dimen/button_height"
+        android:layout_height="@dimen/button_height" />
+
+
+</LinearLayout>

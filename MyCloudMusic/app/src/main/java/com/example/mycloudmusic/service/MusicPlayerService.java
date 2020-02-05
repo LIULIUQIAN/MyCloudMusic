@@ -10,11 +10,15 @@ import android.os.IBinder;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.manager.impl.ListManagerImpl;
+import com.example.mycloudmusic.manager.impl.MusicNotificationManager;
 import com.example.mycloudmusic.manager.impl.MusicPlayerManagerImpl;
 import com.example.mycloudmusic.util.NotificationUtil;
 import com.example.mycloudmusic.util.ServiceUtil;
 
 public class MusicPlayerService extends Service {
+
+    private MusicNotificationManager musicNotificationManager;
+
     public MusicPlayerService() {
     }
 
@@ -29,6 +33,8 @@ public class MusicPlayerService extends Service {
         super.onCreate();
 
         System.out.println("MusicPlayerService-onCreate");
+        //初始化音乐通知管理器
+        musicNotificationManager = MusicNotificationManager.getInstance(getApplicationContext());
     }
 
     @Override
