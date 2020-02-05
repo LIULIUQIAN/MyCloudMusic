@@ -422,7 +422,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     private void showSmallPlayControlData() {
 
         if (listManager.getDatum() != null && listManager.getDatum().size() > 0) {
-
+            ll_play_control_small.setVisibility(View.VISIBLE);
             Song data = listManager.getData();
             if (data == null) {
                 return;
@@ -432,6 +432,8 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
             showProgress(data);
             showMusicPlayStatus();
 
+        }else {
+            ll_play_control_small.setVisibility(View.GONE);
         }
 
     }

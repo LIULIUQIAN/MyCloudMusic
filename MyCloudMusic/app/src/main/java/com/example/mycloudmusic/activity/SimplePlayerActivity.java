@@ -85,6 +85,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
         showProgress();
         //循环模式
         showLoopModel();
+
+        scrollPosition();
     }
 
     /*
@@ -187,6 +189,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     public void onPrepared(MediaPlayer mp, Song data) {
 
         showDuration();
+        scrollPosition();
     }
 
     @Override
@@ -257,4 +260,20 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     }
 
     //end SeekBar
+
+    /**
+     * 选中当前音乐
+     */
+    private void scrollPosition() {
+
+        recycler_view.post(new Runnable() {
+            @Override
+            public void run() {
+                int index = listManager.getDatum().indexOf(listManager.getData());
+                recycler_view.smoothScrollToPosition(index);
+                adapter.setSelectIndex(index);
+            }
+        });
+    }
+
 }
