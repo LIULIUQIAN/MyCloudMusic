@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,8 +34,10 @@ import com.example.mycloudmusic.adapter.SongAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.TimeUtil;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
@@ -46,7 +49,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import retrofit2.Response;
 
-public class SheetDetailActivity extends BaseTitleActivity implements View.OnClickListener {
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_LIST;
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_ONE;
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_RANDOM;
+
+public class SheetDetailActivity extends BaseTitleActivity implements View.OnClickListener, MusicPlayerListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -136,8 +143,15 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     protected void onResume() {
         super.onResume();
 
+        musicPlayerManager.addMusicPlayerListener(this);
         //显示迷你播放控制器数据
         showSmallPlayControlData();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        musicPlayerManager.removeMusicPlayerListener(this);
     }
 
     @Override
@@ -153,6 +167,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
         listManager = MusicPlayerService.getListManager(getApplicationContext());
+        musicPlayerManager.addMusicPlayerListener(this);
 
         adapter = new SongAdapter(R.layout.item_song_detail);
         adapter.setHeaderView(createHeaderView());
@@ -444,4 +459,29 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         tv_title_small_control.setText(data.getTitle());
 
     }
+
+    //音乐播放器回调
+    @Override
+    public void onPaused(Song data) {
+        showMusicPlayStatus();
+    }
+
+    @Override
+    public void onPlaying(Song data) {
+        showMusicPlayStatus();
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp, Song data) {
+        showDuration(data);
+    }
+
+    @Override
+    public void onProgress(Song data) {
+        showProgress(data);
+    }
+
+    //end音乐播放器回调
+
+
 }
