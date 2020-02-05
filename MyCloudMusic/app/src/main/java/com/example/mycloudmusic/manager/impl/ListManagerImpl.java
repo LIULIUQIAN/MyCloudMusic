@@ -65,6 +65,11 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
     }
 
     @Override
+    public Song getData() {
+        return data;
+    }
+
+    @Override
     public void play(Song data) {
 
         this.data = data;

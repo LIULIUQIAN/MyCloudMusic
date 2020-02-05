@@ -36,6 +36,7 @@ import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.manager.ListManager;
+import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
@@ -120,11 +121,23 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
     private SongAdapter adapter;
     private ListManager listManager;
+    private MusicPlayerManager musicPlayerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheet_detail);
+    }
+
+    /*
+     * 界面显示
+     * */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //显示迷你播放控制器数据
+        showSmallPlayControlData();
     }
 
     @Override
@@ -138,7 +151,8 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     protected void initDatum() {
         super.initDatum();
 
-        listManager = MusicPlayerService.getListManager(getMainActivity());
+        musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
+        listManager = MusicPlayerService.getListManager(getApplicationContext());
 
         adapter = new SongAdapter(R.layout.item_song_detail);
         adapter.setHeaderView(createHeaderView());
@@ -347,6 +361,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         return super.onOptionsItemSelected(item);
     }
     /////////////////////////////////////////////////////////////////
+
     /**
      * 迷你播放控制器 容器点击
      */
@@ -360,7 +375,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
      */
     @OnClick(R.id.iv_play_small_control)
     public void onPlaySmallClick() {
-        System.out.println( "onPlaySmallClick");
+        System.out.println("onPlaySmallClick");
     }
 
     /**
@@ -368,7 +383,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
      */
     @OnClick(R.id.iv_next_small_control)
     public void onNextSmallClick() {
-        System.out.println( "onNextSmallClick");
+        System.out.println("onNextSmallClick");
     }
 
     /**
@@ -377,6 +392,56 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     @OnClick(R.id.iv_list_small_control)
     public void onListSmallClick() {
         System.out.println("onListSmallClick");
+
+    }
+
+    /*
+     * 显示迷你播放控制器数据
+     * */
+    private void showSmallPlayControlData() {
+
+        if (listManager.getDatum() != null && listManager.getDatum().size() > 0) {
+
+            Song data = listManager.getData();
+            if (data == null) {
+                return;
+            }
+            showInitData(data);
+            showDuration(data);
+            showProgress(data);
+            showMusicPlayStatus();
+
+        }
+
+    }
+
+    /*
+    * 显示播放状态
+    * */
+    private void showMusicPlayStatus() {
+        iv_play_small_control.setSelected(musicPlayerManager.isPlaying());
+    }
+
+    /*
+    * 显示播放进度
+    * */
+    private void showProgress(Song data) {
+        pb_progress_small_control.setProgress((int) data.getProgress());
+    }
+
+    /*
+    * 显示音乐时长
+    * */
+    private void showDuration(Song data) {
+        pb_progress_small_control.setMax((int) data.getDuration());
+    }
+
+    /*
+     * 显示初始化数据
+     * */
+    private void showInitData(Song data) {
+        ImageUtil.showAvatar(getMainActivity(), iv_banner_small_control, data.getBanner());
+        tv_title_small_control.setText(data.getTitle());
 
     }
 }

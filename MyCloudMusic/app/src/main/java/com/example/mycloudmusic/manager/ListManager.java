@@ -17,6 +17,13 @@ public interface ListManager {
     List<Song> getDatum();
 
     /**
+     * 获取当前播放的音乐
+     *
+     * @return
+     */
+    Song getData();
+
+    /**
      * 播放
      */
     void play(Song data);
