@@ -9,10 +9,12 @@ import android.app.Notification;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.SimplePlayerAdapter;
 import com.example.mycloudmusic.domain.Song;
@@ -129,6 +131,16 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
         super.initListeners();
 
         sb_progress.setOnSeekBarChangeListener(this);
+
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                Song song = listManager.getDatum().get(position);
+                listManager.play(song);
+            }
+        });
+
     }
 
     @OnClick(R.id.bt_previous)
