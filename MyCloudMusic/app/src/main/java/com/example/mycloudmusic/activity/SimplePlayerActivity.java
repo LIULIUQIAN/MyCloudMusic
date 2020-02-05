@@ -1,12 +1,15 @@
 package com.example.mycloudmusic.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.Notification;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +18,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
+import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.SimplePlayerAdapter;
 import com.example.mycloudmusic.domain.Song;
@@ -117,15 +122,55 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
 
         listManager = MusicPlayerService.getListManager(getApplicationContext());
 
-//        String songUrl = "http://dev-courses-misuc.ixuea.com/assets/wangbiliaodewenrou_andongyang.mp3";
-//        Song song = new Song();
-//        song.setUri(songUrl);
-//        musicPlayerManager.play(songUrl, song);
-
         adapter = new SimplePlayerAdapter(android.R.layout.simple_list_item_1);
         recycler_view.setAdapter(adapter);
         adapter.replaceData(listManager.getDatum());
 
+        //列表滑动删除
+        ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(adapter) {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                return isViewCreateByAdapter(viewHolder)
+                        ? makeMovementFlags(ItemTouchHelper.ACTION_STATE_IDLE, ItemTouchHelper.ACTION_STATE_IDLE)
+                        : makeMovementFlags(ItemTouchHelper.ACTION_STATE_IDLE, ItemTouchHelper.LEFT);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
+        itemTouchHelper.attachToRecyclerView(recycler_view);
+        adapter.enableSwipeItem();
+
+        OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
+
+            @Override
+            public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int i) {
+
+            }
+
+            @Override
+            public void clearView(RecyclerView.ViewHolder viewHolder, int i) {
+
+            }
+
+            @Override
+            public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int i) {
+                listManager.delete(i);
+                if (listManager.getDatum().size() == 0) {
+                    finish();
+                }
+            }
+
+            @Override
+            public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float v, float v1, boolean b) {
+
+            }
+        };
+        adapter.setOnItemSwipeListener(onItemSwipeListener);
+    }
+
+    private boolean isViewCreateByAdapter(@NonNull RecyclerView.ViewHolder viewHolder) {
+        int type = viewHolder.getItemViewType();
+        return type == 273 || type == 546 || type == 819 || type == 1365;
     }
 
     @Override

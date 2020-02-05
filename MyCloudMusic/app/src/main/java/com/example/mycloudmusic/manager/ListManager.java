@@ -58,5 +58,10 @@ public interface ListManager {
      */
     int getLoopModel();
 
+    /**
+     * 删除音乐
+     */
+    void delete(int index);
+
 
 }

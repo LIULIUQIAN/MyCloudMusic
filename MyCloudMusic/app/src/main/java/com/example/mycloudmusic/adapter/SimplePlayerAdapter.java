@@ -2,16 +2,21 @@ package com.example.mycloudmusic.adapter;
 
 import androidx.annotation.NonNull;
 
+import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Song;
 
-public class SimplePlayerAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SimplePlayerAdapter extends BaseItemDraggableAdapter<Song, BaseViewHolder> {
 
     private int selectIndex = -1;
+
     public SimplePlayerAdapter(int layoutResId) {
-        super(layoutResId);
+        super(layoutResId, new ArrayList<>());
     }
 
     @Override
