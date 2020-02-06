@@ -92,6 +92,12 @@ public interface Service {
     Observable<ListResponse<Song>> songs();
 
     /**
+     * 歌曲详情
+     */
+    @GET("v1/songs/{id}")
+    Observable<DetailResponse<Song>> songDetail(@Path("id") String id);
+
+    /**
      * 广告列表
      */
     @GET("v1/ads")

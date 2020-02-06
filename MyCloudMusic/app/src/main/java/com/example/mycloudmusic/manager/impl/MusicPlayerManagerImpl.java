@@ -8,8 +8,11 @@ import android.os.Message;
 
 import androidx.annotation.NonNull;
 
+import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.Consumer;
+import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.util.ListUtil;
@@ -92,6 +95,9 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
             ListUtil.eachListener(listeners, listener -> listener.onPlaying(data));
 
             startPublishProgress();
+
+            //歌词处理
+            requestLyric();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -224,4 +230,30 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
             }
         }
     };
+
+    /*
+     * 请求歌词
+     * */
+    private void requestLyric() {
+
+        if (data.getLyric() == null) {
+            Api.getInstance().songDetail(data.getId()).subscribe(new HttpObserver<DetailResponse<Song>>() {
+                @Override
+                public void onSucceeded(DetailResponse<Song> songDetail) {
+
+                    if (songDetail != null && songDetail.getData() != null) {
+
+                        data.setLyric(songDetail.getData().getLyric());
+                        data.setStyle(songDetail.getData().getStyle());
+
+                    }
+
+                    ListUtil.eachListener(listeners, listener -> listener.onLyricChanged(data));
+                }
+            });
+        } else {
+            ListUtil.eachListener(listeners, listener -> listener.onLyricChanged(data));
+        }
+
+    }
 }

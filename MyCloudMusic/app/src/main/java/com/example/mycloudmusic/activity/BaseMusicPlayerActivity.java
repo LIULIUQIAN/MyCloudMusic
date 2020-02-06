@@ -102,7 +102,7 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
      */
     @OnClick(R.id.ll_play_control_small)
     public void onPlayControlSmallClick() {
-        SimplePlayerActivity.start(getMainActivity());
+        MusicPlayerActivity.start(getMainActivity());
     }
 
     /**

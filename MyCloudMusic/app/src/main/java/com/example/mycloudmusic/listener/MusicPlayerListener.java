@@ -36,4 +36,13 @@ public interface MusicPlayerListener {
     default void onCompletion(MediaPlayer mp) {
     }
 
+    /**
+     * 歌词数据改变了
+     *
+     * @param data
+     */
+    default void onLyricChanged(Song data) {
+
+    }
+
 }

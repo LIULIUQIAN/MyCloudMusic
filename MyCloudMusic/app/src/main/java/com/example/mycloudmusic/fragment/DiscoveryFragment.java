@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.activity.MusicPlayerActivity;
 import com.example.mycloudmusic.activity.SheetDetailActivity;
+import com.example.mycloudmusic.activity.SimplePlayerActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
 import com.example.mycloudmusic.adapter.DiscoveryAdapter;
 import com.example.mycloudmusic.api.Api;
@@ -28,6 +30,8 @@ import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.Title;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+import com.example.mycloudmusic.manager.ListManager;
+import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.youth.banner.Banner;
@@ -149,9 +153,17 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
                 Object item = adapter.getItem(position);
-                if (item instanceof Sheet){
+                if (item instanceof Sheet) {
                     Sheet sheet = (Sheet) item;
-                    startActivityExtraId(SheetDetailActivity.class,sheet.getId());
+                    startActivityExtraId(SheetDetailActivity.class, sheet.getId());
+                } else if (item instanceof Song) {
+                    Song song = (Song) item;
+                    ListManager listManager = MusicPlayerService.getListManager(getMainActivity());
+                    ArrayList<Song> list = new ArrayList<>();
+                    list.add(song);
+                    listManager.setDatum(list);
+                    listManager.play(song);
+                    startActivity(MusicPlayerActivity.class);
                 }
             }
         });

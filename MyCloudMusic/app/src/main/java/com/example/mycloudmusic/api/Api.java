@@ -185,6 +185,15 @@ public class Api {
     }
 
     /**
+     * 歌曲详情
+     */
+    public Observable<DetailResponse<Song>> songDetail(String id) {
+        return service.songDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 广告列表
      */
     public Observable<ListResponse<Advert>> adverts() {

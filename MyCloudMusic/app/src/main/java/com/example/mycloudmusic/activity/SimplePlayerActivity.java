@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -240,6 +241,17 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     @Override
     public void onProgress(Song data) {
         showProgress();
+    }
+
+    @Override
+    public void onLyricChanged(Song data) {
+
+        try {
+            Log.d("onLyricChanged",data.getLyric());
+        }catch (Exception e){
+
+        }
+
     }
 
     /*
