@@ -68,5 +68,10 @@ public interface ListManager {
      */
     void deleteAll();
 
+    /**
+     * 从该位置播放
+     */
+    void seekTo(int progress);
+
 
 }

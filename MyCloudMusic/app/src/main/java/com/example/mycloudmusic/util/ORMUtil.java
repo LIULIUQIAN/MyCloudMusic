@@ -109,6 +109,25 @@ public class ORMUtil {
     }
 
     /**
+     * 删除音乐
+     */
+    public void deleteAll() {
+        Realm realm = getRealm();
+
+        RealmResults<SongLocal> playList = realm.where(SongLocal.class)
+                .equalTo("playList", true)
+                .findAll();
+
+        realm.beginTransaction();
+        for (SongLocal songLocal : playList) {
+            //逻辑删除
+            songLocal.setPlayList(false);
+        }
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    /**
      * 获取数据库对象
      */
     private Realm getRealm() {

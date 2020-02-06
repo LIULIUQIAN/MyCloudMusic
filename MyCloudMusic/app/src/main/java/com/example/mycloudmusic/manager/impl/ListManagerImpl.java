@@ -148,6 +148,10 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
             musicPlayerManager.resume();
         } else {
             play(data);
+
+            if (data.getProgress() > 0){
+                musicPlayerManager.seekTo((int) data.getProgress());
+            }
         }
     }
 
@@ -246,6 +250,17 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
             pause();
         }
         datum.clear();
+
+        orm.deleteAll();
+    }
+
+    @Override
+    public void seekTo(int progress) {
+
+        if (!musicPlayerManager.isPlaying()){
+            resume();
+        }
+        musicPlayerManager.seekTo(progress);
     }
 
     /**

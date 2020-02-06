@@ -290,7 +290,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
         if (fromUser) {
-            musicPlayerManager.seekTo(progress);
+            listManager.seekTo(progress);
         }
     }
 
