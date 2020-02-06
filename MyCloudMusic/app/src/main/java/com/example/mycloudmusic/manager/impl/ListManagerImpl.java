@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.text.TextUtils;
 
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.event.OnPlayEvent;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
@@ -13,6 +14,8 @@ import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.DataUtil;
 import com.example.mycloudmusic.util.ORMUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -123,6 +126,8 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
     @Override
     public void play(Song data) {
+
+        EventBus.getDefault().post(new OnPlayEvent());
 
         this.data = data;
 

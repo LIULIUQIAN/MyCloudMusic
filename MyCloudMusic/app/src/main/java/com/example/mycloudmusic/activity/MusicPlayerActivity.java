@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -27,6 +28,9 @@ import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.MusicPlayerAdapter;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.TimeUtil;
+import com.example.mycloudmusic.domain.event.OnPlayEvent;
+import com.example.mycloudmusic.domain.event.OnStartRecordEvent;
+import com.example.mycloudmusic.domain.event.OnStopRecordEvent;
 import com.example.mycloudmusic.domain.event.PlayListChangedEvent;
 import com.example.mycloudmusic.fragment.PlayListDialogFragment;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
@@ -49,6 +53,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_LIST;
 import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_ONE;
@@ -115,7 +121,30 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         //显示循环模式
         showLoopModel();
 
+        //滚动到当前音乐位置
+        scrollPosition();
 
+
+    }
+
+    /*
+     * 滚动到当前音乐位置
+     * */
+    private void scrollPosition() {
+        viewPager.post(new Runnable() {
+            @Override
+            public void run() {
+
+                int index = listManager.getDatum().indexOf(listManager.getData());
+                viewPager.setCurrentItem(index, false);
+
+                if (musicPlayerManager.isPlaying()){
+                    startRecordRotate();
+                }else {
+                    stopRecordRotate();
+                }
+            }
+        });
     }
 
     @Override
@@ -152,6 +181,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         lightStatusBar();
 
+        viewPager.setOffscreenPageLimit(3);
     }
 
     @Override
@@ -186,6 +216,46 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
+        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            /**
+             * 滚动状态改变了
+             *
+             * @param state 滚动状态
+             * @see ViewPager#SCROLL_STATE_IDLE：空闲
+             * @see ViewPager#SCROLL_STATE_DRAGGING：正在拖拽
+             * @see ViewPager#SCROLL_STATE_SETTLING：滚动完成后
+             */
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+                if (state == SCROLL_STATE_DRAGGING){
+                    stopRecordRotate();
+
+                }else if (state == SCROLL_STATE_IDLE){
+                    Song song = listManager.getDatum().get(viewPager.getCurrentItem());
+                    if (song.getId().equals(listManager.getData().getId())){
+
+                        if (musicPlayerManager.isPlaying()){
+                            startRecordRotate();
+                        }
+                    }else {
+                        listManager.play(song);
+                    }
+                }
+
+            }
+
         });
     }
 
@@ -290,6 +360,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @Override
     public void onPaused(Song data) {
         ib_play.setImageResource(R.drawable.ic_music_play);
+        stopRecordRotate();
     }
 
     /**
@@ -298,6 +369,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @Override
     public void onPlaying(Song data) {
         ib_play.setImageResource(R.drawable.ic_music_pause);
+
+        startRecordRotate();
     }
 
     /**
@@ -309,6 +382,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         showInitData();
         //显示时长
         showDuration();
+        //滚动到当前音乐位置
+        scrollPosition();
 
     }
 
@@ -380,6 +455,36 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         if (listManager.getDatum().size() == 0) {
             finish();
         }
+    }
+
+    /**
+     * 播放前回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayEvent(OnPlayEvent event){
+        stopRecordRotate();
+    }
+
+    /**
+     * 黑胶唱片停止滚动
+     * 黑胶唱片指针回到暂停状态
+     */
+    private void stopRecordRotate() {
+
+        Song data = listManager.getData();
+
+        EventBus.getDefault().post(new OnStopRecordEvent(data));
+
+    }
+    /**
+     * 开始黑胶唱片滚动
+     * 指针回到播放位置
+     */
+    private void startRecordRotate() {
+
+        Song data = listManager.getData();
+
+        EventBus.getDefault().post(new OnStartRecordEvent(data));
     }
 
 }
