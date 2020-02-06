@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +20,9 @@ import com.example.mycloudmusic.activity.SimplePlayerActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
 import com.example.mycloudmusic.adapter.MainAdapter;
 import com.example.mycloudmusic.api.Api;
+import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.User;
+import com.example.mycloudmusic.domain.UserTest;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.fragment.DiscoveryFragment;
 import com.example.mycloudmusic.fragment.FeedFragment;
@@ -42,6 +45,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class MainActivity extends BaseMusicPlayerActivity {
 
@@ -148,6 +153,34 @@ public class MainActivity extends BaseMusicPlayerActivity {
         super.initDatum();
 
         fetchUserData();
+        realmTest();
+    }
+
+    private void realmTest() {
+
+//        orm.saveSong(new Song());
+
+//        Realm realm = Realm.getDefaultInstance();
+//
+//        realm.beginTransaction();
+//
+//        UserTest userTest = realm.createObject(UserTest.class);
+//        userTest.setName("aaaaaaa6666");
+//        userTest.setAge(88);
+//
+//        realm.commitTransaction();
+//
+//        RealmResults<UserTest> userList = realm.where(UserTest.class).findAll();
+//        Log.d("aaa===========",userList.size()+"");
+//
+//
+//        for (int i = 0; i< userList.size();i++){
+//            UserTest u = userList.get(i);
+//            Log.d("aaa============",u.getName());
+//        }
+//
+//        realm.close();
+
 
     }
 

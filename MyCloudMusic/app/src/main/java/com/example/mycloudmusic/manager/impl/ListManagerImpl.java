@@ -2,6 +2,7 @@ package com.example.mycloudmusic.manager.impl;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.text.TextUtils;
 
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
@@ -9,6 +10,9 @@ import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.DataUtil;
+import com.example.mycloudmusic.util.ORMUtil;
+import com.example.mycloudmusic.util.PreferenceUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +28,8 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
     private static ListManagerImpl instance;
     private final Context context;
     private final MusicPlayerManager musicPlayerManager;
+    private final ORMUtil orm;
+    private final PreferenceUtil sp;
 
     List<Song> datum = new LinkedList<>();
     private Song data;
@@ -38,12 +44,19 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
      * 默认列表循环
      */
     private int model = MODEL_LOOP_LIST;
+    private double lastTime;
 
     private ListManagerImpl(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
         musicPlayerManager.addMusicPlayerListener(this);
+
+        orm = ORMUtil.getInstance(this.context);
+        sp = PreferenceUtil.getInstance(this.context);
+
+        initPlayList();
     }
+
 
     public static synchronized ListManager getInstance(Context context) {
 
@@ -53,10 +66,49 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         return instance;
     }
 
+    /*
+     * 初始化播放列表
+     * */
+    private void initPlayList() {
+
+        List<Song> songs = orm.queryPlayList();
+        if (songs.size() == 0) {
+            return;
+        }
+        datum.clear();
+        datum.addAll(songs);
+
+        String lastPlaySongId = sp.getLastPlaySongId();
+        if (!TextUtils.isEmpty(lastPlaySongId)) {
+
+            for (Song song : datum) {
+                if (lastPlaySongId.equals(song.getId())) {
+                    data = song;
+                    break;
+                }
+            }
+
+            if (data == null) {
+                data = datum.get(0);
+            }
+        } else {
+            data = datum.get(0);
+        }
+
+    }
+
+
     @Override
     public void setDatum(List<Song> datum) {
+
+        DataUtil.changePlayListFlag(this.datum, false);
+        saveAll();
+
         this.datum.clear();
         this.datum.addAll(datum);
+
+        DataUtil.changePlayListFlag(this.datum, true);
+        saveAll();
     }
 
     @Override
@@ -81,6 +133,8 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         musicPlayerManager.play(uri, data);
         //标记已经播放了
         isPlay = true;
+
+        sp.setLastPlaySongId(data.getId());
     }
 
     @Override
@@ -186,12 +240,18 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
     @Override
     public void deleteAll() {
-        if (musicPlayerManager.isPlaying()){
+        if (musicPlayerManager.isPlaying()) {
             pause();
         }
         datum.clear();
     }
 
+    /**
+     * 保存播放列表
+     */
+    private void saveAll() {
+        orm.saveAll(datum);
+    }
 
     // 播放器回调
     @Override
@@ -204,6 +264,16 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
             }
         }
 
+    }
+
+    @Override
+    public void onProgress(Song data) {
+        long currentTimeMillis = System.currentTimeMillis();
+
+        if (currentTimeMillis - lastTime > Constant.SAVE_PROGRESS_TIME) {
+            orm.saveSong(data);
+            lastTime = currentTimeMillis;
+        }
     }
 
     //end播放器回调

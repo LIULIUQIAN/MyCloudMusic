@@ -194,4 +194,34 @@ public class Song extends BaseMultiItemEntity {
     public int getItemType() {
         return TYPE_SONG;
     }
+
+    /**
+     * 将Song转为SongLocal对象
+     */
+    public SongLocal toSongLocal() {
+        //创建对象
+        SongLocal songLocal = new SongLocal();
+
+        //赋值
+        songLocal.setId(getId());
+        songLocal.setTitle(title);
+        songLocal.setBanner(banner);
+        songLocal.setUri(uri);
+
+        //歌手
+        songLocal.setSinger_id(singer.getId());
+        songLocal.setSinger_nickname(singer.getNickname());
+        songLocal.setSinger_avatar(singer.getAvatar());
+
+        //是否在播放列表
+        songLocal.setPlayList(playList);
+        //来源
+        songLocal.setSource(source);
+        //音乐时长
+        songLocal.setDuration(duration);
+        //播放进度
+        songLocal.setProgress(progress);
+        //返回
+        return songLocal;
+    }
 }

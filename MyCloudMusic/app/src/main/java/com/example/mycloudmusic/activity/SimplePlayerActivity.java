@@ -247,18 +247,18 @@ public class SimplePlayerActivity extends BaseTitleActivity implements MusicPlay
      * */
     private void showDuration() {
 
-        long duration = musicPlayerManager.getData().getDuration();
+        long duration = listManager.getData().getDuration();
         tv_end.setText(TimeUtil.formatMinuteSecond((int) duration));
         sb_progress.setMax((int) duration);
 
-        tv_title.setText(musicPlayerManager.getData().getTitle());
+        tv_title.setText(listManager.getData().getTitle());
     }
 
     /**
      * 显示播放进度
      */
     private void showProgress() {
-        long progress = musicPlayerManager.getData().getProgress();
+        long progress = listManager.getData().getProgress();
         sb_progress.setProgress((int) progress);
         tv_start.setText(TimeUtil.formatMinuteSecond((int) progress));
     }

@@ -109,6 +109,9 @@ public class Constant {
      */
     public static final String ACTION_MUSIC_PLAY_CLICK = "com.example.mycloudmusic.ACTION_MUSIC_PLAY_CLICK";
 
-
+    /**
+     * 保持播放进度间隔（毫秒）
+     */
+    public static final int SAVE_PROGRESS_TIME = 1000;
 
 }

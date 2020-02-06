@@ -9,6 +9,7 @@ import androidx.multidex.MultiDex;
 import com.example.mycloudmusic.activity.LoginOrRegisterActivity;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.event.LoginSuccessEvent;
+import com.example.mycloudmusic.util.ORMUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 import com.facebook.stetho.Stetho;
@@ -21,6 +22,7 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import es.dmoral.toasty.Toasty;
+import io.realm.Realm;
 
 public class AppContext extends Application {
 
@@ -58,6 +60,9 @@ public class AppContext extends Application {
 
         //初始化 sharesdk
         MobSDK.init(this);
+
+        //初始化Realm数据库
+        Realm.init(context);
 
     }
 
@@ -107,6 +112,12 @@ public class AppContext extends Application {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
+        onLogout();
+
+    }
+
+    private void onLogout() {
+        ORMUtil.destroy();
     }
 
     /**

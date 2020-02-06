@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.ORMUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
 
 import butterknife.ButterKnife;
@@ -16,6 +17,7 @@ import butterknife.ButterKnife;
 public class BaseCommonActivity extends BaseActivity {
 
     protected PreferenceUtil sp;
+    protected ORMUtil orm;
 
     @Override
     protected void initViews() {
@@ -29,6 +31,7 @@ public class BaseCommonActivity extends BaseActivity {
     protected void initDatum() {
         super.initDatum();
         sp = PreferenceUtil.getInstance(getMainActivity());
+        orm = ORMUtil.getInstance(getMainActivity());
     }
 
     /*
