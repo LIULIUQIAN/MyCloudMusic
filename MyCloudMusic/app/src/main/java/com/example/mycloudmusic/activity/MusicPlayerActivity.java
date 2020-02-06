@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +24,8 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.TimeUtil;
+import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
@@ -41,7 +44,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
-public class MusicPlayerActivity extends BaseTitleActivity {
+public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener {
 
     @BindView(R.id.iv_background)
     ImageView iv_background;
@@ -77,10 +80,34 @@ public class MusicPlayerActivity extends BaseTitleActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        musicPlayerManager.addMusicPlayerListener(this);
 
         //显示初始化数据
         showInitData();
 
+        //显示音乐时长
+        showDuration();
+
+        //显示播放进度
+        showProgress();
+
+        //显示播放状态
+        showMusicPlayStatus();
+
+
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        musicPlayerManager.removeMusicPlayerListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        musicPlayerManager.removeMusicPlayerListener(this);
     }
 
     @Override
@@ -157,33 +184,126 @@ public class MusicPlayerActivity extends BaseTitleActivity {
     }
 
     @OnClick(R.id.ib_download)
-    public void onDownloadClick(){
+    public void onDownloadClick() {
         System.out.println("========ib_download");
     }
 
     @OnClick(R.id.ib_loop_model)
-    public void onLoopModelClick(){
+    public void onLoopModelClick() {
         System.out.println("========ib_loop_model");
     }
 
     @OnClick(R.id.ib_previous)
-    public void onPreviousClick(){
-        System.out.println("========ib_previous");
+    public void onPreviousClick() {
+        listManager.play(listManager.previous());
     }
 
     @OnClick(R.id.ib_play)
-    public void onPlayClick(){
-        System.out.println("========ib_play");
+    public void onPlayClick() {
+        if (musicPlayerManager.isPlaying()) {
+            listManager.pause();
+        } else {
+            listManager.resume();
+        }
+
     }
 
     @OnClick(R.id.ib_next)
-    public void onNextClick(){
-        System.out.println("========ib_next");
+    public void onNextClick() {
+        listManager.play(listManager.next());
     }
 
     @OnClick(R.id.ib_list)
-    public void onListClick(){
+    public void onListClick() {
         System.out.println("========ib_list");
     }
 
+    //播放器监听回调//////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 已经暂停了
+     */
+    @Override
+    public void onPaused(Song data) {
+        ib_play.setImageResource(R.drawable.ic_music_play);
+    }
+
+    /**
+     * 已经播放了
+     */
+    @Override
+    public void onPlaying(Song data) {
+        ib_play.setImageResource(R.drawable.ic_music_pause);
+    }
+
+    /**
+     * 播放器准备完毕了
+     */
+    @Override
+    public void onPrepared(MediaPlayer mp, Song data) {
+        //显示初始化数据
+        showInitData();
+        //显示时长
+        showDuration();
+
+    }
+
+    /**
+     * 播放进度回调
+     */
+    @Override
+    public void onProgress(Song data) {
+        showProgress();
+    }
+
+    /**
+     * 播放完毕
+     */
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+
+    }
+
+    /**
+     * 歌词数据改变了
+     */
+    @Override
+    public void onLyricChanged(Song data) {
+
+    }
+
+    /*
+     * 显示时长
+     * */
+    private void showDuration() {
+        long duration = listManager.getData().getDuration();
+        //格式化
+        tv_end.setText(TimeUtil.formatMinuteSecond((int) duration));
+        //设置到进度条
+        sb_progress.setMax((int) duration);
+    }
+
+    /**
+     * 显示播放进度
+     */
+    private void showProgress() {
+
+        long progress = listManager.getData().getProgress();
+        tv_start.setText(TimeUtil.formatMinuteSecond((int) progress));
+        sb_progress.setProgress((int) progress);
+    }
+
+    /*
+     * 显示播放状态
+     * */
+    private void showMusicPlayStatus() {
+
+        if (musicPlayerManager.isPlaying()) {
+            ib_play.setImageResource(R.drawable.ic_music_pause);
+        } else {
+            ib_play.setImageResource(R.drawable.ic_music_play);
+        }
+
+    }
+    //end播放器监听回调//////////////////////////////////////////////////////////////////////////////////////////////
 }
