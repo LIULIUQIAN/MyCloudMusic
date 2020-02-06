@@ -65,8 +65,6 @@ public class ORMUtil {
 
     /**
      * 从数据库中查询播放列表
-     *
-     * @return
      */
     public List<Song> queryPlayList() {
         Realm realm = getRealm();
@@ -79,6 +77,35 @@ public class ORMUtil {
         }
         realm.close();
         return songs;
+    }
+
+    /**
+     * 删除音乐
+     */
+    public void deleteSong(Song song) {
+
+        Realm realm = getRealm();
+        SongLocal songLocal = realm.where(SongLocal.class)
+                .equalTo("playList", true)
+                .and()
+                .equalTo("id", song.getId())
+                .findFirst();
+
+//        //物理删除
+//        realm.executeTransaction(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//                songLocal.deleteFromRealm();
+//            }
+//        });
+
+        realm.beginTransaction();
+
+        //逻辑删除
+        songLocal.setPlayList(false);
+
+        realm.commitTransaction();
+        realm.close();
     }
 
     /**

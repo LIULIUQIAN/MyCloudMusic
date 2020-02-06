@@ -236,6 +236,8 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
             }
         }
         datum.remove(song);
+
+        orm.deleteSong(song);
     }
 
     @Override
