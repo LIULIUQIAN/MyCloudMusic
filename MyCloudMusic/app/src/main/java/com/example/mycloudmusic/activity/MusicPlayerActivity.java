@@ -3,6 +3,7 @@ package com.example.mycloudmusic.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -23,8 +24,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.adapter.MusicPlayerAdapter;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.TimeUtil;
+import com.example.mycloudmusic.domain.event.PlayListChangedEvent;
+import com.example.mycloudmusic.fragment.PlayListDialogFragment;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
@@ -35,6 +39,9 @@ import com.example.mycloudmusic.util.SwitchDrawableUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.time.Instant;
 
@@ -43,11 +50,17 @@ import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_LIST;
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_ONE;
+import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_RANDOM;
 
 public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener {
 
     @BindView(R.id.iv_background)
     ImageView iv_background;
+
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
 
     @BindView(R.id.tv_start)
     TextView tv_start;
@@ -61,9 +74,13 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @BindView(R.id.ib_play)
     ImageButton ib_play;
 
+    @BindView(R.id.ib_loop_model)
+    ImageButton ib_loop_model;
+
 
     private ListManager listManager;
     private MusicPlayerManager musicPlayerManager;
+    private MusicPlayerAdapter recordAdapter;
 
     public static void start(Activity activity) {
 
@@ -81,6 +98,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     protected void onResume() {
         super.onResume();
         musicPlayerManager.addMusicPlayerListener(this);
+        EventBus.getDefault().register(this);
 
         //显示初始化数据
         showInitData();
@@ -94,20 +112,17 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         //显示播放状态
         showMusicPlayStatus();
 
+        //显示循环模式
+        showLoopModel();
 
-    }
 
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        musicPlayerManager.removeMusicPlayerListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         musicPlayerManager.removeMusicPlayerListener(this);
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -144,6 +159,34 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         super.initDatum();
         listManager = MusicPlayerService.getListManager(getApplicationContext());
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
+
+        recordAdapter = new MusicPlayerAdapter(getMainActivity(), getSupportFragmentManager());
+        viewPager.setAdapter(recordAdapter);
+        recordAdapter.setDatum(listManager.getDatum());
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        //进度拖拽
+        sb_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    listManager.seekTo(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     /*
@@ -190,7 +233,28 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     @OnClick(R.id.ib_loop_model)
     public void onLoopModelClick() {
-        System.out.println("========ib_loop_model");
+        listManager.changeLoopModel();
+        showLoopModel();
+
+    }
+
+    /*
+     * 显示循环模式
+     * */
+    private void showLoopModel() {
+
+        switch (listManager.getLoopModel()) {
+            case MODEL_LOOP_RANDOM:
+                ib_loop_model.setImageResource(R.drawable.ic_music_repeat_random);
+                break;
+            case MODEL_LOOP_LIST:
+                ib_loop_model.setImageResource(R.drawable.ic_music_repeat_list);
+                break;
+            case MODEL_LOOP_ONE:
+                ib_loop_model.setImageResource(R.drawable.ic_music_repeat_one);
+                break;
+        }
+
     }
 
     @OnClick(R.id.ib_previous)
@@ -215,7 +279,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     @OnClick(R.id.ib_list)
     public void onListClick() {
-        System.out.println("========ib_list");
+        PlayListDialogFragment.show(getSupportFragmentManager());
     }
 
     //播放器监听回调//////////////////////////////////////////////////////////////////////////////////////////////
@@ -306,4 +370,16 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     }
     //end播放器监听回调//////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * 删除音乐事件
+     * */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayListChangedEvent(PlayListChangedEvent event) {
+
+        if (listManager.getDatum().size() == 0) {
+            finish();
+        }
+    }
+
 }
