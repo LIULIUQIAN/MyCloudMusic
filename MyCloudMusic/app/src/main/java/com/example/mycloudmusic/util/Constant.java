@@ -114,4 +114,20 @@ public class Constant {
      */
     public static final int SAVE_PROGRESS_TIME = 1000;
 
+    //黑胶唱片指针旋转
+    /**
+     * 黑胶唱片指针暂停的角度
+     */
+    public static final float THUMB_ROTATION_PAUSE = -25F;
+
+    /**
+     * 黑胶唱片指针播放的角度
+     */
+    public static final float THUMB_ROTATION_PLAY = 0F;
+
+    /**
+     * 黑胶唱片指针动画时间
+     */
+    public static final long THUMB_DURATION = 300;
+
 }

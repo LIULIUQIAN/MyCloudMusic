@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -38,6 +40,7 @@ import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.DensityUtil;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.SwitchDrawableUtil;
 import com.example.mycloudmusic.util.ToastUtil;
@@ -59,6 +62,9 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_LIST;
 import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_ONE;
 import static com.example.mycloudmusic.util.Constant.MODEL_LOOP_RANDOM;
+import static com.example.mycloudmusic.util.Constant.THUMB_DURATION;
+import static com.example.mycloudmusic.util.Constant.THUMB_ROTATION_PAUSE;
+import static com.example.mycloudmusic.util.Constant.THUMB_ROTATION_PLAY;
 
 public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener {
 
@@ -67,6 +73,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+
+    @BindView(R.id.iv_record_thumb)
+    ImageView iv_record_thumb;
 
     @BindView(R.id.tv_start)
     TextView tv_start;
@@ -87,6 +96,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private ListManager listManager;
     private MusicPlayerManager musicPlayerManager;
     private MusicPlayerAdapter recordAdapter;
+    private ObjectAnimator playThumbAnimator;
+    private ValueAnimator pauseThumbAnimator;
 
     public static void start(Activity activity) {
 
@@ -182,6 +193,11 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         lightStatusBar();
 
         viewPager.setOffscreenPageLimit(3);
+
+        //黑胶唱片指针旋转点
+        int rotate = DensityUtil.dipTopx(getMainActivity(), 15);
+        iv_record_thumb.setPivotX(rotate);
+        iv_record_thumb.setPivotY(rotate);
     }
 
     @Override
@@ -193,6 +209,20 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         recordAdapter = new MusicPlayerAdapter(getMainActivity(), getSupportFragmentManager());
         viewPager.setAdapter(recordAdapter);
         recordAdapter.setDatum(listManager.getDatum());
+
+        //指针动画创建
+        playThumbAnimator = ObjectAnimator.ofFloat(iv_record_thumb, "rotation", THUMB_ROTATION_PAUSE, THUMB_ROTATION_PLAY);
+        playThumbAnimator.setDuration(THUMB_DURATION);
+
+        pauseThumbAnimator = ValueAnimator.ofFloat(THUMB_ROTATION_PLAY, THUMB_ROTATION_PAUSE);
+        pauseThumbAnimator.setDuration(THUMB_DURATION);
+        pauseThumbAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                iv_record_thumb.setRotation((Float) animation.getAnimatedValue());
+            }
+        });
+
     }
 
     @Override
@@ -471,8 +501,12 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      */
     private void stopRecordRotate() {
 
-        Song data = listManager.getData();
+        float thumbRotation = iv_record_thumb.getRotation();
+        if (thumbRotation != THUMB_ROTATION_PAUSE){
+            pauseThumbAnimator.start();
+        }
 
+        Song data = listManager.getData();
         EventBus.getDefault().post(new OnStopRecordEvent(data));
 
     }
@@ -481,9 +515,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      * 指针回到播放位置
      */
     private void startRecordRotate() {
+        playThumbAnimator.start();
 
         Song data = listManager.getData();
-
         EventBus.getDefault().post(new OnStartRecordEvent(data));
     }
 
