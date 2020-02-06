@@ -41,11 +41,115 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_control_height">
+
+            <ImageButton
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_like" />
+
+            <ImageButton
+                android:id="@+id/ib_download"
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_download" />
+
+            <ImageButton
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_eq" />
+
+            <ImageButton
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_comment_count" />
+
+            <ImageButton
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_music_more" />
+
+        </LinearLayout>
+
+        <!--进度容器-->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="adfadfadsfadf"
-            android:textColor="@color/colorPrimary" />
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_small" />
+
+            <SeekBar
+                android:id="@+id/sb_progress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_meddle"
+                android:layout_marginRight="@dimen/padding_meddle"
+                android:layout_weight="1"
+                android:maxHeight="@dimen/music_seek_bar_height"
+                android:minHeight="@dimen/music_seek_bar_height" />
+
+            <TextView
+                android:id="@+id/tv_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_small" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_control_height">
+
+            <ImageButton
+                android:id="@+id/ib_loop_model"
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_music_repeat_list" />
+
+            <ImageButton
+                android:id="@+id/ib_previous"
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_music_previous" />
+
+            <ImageButton
+                android:id="@+id/ib_play"
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_music_play" />
+
+            <ImageButton
+
+                android:id="@+id/ib_next"
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_music_next" />
+
+            <ImageButton
+                android:id="@+id/ib_list"
+                style="@style/MusicPlayerItem"
+                android:src="@drawable/ic_music_list" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
 

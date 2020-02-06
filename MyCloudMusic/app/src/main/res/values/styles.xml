@@ -134,5 +134,12 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="MusicPlayerItem">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/button_control_height</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@null</item>
+    </style>
+
 
 </resources>
