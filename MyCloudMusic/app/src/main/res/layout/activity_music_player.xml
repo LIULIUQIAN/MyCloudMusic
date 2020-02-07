@@ -48,15 +48,50 @@
 
             <!--歌词容器-->
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/rl_lyric"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/ll_lyric_drag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_meddle"
+                    android:layout_marginRight="@dimen/padding_meddle"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/ib_lyric_play"
+                        android:background="@null"
+                        android:src="@drawable/ic_lyric_music_play"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_marginRight="@dimen/padding_meddle"
+                        android:layout_marginLeft="@dimen/padding_meddle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/divider_small"
+                        android:background="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/tv_lyric_time"
+                        android:textColor="@color/white"
+                        android:text="00:00"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
             </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

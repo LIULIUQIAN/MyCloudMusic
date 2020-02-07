@@ -140,4 +140,9 @@ public class Constant {
      */
     public static final int KSC = 10;
 
+    /**
+     * 隐藏歌词拖拽时间
+     */
+    public static final long LYRIC_HIDE_DRAG_TIME = 4000;
+
 }

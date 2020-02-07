@@ -41,6 +41,7 @@ import com.example.mycloudmusic.domain.event.OnRecordClickEvent;
 import com.example.mycloudmusic.domain.event.OnStartRecordEvent;
 import com.example.mycloudmusic.domain.event.OnStopRecordEvent;
 import com.example.mycloudmusic.domain.event.PlayListChangedEvent;
+import com.example.mycloudmusic.domain.lyric.Line;
 import com.example.mycloudmusic.domain.lyric.Lyric;
 import com.example.mycloudmusic.fragment.PlayListDialogFragment;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
@@ -61,6 +62,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -89,6 +93,12 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     @BindView(R.id.rl_lyric)
     View rl_lyric;
+
+    @BindView(R.id.tv_lyric_time)
+    TextView tv_lyric_time;
+
+    @BindView(R.id.ll_lyric_drag)
+    View ll_lyric_drag;
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -121,6 +131,16 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private int lineNumber;
     private int lyricOffsetX;
     private LinearLayoutManager layoutManager;
+
+    /**
+     * 歌词填充多个占位数据
+     */
+    private int lyricPlaceholderSize;
+    private boolean isDrag;
+    private TimerTask lyricTimerTask;
+    private Timer lyricTimer;
+
+    private Line scrollSelectedLyricLine;
 
     public static void start(Activity activity) {
 
@@ -339,6 +359,46 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             }
         });
 
+        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == SCROLL_STATE_DRAGGING) {
+                    //拖拽状态
+                    showDragView();
+                } else if (newState == SCROLL_STATE_IDLE) {
+                    //空闲状态
+                    prepareScrollLyricView();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition() + lyricPlaceholderSize;
+
+                if (isDrag) {
+                    Object data = lyricAdapter.getItem(firstVisibleItemPosition);
+                    if (data instanceof String) {
+                        if (firstVisibleItemPosition < lyricPlaceholderSize) {
+                            scrollSelectedLyricLine = (Line) lyricAdapter.getItem(lyricPlaceholderSize);
+                        } else {
+                            int index = lyricAdapter.getItemCount() - 1 - lyricPlaceholderSize;
+                            scrollSelectedLyricLine = (Line) lyricAdapter.getItem(index);
+                        }
+                    } else {
+                        scrollSelectedLyricLine = (Line) data;
+                    }
+
+                    tv_lyric_time.setText(TimeUtil.formatMinuteSecond((int) scrollSelectedLyricLine.getStartTime()));
+                }
+            }
+        });
+
     }
 
     /*
@@ -432,6 +492,14 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @OnClick(R.id.ib_list)
     public void onListClick() {
         PlayListDialogFragment.show(getSupportFragmentManager());
+    }
+
+    @OnClick(R.id.ib_lyric_play)
+    public void onLyricPlayClick() {
+
+        cancelLyricTask();
+        listManager.seekTo((int) scrollSelectedLyricLine.getStartTime());
+        enableScrollLyric();
     }
 
     //播放器监听回调//////////////////////////////////////////////////////////////////////////////////////////////
@@ -605,11 +673,33 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      */
     private void showLyricData() {
 
+        if (lyricPlaceholderSize > 0) {
+            next();
+        }
+        viewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                int height = viewPager.getMeasuredHeight();
+                lyricPlaceholderSize = (int) Math.ceil(height * 1.0 / 2 / DensityUtil.dipTopx(getMainActivity(), 40));
+
+                next();
+            }
+        });
+
+
+    }
+
+    private void next() {
         Song song = listManager.getData();
         if (song.getParsedLyric() == null) {
             lyricAdapter.replaceData(new ArrayList<>());
         } else {
-            lyricAdapter.replaceData(song.getParsedLyric().getDatum());
+
+            List<Object> datum = new ArrayList<>();
+            addLyricFillData(datum);
+            datum.addAll(song.getParsedLyric().getDatum());
+            addLyricFillData(datum);
+            lyricAdapter.replaceData(datum);
         }
     }
 
@@ -623,7 +713,11 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             return;
         }
 
-        int newLineNumber = LyricUtil.getLineNumber(data, progress);
+        if (isDrag) {
+            return;
+        }
+
+        int newLineNumber = LyricUtil.getLineNumber(data, progress) + lyricPlaceholderSize;
 
         if (newLineNumber != lineNumber) {
             //滚动到当前行
@@ -643,9 +737,69 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
 //                recycler_view.smoothScrollToPosition(lineNumber);
 
-                layoutManager.scrollToPositionWithOffset(lineNumber,lyricOffsetX);
+                layoutManager.scrollToPositionWithOffset(lineNumber, lyricOffsetX);
             }
         });
+    }
+
+    /**
+     * 添加歌词占位数据
+     */
+    public void addLyricFillData(List<Object> datum) {
+        for (int i = 0; i < lyricPlaceholderSize; i++) {
+            datum.add("fill");
+        }
+    }
+
+    /**
+     * 歌词空闲状态
+     */
+    private void prepareScrollLyricView() {
+
+        cancelLyricTask();
+
+        lyricTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                viewPager.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        enableScrollLyric();
+                    }
+                });
+            }
+        };
+
+        lyricTimer = new Timer();
+        lyricTimer.schedule(lyricTimerTask, Constant.LYRIC_HIDE_DRAG_TIME);
+    }
+
+    private void cancelLyricTask() {
+
+        if (lyricTimerTask != null) {
+            lyricTimerTask.cancel();
+            lyricTimerTask = null;
+
+        }
+        if (lyricTimer != null) {
+            lyricTimer.cancel();
+            lyricTimer = null;
+        }
+
+    }
+
+    /*
+     * 歌词拖拽状态
+     * */
+    private void showDragView() {
+
+        ll_lyric_drag.setVisibility(View.VISIBLE);
+        isDrag = true;
+    }
+
+    private void enableScrollLyric() {
+        ll_lyric_drag.setVisibility(View.GONE);
+        isDrag = false;
     }
 
 }
