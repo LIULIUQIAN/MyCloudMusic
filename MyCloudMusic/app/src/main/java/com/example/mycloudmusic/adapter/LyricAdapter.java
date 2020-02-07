@@ -8,6 +8,8 @@ import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.lyric.Line;
 
 public class LyricAdapter extends BaseQuickAdapter<Line, BaseViewHolder> {
+
+    private int selectedIndex = 0;
     public LyricAdapter(int layoutResId) {
         super(layoutResId);
     }
@@ -16,5 +18,17 @@ public class LyricAdapter extends BaseQuickAdapter<Line, BaseViewHolder> {
     protected void convert(@NonNull BaseViewHolder helper, Line item) {
 
         helper.setText(R.id.tv,item.getData());
+        if (helper.getAdapterPosition() == selectedIndex){
+            helper.setTextColor(R.id.tv,mContext.getResources().getColor(R.color.colorPrimary));
+        }else {
+            helper.setTextColor(R.id.tv,mContext.getResources().getColor(R.color.lyric_text_color));
+        }
+    }
+
+    public void setSelectedIndex(int selectedIndex) {
+
+        notifyItemChanged(this.selectedIndex);
+        this.selectedIndex = selectedIndex;
+        notifyItemChanged(this.selectedIndex);
     }
 }

@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -40,6 +41,7 @@ import com.example.mycloudmusic.domain.event.OnRecordClickEvent;
 import com.example.mycloudmusic.domain.event.OnStartRecordEvent;
 import com.example.mycloudmusic.domain.event.OnStopRecordEvent;
 import com.example.mycloudmusic.domain.event.PlayListChangedEvent;
+import com.example.mycloudmusic.domain.lyric.Lyric;
 import com.example.mycloudmusic.fragment.PlayListDialogFragment;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
@@ -50,6 +52,7 @@ import com.example.mycloudmusic.util.DensityUtil;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.SwitchDrawableUtil;
 import com.example.mycloudmusic.util.ToastUtil;
+import com.example.mycloudmusic.util.lyric.LyricUtil;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -115,6 +118,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private ObjectAnimator playThumbAnimator;
     private ValueAnimator pauseThumbAnimator;
     private LyricAdapter lyricAdapter;
+    private int lineNumber;
+    private int lyricOffsetX;
+    private LinearLayoutManager layoutManager;
 
     public static void start(Activity activity) {
 
@@ -169,9 +175,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
                 int index = listManager.getDatum().indexOf(listManager.getData());
                 viewPager.setCurrentItem(index, false);
 
-                if (musicPlayerManager.isPlaying()){
+                if (musicPlayerManager.isPlaying()) {
                     startRecordRotate();
-                }else {
+                } else {
                     stopRecordRotate();
                 }
             }
@@ -220,7 +226,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         iv_record_thumb.setPivotY(rotate);
 
         recycler_view.setHasFixedSize(true);
-        recycler_view.setLayoutManager(new LinearLayoutManager(getMainActivity()));
+        layoutManager = new LinearLayoutManager(getMainActivity());
+        recycler_view.setLayoutManager(layoutManager);
 
     }
 
@@ -296,17 +303,17 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             @Override
             public void onPageScrollStateChanged(int state) {
 
-                if (state == SCROLL_STATE_DRAGGING){
+                if (state == SCROLL_STATE_DRAGGING) {
                     stopRecordRotate();
 
-                }else if (state == SCROLL_STATE_IDLE){
+                } else if (state == SCROLL_STATE_IDLE) {
                     Song song = listManager.getDatum().get(viewPager.getCurrentItem());
-                    if (song.getId().equals(listManager.getData().getId())){
+                    if (song.getId().equals(listManager.getData().getId())) {
 
-                        if (musicPlayerManager.isPlaying()){
+                        if (musicPlayerManager.isPlaying()) {
                             startRecordRotate();
                         }
-                    }else {
+                    } else {
                         listManager.play(song);
                     }
                 }
@@ -322,6 +329,16 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
                 rl_lyric.setVisibility(View.GONE);
             }
         });
+
+        //添加布局监听器
+        viewPager.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                lyricOffsetX = viewPager.getHeight() / 2 - DensityUtil.dipTopx(getMainActivity(), 40) / 2;
+                viewPager.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
     }
 
     /*
@@ -458,6 +475,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @Override
     public void onProgress(Song data) {
         showProgress();
+
+        //显示歌词进度
+        showLyricProgress(listManager.getData().getProgress());
     }
 
     /**
@@ -528,16 +548,17 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      * 播放前回调
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPlayEvent(OnPlayEvent event){
+    public void onPlayEvent(OnPlayEvent event) {
         stopRecordRotate();
     }
-    /*
-    * 黑胶唱片点击
-    * */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRecordClickEvent(OnRecordClickEvent event){
 
-        if (isLyricEmpty()){
+    /*
+     * 黑胶唱片点击
+     * */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRecordClickEvent(OnRecordClickEvent event) {
+
+        if (isLyricEmpty()) {
             return;
         }
 
@@ -559,7 +580,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private void stopRecordRotate() {
 
         float thumbRotation = iv_record_thumb.getRotation();
-        if (thumbRotation != THUMB_ROTATION_PAUSE){
+        if (thumbRotation != THUMB_ROTATION_PAUSE) {
             pauseThumbAnimator.start();
         }
 
@@ -567,6 +588,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         EventBus.getDefault().post(new OnStopRecordEvent(data));
 
     }
+
     /**
      * 开始黑胶唱片滚动
      * 指针回到播放位置
@@ -584,11 +606,46 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private void showLyricData() {
 
         Song song = listManager.getData();
-        if (song.getParsedLyric() == null){
+        if (song.getParsedLyric() == null) {
             lyricAdapter.replaceData(new ArrayList<>());
-        }else {
+        } else {
             lyricAdapter.replaceData(song.getParsedLyric().getDatum());
         }
+    }
+
+    /*
+     * 显示歌词进度
+     * */
+    private void showLyricProgress(long progress) {
+
+        Lyric data = listManager.getData().getParsedLyric();
+        if (data == null) {
+            return;
+        }
+
+        int newLineNumber = LyricUtil.getLineNumber(data, progress);
+
+        if (newLineNumber != lineNumber) {
+            //滚动到当前行
+            scrollLyricPosition(newLineNumber);
+            lineNumber = newLineNumber;
+
+            lyricAdapter.setSelectedIndex(lineNumber);
+        }
+
+    }
+
+    private void scrollLyricPosition(int lineNumber) {
+
+        recycler_view.post(new Runnable() {
+            @Override
+            public void run() {
+
+//                recycler_view.smoothScrollToPosition(lineNumber);
+
+                layoutManager.scrollToPositionWithOffset(lineNumber,lyricOffsetX);
+            }
+        });
     }
 
 }
