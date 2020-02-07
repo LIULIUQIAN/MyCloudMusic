@@ -3,6 +3,8 @@ package com.example.mycloudmusic.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ObjectAnimator;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -26,11 +29,14 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.adapter.LyricAdapter;
 import com.example.mycloudmusic.adapter.MusicPlayerAdapter;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.TimeUtil;
 import com.example.mycloudmusic.domain.event.OnPlayEvent;
+import com.example.mycloudmusic.domain.event.OnRecordClickEvent;
 import com.example.mycloudmusic.domain.event.OnStartRecordEvent;
 import com.example.mycloudmusic.domain.event.OnStopRecordEvent;
 import com.example.mycloudmusic.domain.event.PlayListChangedEvent;
@@ -51,6 +57,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.time.Instant;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -70,6 +77,15 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     @BindView(R.id.iv_background)
     ImageView iv_background;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView recycler_view;
+
+    @BindView(R.id.cl_record)
+    View cl_record;
+
+    @BindView(R.id.rl_lyric)
+    View rl_lyric;
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -98,6 +114,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private MusicPlayerAdapter recordAdapter;
     private ObjectAnimator playThumbAnimator;
     private ValueAnimator pauseThumbAnimator;
+    private LyricAdapter lyricAdapter;
 
     public static void start(Activity activity) {
 
@@ -134,6 +151,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //滚动到当前音乐位置
         scrollPosition();
+
+        //显示歌词
+        showLyricData();
 
 
     }
@@ -198,6 +218,10 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         int rotate = DensityUtil.dipTopx(getMainActivity(), 15);
         iv_record_thumb.setPivotX(rotate);
         iv_record_thumb.setPivotY(rotate);
+
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setLayoutManager(new LinearLayoutManager(getMainActivity()));
+
     }
 
     @Override
@@ -222,6 +246,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
                 iv_record_thumb.setRotation((Float) animation.getAnimatedValue());
             }
         });
+
+        lyricAdapter = new LyricAdapter(R.layout.item_lyric);
+        recycler_view.setAdapter(lyricAdapter);
 
     }
 
@@ -286,6 +313,14 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
             }
 
+        });
+
+        lyricAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                cl_record.setVisibility(View.VISIBLE);
+                rl_lyric.setVisibility(View.GONE);
+            }
         });
     }
 
@@ -439,6 +474,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @Override
     public void onLyricChanged(Song data) {
 
+        showLyricData();
+
     }
 
     /*
@@ -494,6 +531,26 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     public void onPlayEvent(OnPlayEvent event){
         stopRecordRotate();
     }
+    /*
+    * 黑胶唱片点击
+    * */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRecordClickEvent(OnRecordClickEvent event){
+
+        if (isLyricEmpty()){
+            return;
+        }
+
+        cl_record.setVisibility(View.GONE);
+        rl_lyric.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 是否没有歌词数据
+     */
+    private boolean isLyricEmpty() {
+        return lyricAdapter.getItemCount() == 0;
+    }
 
     /**
      * 黑胶唱片停止滚动
@@ -519,6 +576,19 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         Song data = listManager.getData();
         EventBus.getDefault().post(new OnStartRecordEvent(data));
+    }
+
+    /**
+     * 显示歌词数据
+     */
+    private void showLyricData() {
+
+        Song song = listManager.getData();
+        if (song.getParsedLyric() == null){
+            lyricAdapter.replaceData(new ArrayList<>());
+        }else {
+            lyricAdapter.replaceData(song.getParsedLyric().getDatum());
+        }
     }
 
 }

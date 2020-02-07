@@ -130,4 +130,14 @@ public class Constant {
      */
     public static final long THUMB_DURATION = 300;
 
+    /**
+     * LRC歌词
+     */
+    public static final int LRC = 0;
+
+    /**
+     * KSC歌词
+     */
+    public static final int KSC = 10;
+
 }

@@ -1,5 +1,7 @@
 package com.example.mycloudmusic.domain;
 
+import com.example.mycloudmusic.domain.lyric.Lyric;
+
 import static com.example.mycloudmusic.util.Constant.TYPE_SONG;
 
 public class Song extends BaseMultiItemEntity {

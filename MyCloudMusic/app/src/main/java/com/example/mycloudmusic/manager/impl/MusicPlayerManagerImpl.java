@@ -16,6 +16,7 @@ import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.util.ListUtil;
+import com.example.mycloudmusic.util.lyric.LyricParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -245,6 +246,8 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
 
                         data.setLyric(songDetail.getData().getLyric());
                         data.setStyle(songDetail.getData().getStyle());
+
+                        data.setParsedLyric(LyricParser.parse(data.getStyle(),data.getLyric()));
 
                     }
 
