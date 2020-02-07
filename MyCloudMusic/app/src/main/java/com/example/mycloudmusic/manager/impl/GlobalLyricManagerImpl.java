@@ -10,6 +10,10 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.mycloudmusic.manager.GlobalLyricManager;
+import com.example.mycloudmusic.manager.ListManager;
+import com.example.mycloudmusic.manager.MusicPlayerManager;
+import com.example.mycloudmusic.service.MusicPlayerService;
+import com.example.mycloudmusic.util.NotificationUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
 import com.example.mycloudmusic.view.GlobalLyricView;
 
@@ -21,14 +25,21 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
     private WindowManager.LayoutParams layoutParams;
     private GlobalLyricView globalLyricView;
     private final PreferenceUtil sp;
+    private final ListManager listManager;
+    private final MusicPlayerManager musicPlayerManager;
 
     private GlobalLyricManagerImpl(Context context) {
         this.context = context.getApplicationContext();
 
         initWindowManager();
 
-
+        listManager = MusicPlayerService.getListManager(this.context);
+        musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
         sp = PreferenceUtil.getInstance(this.context);
+
+        if (sp.isShowGlobalLyric()){
+            initGlobalLyricView();
+        }
     }
 
 
@@ -55,6 +66,8 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
         globalLyricView = null;
 
         sp.setShowGlobalLyric(false);
+
+        NotificationUtil.showMusicNotification(context, listManager.getData(), musicPlayerManager.isPlaying(), false);
 
     }
 

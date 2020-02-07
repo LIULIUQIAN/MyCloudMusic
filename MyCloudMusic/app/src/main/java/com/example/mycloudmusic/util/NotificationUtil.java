@@ -85,7 +85,7 @@ public class NotificationUtil {
     /**
      * 显示音乐通知
      */
-    public static void showMusicNotification(Context context, Song data, boolean isPlaying) {
+    public static void showMusicNotification(Context context, Song data, boolean isPlaying,boolean isShowGlobalLyric) {
 
         String url = String.format(Constant.RESOURCE_ENDPOINT, data.getBanner());
         RequestOptions options = ImageUtil.getCommonRequestOptions();
@@ -97,7 +97,7 @@ public class NotificationUtil {
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        showMusicNotification(context, data, isPlaying, resource);
+                        showMusicNotification(context, data, isPlaying, resource,isShowGlobalLyric);
                     }
 
                     @Override
@@ -112,15 +112,15 @@ public class NotificationUtil {
     /**
      * 显示音乐通知
      */
-    public static void showMusicNotification(Context context, Song data, boolean isPlaying, Bitmap banner) {
+    public static void showMusicNotification(Context context, Song data, boolean isPlaying, Bitmap banner, boolean isShowGlobalLyric) {
 
         createNotificationChannel();
 
         RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play);
         RemoteViews contentBigView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play_large);
 
-        setData(data, contentView, isPlaying, banner);
-        setData(data, contentBigView, isPlaying, banner);
+        setData(data, contentView, isPlaying, banner,isShowGlobalLyric);
+        setData(data, contentBigView, isPlaying, banner,isShowGlobalLyric);
 
         //点赞
         PendingIntent likePendingIntent = PendingIntent.getBroadcast(context,
@@ -164,7 +164,7 @@ public class NotificationUtil {
     /*
      * 设置通知显示数据
      * */
-    private static void setData(Song data, RemoteViews contentView, boolean isPlaying, Bitmap banner) {
+    private static void setData(Song data, RemoteViews contentView, boolean isPlaying, Bitmap banner, boolean isShowGlobalLyric) {
 
         contentView.setTextViewText(R.id.tv_title, data.getTitle());
         contentView.setTextViewText(R.id.tv_info, data.getSinger().getNickname());
@@ -172,6 +172,9 @@ public class NotificationUtil {
         int playButtonResourceId = isPlaying ? R.drawable.ic_music_notification_pause : R.drawable.ic_music_notification_play;
         contentView.setImageViewResource(R.id.iv_play, playButtonResourceId);
         contentView.setImageViewBitmap(R.id.iv_banner, banner);
+
+        int lyricButtonResourceId = isShowGlobalLyric ? R.drawable.ic_music_notification_lyric_selected : R.drawable.ic_music_notification_lyric;
+        contentView.setImageViewResource(R.id.iv_lyric, lyricButtonResourceId);
     }
 
     /*

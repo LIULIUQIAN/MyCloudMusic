@@ -34,6 +34,15 @@ public class MusicNotificationManager implements MusicPlayerListener {
         globalLyricManager = GlobalLyricManagerImpl.getInstance(this.context);
 
         initMusicNotificationReceiver();
+
+        //判断是否显示音乐通知
+        if (listManager.getDatum().size() > 0) {
+            //显示通知
+            NotificationUtil.showMusicNotification(context,
+                    listManager.getData(),
+                    false,
+                    globalLyricManager.isShowing());
+        }
     }
 
     public static synchronized MusicNotificationManager getInstance(Context context) {
@@ -87,12 +96,12 @@ public class MusicNotificationManager implements MusicPlayerListener {
 
     @Override
     public void onPaused(Song data) {
-        NotificationUtil.showMusicNotification(context, data, false);
+        NotificationUtil.showMusicNotification(context, data, false, globalLyricManager.isShowing());
     }
 
     @Override
     public void onPlaying(Song data) {
-        NotificationUtil.showMusicNotification(context, data, true);
+        NotificationUtil.showMusicNotification(context, data, true, globalLyricManager.isShowing());
     }
 
     @Override
@@ -115,6 +124,7 @@ public class MusicNotificationManager implements MusicPlayerListener {
         } else {
             globalLyricManager.show();
         }
+        NotificationUtil.showMusicNotification(context, listManager.getData(), musicPlayerManager.isPlaying(), globalLyricManager.isShowing());
     }
 
 
