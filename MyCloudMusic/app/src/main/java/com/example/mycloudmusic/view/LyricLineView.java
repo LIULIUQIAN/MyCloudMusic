@@ -16,6 +16,7 @@ import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.lyric.Line;
 import com.example.mycloudmusic.util.DensityUtil;
 import com.example.mycloudmusic.util.TextUtil;
+import com.example.mycloudmusic.util.ToastUtil;
 
 public class LyricLineView extends View {
 
@@ -216,17 +217,21 @@ public class LyricLineView extends View {
                     lineLyricPlayedWidth = textWidth;
                 } else {
 
-                    String[] lyricWords = data.getWords();
-                    Integer[] wordDurations = data.getWordDurations();
+                    try {
+                        String[] lyricWords = data.getWords();
+                        Integer[] wordDurations = data.getWordDurations();
 
-                    String beforeText = data.getData().substring(0, lyricCurrentWordIndex);
-                    float beforeTextWidth = TextUtil.getTextWidth(foregroundTextPaint, beforeText);
-                    String currentWord = lyricWords[lyricCurrentWordIndex];
-                    float currentWordTextWidth = TextUtil.getTextWidth(foregroundTextPaint, currentWord);
+                        String beforeText = data.getData().substring(0, lyricCurrentWordIndex);
+                        float beforeTextWidth = TextUtil.getTextWidth(foregroundTextPaint, beforeText);
+                        String currentWord = lyricWords[lyricCurrentWordIndex];
+                        float currentWordTextWidth = TextUtil.getTextWidth(foregroundTextPaint, currentWord);
 
-                    float currentWordPlayedWidth = currentWordTextWidth / wordDurations[lyricCurrentWordIndex] * wordPlayedTime;
+                        float currentWordPlayedWidth = currentWordTextWidth / wordDurations[lyricCurrentWordIndex] * wordPlayedTime;
 
-                    lineLyricPlayedWidth = beforeTextWidth + currentWordPlayedWidth;
+                        lineLyricPlayedWidth = beforeTextWidth + currentWordPlayedWidth;
+                    }catch (Exception e){
+                        ToastUtil.errorShortToast("歌词解析出错了*******");
+                    }
 
                 }
 

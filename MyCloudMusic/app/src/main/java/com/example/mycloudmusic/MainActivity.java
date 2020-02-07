@@ -1,5 +1,7 @@
 package com.example.mycloudmusic;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -8,7 +10,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -47,6 +52,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static com.example.mycloudmusic.util.Constant.REQUEST_OVERLAY_PERMISSION;
 
 public class MainActivity extends BaseMusicPlayerActivity {
 
@@ -87,6 +94,16 @@ public class MainActivity extends BaseMusicPlayerActivity {
         super.onNewIntent(intent);
 
         processIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestDrawOverlays();
+        }
+
     }
 
     @Override
@@ -242,5 +259,35 @@ public class MainActivity extends BaseMusicPlayerActivity {
 
     private void closeDrawer() {
         dl.closeDrawer(GravityCompat.START);
+    }
+
+    /**
+     * 检查是否有悬浮窗权限
+     * */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean requestDrawOverlays(){
+
+        if (!Settings.canDrawOverlays(getMainActivity())){
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getMainActivity().getPackageName()));
+            startActivityForResult(intent,REQUEST_OVERLAY_PERMISSION);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case REQUEST_OVERLAY_PERMISSION:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (requestDrawOverlays()){
+                        Log.e("onActivityResult","权限获取成功");
+                    }else {
+                        Log.e("onActivityResult","权限获取失败");
+                    }
+                }
+                break;
+        }
     }
 }

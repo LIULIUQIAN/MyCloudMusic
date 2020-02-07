@@ -9,6 +9,7 @@ import android.os.IBinder;
 
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
+import com.example.mycloudmusic.manager.impl.GlobalLyricManagerImpl;
 import com.example.mycloudmusic.manager.impl.ListManagerImpl;
 import com.example.mycloudmusic.manager.impl.MusicNotificationManager;
 import com.example.mycloudmusic.manager.impl.MusicPlayerManagerImpl;
@@ -35,6 +36,9 @@ public class MusicPlayerService extends Service {
         System.out.println("MusicPlayerService-onCreate");
         //初始化音乐通知管理器
         musicNotificationManager = MusicNotificationManager.getInstance(getApplicationContext());
+
+        //初始化全局歌词管理器
+        GlobalLyricManagerImpl.getInstance(getApplicationContext());
     }
 
     @Override

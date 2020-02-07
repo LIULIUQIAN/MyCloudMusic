@@ -145,4 +145,9 @@ public class Constant {
      */
     public static final long LYRIC_HIDE_DRAG_TIME = 4000;
 
+    /**
+     * 请求获取overlay权限请求码
+     */
+    public static final int REQUEST_OVERLAY_PERMISSION = 100;
+
 }

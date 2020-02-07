@@ -31,6 +31,11 @@ public class PreferenceUtil {
      */
     private static final String LAST_PLAY_SONG_ID = "LAST_PLAY_SONG_ID";
 
+    /**
+     * 是否显示全局歌词 key
+     */
+    private static final String KEY_SHOW_GLOBAL_LYRIC = "KEY_SHOW_GLOBAL_LYRIC";
+
     private static PreferenceUtil instance;
     private final Context context;
     private final SharedPreferences preference;
@@ -123,8 +128,26 @@ public class PreferenceUtil {
         putString(LAST_PLAY_SONG_ID, data);
     }
 
-    //辅助方法
 
+    /**
+     * 是否显示全局歌词
+     *
+     * @return
+     */
+    public boolean isShowGlobalLyric() {
+        return getBoolean(KEY_SHOW_GLOBAL_LYRIC, false);
+    }
+
+    /**
+     * 设置是否显示全局歌词
+     *
+     * @param data
+     */
+    public void setShowGlobalLyric(boolean data) {
+        putBoolean(KEY_SHOW_GLOBAL_LYRIC, data);
+    }
+
+    //辅助方法
     /**
      * 保存字符串
      */

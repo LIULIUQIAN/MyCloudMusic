@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
+import com.example.mycloudmusic.manager.GlobalLyricManager;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
@@ -19,6 +20,7 @@ public class MusicNotificationManager implements MusicPlayerListener {
     private static MusicNotificationManager instance;
     private final Context context;
     private final MusicPlayerManager musicPlayerManager;
+    private final GlobalLyricManager globalLyricManager;
     private BroadcastReceiver musicNotificationBroadcastReceiver;
     private final ListManager listManager;
 
@@ -28,6 +30,8 @@ public class MusicNotificationManager implements MusicPlayerListener {
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
         musicPlayerManager.addMusicPlayerListener(this);
         listManager = MusicPlayerService.getListManager(this.context);
+
+        globalLyricManager = GlobalLyricManagerImpl.getInstance(this.context);
 
         initMusicNotificationReceiver();
     }
@@ -65,10 +69,11 @@ public class MusicNotificationManager implements MusicPlayerListener {
                     Song song = listManager.next();
                     listManager.play(song);
                 } else if (Constant.ACTION_LYRIC.equals(action)) {
-                    System.out.println("==========ACTION_LYRIC");
+                    showOrHideGlobalLyric();
                 }
 
             }
+
         };
 
         IntentFilter intentFilter = new IntentFilter();
@@ -98,6 +103,18 @@ public class MusicNotificationManager implements MusicPlayerListener {
     @Override
     public void onProgress(Song data) {
 
+    }
+
+    /*
+     * 隐藏或显示全局歌词控件
+     * */
+    private void showOrHideGlobalLyric() {
+
+        if (globalLyricManager.isShowing()) {
+            globalLyricManager.hide();
+        } else {
+            globalLyricManager.show();
+        }
     }
 
 
