@@ -46,13 +46,14 @@
                 android:text="标题"
                 android:textColor="@color/text" />
 
-            <TextView
+            <com.example.mycloudmusic.view.LyricLineView
                 android:id="@+id/llv_small_control"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="歌词"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_small" />
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lyric_height_small"
+                app:gravity="left"
+                app:selected_text_color="@color/colorPrimary"
+                app:text_color="@color/light_grey"
+                app:text_size="@dimen/text_small" />
         </LinearLayout>
 
         <ImageView

@@ -10,12 +10,16 @@ import android.widget.TextView;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.event.PlayListChangedEvent;
+import com.example.mycloudmusic.domain.lyric.Line;
+import com.example.mycloudmusic.domain.lyric.Lyric;
 import com.example.mycloudmusic.fragment.PlayListDialogFragment;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.ImageUtil;
+import com.example.mycloudmusic.util.lyric.LyricUtil;
+import com.example.mycloudmusic.view.LyricLineView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,7 +52,7 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
      * 迷你播放控制器 歌词控件
      */
     @BindView(R.id.llv_small_control)
-    TextView llv;
+    LyricLineView llv;
 
     /**
      * 迷你播放控制器 播放暂停按钮
@@ -87,6 +91,12 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    protected void initViews() {
+        super.initViews();
+
+        llv.setLineSelected(true);
+    }
 
     @Override
     protected void initDatum() {
@@ -152,9 +162,27 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
             showDuration(data);
             showProgress(data);
             showMusicPlayStatus();
+            showLyricData();
 
         } else {
             ll_play_control_small.setVisibility(View.GONE);
+        }
+
+    }
+
+    /*
+    * 显示歌词
+    * */
+    private void showLyricData() {
+
+        Song data = listManager.getData();
+        Lyric lyric = data.getParsedLyric();
+        if (lyric == null){
+            llv.setData(null);
+        }else {
+            llv.setAccurate(lyric.isAccurate());
+            Line line = LyricUtil.getLyricLine(lyric, data.getProgress());
+            llv.setData(line);
         }
 
     }
@@ -209,6 +237,32 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
     @Override
     public void onProgress(Song data) {
         showProgress(data);
+
+        Lyric lyric = data.getParsedLyric();
+        if (lyric == null){
+            return;
+        }
+
+        long progress = data.getProgress();
+        Line line = LyricUtil.getLyricLine(lyric, progress);
+        if (line != llv.getData()){
+            llv.setData(line);
+        }
+        if (lyric.isAccurate()){
+
+            int wordIndex = LyricUtil.getWordIndex(line, progress);
+            float wordPlayedTime = LyricUtil.getWordPlayedTime(line, progress);
+
+            llv.setLyricCurrentWordIndex(wordIndex);
+            llv.setWordPlayedTime(wordPlayedTime);
+            llv.onProgress();
+        }
+
+    }
+
+    @Override
+    public void onLyricChanged(Song data) {
+        showLyricData();
     }
     //end音乐播放器回调
 

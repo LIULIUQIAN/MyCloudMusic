@@ -711,7 +711,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private void showLyricProgress(long progress) {
 
         Lyric data = listManager.getData().getParsedLyric();
-        if (data == null) {
+        if (data == null || lyricAdapter.getData() == null || lyricAdapter.getData().size() == 0) {
             return;
         }
 

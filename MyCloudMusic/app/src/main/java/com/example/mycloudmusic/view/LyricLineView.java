@@ -145,13 +145,15 @@ public class LyricLineView extends View {
 
         //解析自定义属性
         if (attrs != null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(R.styleable.LyricLineView);
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs,R.styleable.LyricLineView);
             lyricTextSize = (int) typedArray.getDimension(R.styleable.LyricLineView_text_size, lyricTextSize);
             lyricTextColor = typedArray.getColor(R.styleable.LyricLineView_text_color, lyricTextColor);
             lyricSelectedTextColor = typedArray.getColor(R.styleable.LyricLineView_selected_text_color, lyricSelectedTextColor);
             lyricGravity = typedArray.getInt(R.styleable.LyricLineView_gravity, GRAVITY_CENTER);
 
             typedArray.recycle();
+
+
 
         }
         //初始化画笔
