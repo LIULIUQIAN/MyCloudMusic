@@ -54,6 +54,7 @@ import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.SwitchDrawableUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 import com.example.mycloudmusic.util.lyric.LyricUtil;
+import com.example.mycloudmusic.view.LyricLineView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -699,6 +700,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             addLyricFillData(datum);
             datum.addAll(song.getParsedLyric().getDatum());
             addLyricFillData(datum);
+            lyricAdapter.setAccurate(song.getParsedLyric().isAccurate());
             lyricAdapter.replaceData(datum);
         }
     }
@@ -723,8 +725,27 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             //滚动到当前行
             scrollLyricPosition(newLineNumber);
             lineNumber = newLineNumber;
+        }
 
-            lyricAdapter.setSelectedIndex(lineNumber);
+        if (data.isAccurate()) {
+            Object object = lyricAdapter.getData().get(lineNumber);
+            if (object instanceof Line) {
+                Line line = (Line) object;
+
+                int lyricCurrentWordIndex = LyricUtil.getWordIndex(line, progress);
+
+                float wordPlayedTime = LyricUtil.getWordPlayedTime(line, progress);
+
+                View view = layoutManager.findViewByPosition(lineNumber);
+
+                if (view != null){
+                    LyricLineView llv = view.findViewById(R.id.llv);
+                    llv.setLyricCurrentWordIndex(lyricCurrentWordIndex);
+                    llv.setWordPlayedTime(wordPlayedTime);
+                    llv.onProgress();
+                }
+
+            }
         }
 
     }
@@ -734,7 +755,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         recycler_view.post(new Runnable() {
             @Override
             public void run() {
-
+                lyricAdapter.setSelectedIndex(lineNumber);
 //                recycler_view.smoothScrollToPosition(lineNumber);
 
                 layoutManager.scrollToPositionWithOffset(lineNumber, lyricOffsetX);
