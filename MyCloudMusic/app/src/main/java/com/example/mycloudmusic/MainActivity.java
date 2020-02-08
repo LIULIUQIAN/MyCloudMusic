@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mycloudmusic.activity.BaseMusicPlayerActivity;
+import com.example.mycloudmusic.activity.MusicPlayerActivity;
 import com.example.mycloudmusic.activity.SettingActivity;
 import com.example.mycloudmusic.activity.SimplePlayerActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
@@ -236,7 +237,7 @@ public class MainActivity extends BaseMusicPlayerActivity {
             WebViewActivity.start(getMainActivity(), "广告详情", intent.getStringExtra(Constant.URL));
         }else if (Constant.ACTION_MUSIC_PLAY_CLICK.equals(intent.getAction())){
             //音乐通知点击
-            SimplePlayerActivity.start(getMainActivity());
+            MusicPlayerActivity.start(getMainActivity());
         }
     }
 
