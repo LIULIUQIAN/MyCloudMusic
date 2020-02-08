@@ -25,6 +25,7 @@ import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Song;
 
 import static com.example.mycloudmusic.util.Constant.NOTIFICATION_MUSIC_ID;
+import static com.example.mycloudmusic.util.Constant.NOTIFICATION_UNLOCK_LYRIC_ID;
 
 public class NotificationUtil {
 
@@ -85,7 +86,7 @@ public class NotificationUtil {
     /**
      * 显示音乐通知
      */
-    public static void showMusicNotification(Context context, Song data, boolean isPlaying,boolean isShowGlobalLyric) {
+    public static void showMusicNotification(Context context, Song data, boolean isPlaying, boolean isShowGlobalLyric) {
 
         String url = String.format(Constant.RESOURCE_ENDPOINT, data.getBanner());
         RequestOptions options = ImageUtil.getCommonRequestOptions();
@@ -97,7 +98,7 @@ public class NotificationUtil {
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        showMusicNotification(context, data, isPlaying, resource,isShowGlobalLyric);
+                        showMusicNotification(context, data, isPlaying, resource, isShowGlobalLyric);
                     }
 
                     @Override
@@ -114,13 +115,14 @@ public class NotificationUtil {
      */
     public static void showMusicNotification(Context context, Song data, boolean isPlaying, Bitmap banner, boolean isShowGlobalLyric) {
 
+        getNotificationManager(context);
         createNotificationChannel();
 
         RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play);
         RemoteViews contentBigView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play_large);
 
-        setData(data, contentView, isPlaying, banner,isShowGlobalLyric);
-        setData(data, contentBigView, isPlaying, banner,isShowGlobalLyric);
+        setData(data, contentView, isPlaying, banner, isShowGlobalLyric);
+        setData(data, contentBigView, isPlaying, banner, isShowGlobalLyric);
 
         //点赞
         PendingIntent likePendingIntent = PendingIntent.getBroadcast(context,
@@ -156,7 +158,7 @@ public class NotificationUtil {
                 .setCustomBigContentView(contentBigView)
                 .setContentIntent(contentPendingIntent);
 
-        getNotificationManager(context);
+
         notificationManager.notify(NOTIFICATION_MUSIC_ID, builder.build());
 
     }
@@ -202,5 +204,36 @@ public class NotificationUtil {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         contentView.setOnClickPendingIntent(R.id.iv_lyric, lyricPendingIntent);
 
+    }
+
+    /*
+     * 全局歌词解锁通知
+     * */
+    public static void showUnlockGlobalLyricNotification(Context context) {
+
+        getNotificationManager(context);
+        createNotificationChannel();
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                Constant.ACTION_UNLOCK_LYRIC.hashCode(),
+                new Intent(Constant.ACTION_UNLOCK_LYRIC),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, IMPORTANCE_LOW_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getResources().getString(R.string.lock_lyric_title))
+                .setContentText(context.getResources().getString(R.string.lock_lyric_content))
+                .setContentIntent(pendingIntent);
+
+
+        notificationManager.notify(NOTIFICATION_UNLOCK_LYRIC_ID, builder.build());
+    }
+
+    /**
+     * 清除通知
+     */
+    public static void clearUnlockGlobalLyricNotification(Context context) {
+        getNotificationManager(context);
+        notificationManager.cancel(NOTIFICATION_UNLOCK_LYRIC_ID);
     }
 }

@@ -13,8 +13,8 @@ public class ServiceUtil {
      */
     public static void startService(Context context, Class<?> clazz) {
 
-        if (!ServiceUtil.isServiceRunning(context,clazz)){
-            Intent intent = new Intent(context,clazz);
+        if (!ServiceUtil.isServiceRunning(context, clazz)) {
+            Intent intent = new Intent(context, clazz);
             context.startService(intent);
         }
     }
@@ -28,14 +28,30 @@ public class ServiceUtil {
 
         List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
 
-        if (services == null || services.size() == 0){
+        if (services == null || services.size() == 0) {
             return false;
         }
 
-        for (ActivityManager.RunningServiceInfo service : services){
+        for (ActivityManager.RunningServiceInfo service : services) {
 
-            if (service.service.getClassName().equals(clazz.getName())){
+            if (service.service.getClassName().equals(clazz.getName())) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 当前应用是否后台运行
+     */
+    public static boolean isBackgroundRunning(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+
+        for (ActivityManager.RunningAppProcessInfo appProcesse : appProcesses) {
+            if (appProcesse.processName.equals(context.getPackageName())) {
+                return appProcesse.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
             }
         }
 

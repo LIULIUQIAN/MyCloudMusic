@@ -8,9 +8,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.mycloudmusic.api.Service;
+import com.example.mycloudmusic.manager.GlobalLyricManager;
+import com.example.mycloudmusic.manager.impl.GlobalLyricManagerImpl;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ORMUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
+import com.example.mycloudmusic.util.ServiceUtil;
 
 import butterknife.ButterKnife;
 
@@ -18,6 +22,24 @@ public class BaseCommonActivity extends BaseActivity {
 
     protected PreferenceUtil sp;
     protected ORMUtil orm;
+    private GlobalLyricManagerImpl globalLyricManager;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!ServiceUtil.isBackgroundRunning(getApplicationContext())){
+            globalLyricManager.tryHide();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (ServiceUtil.isBackgroundRunning(getApplicationContext())){
+            globalLyricManager.tryShow();
+        }
+    }
 
     @Override
     protected void initViews() {
@@ -32,6 +54,7 @@ public class BaseCommonActivity extends BaseActivity {
         super.initDatum();
         sp = PreferenceUtil.getInstance(getMainActivity());
         orm = ORMUtil.getInstance(getMainActivity());
+        globalLyricManager = GlobalLyricManagerImpl.getInstance(getApplicationContext());
     }
 
     /*

@@ -1,7 +1,9 @@
 package com.example.mycloudmusic.manager.impl;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
@@ -9,6 +11,7 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -25,6 +28,8 @@ import com.example.mycloudmusic.util.NotificationUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
 import com.example.mycloudmusic.view.GlobalLyricView;
 
+import static com.example.mycloudmusic.util.Constant.ACTION_UNLOCK_LYRIC;
+
 public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricListener, MusicPlayerListener {
 
     private static GlobalLyricManagerImpl instance;
@@ -35,19 +40,22 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     private final PreferenceUtil sp;
     private final ListManager listManager;
     private final MusicPlayerManager musicPlayerManager;
+    private BroadcastReceiver unlockGlobalLyricBroadcastReceiver;
 
     private GlobalLyricManagerImpl(Context context) {
-        this.context = context.getApplicationContext();
-
-        initWindowManager();
-
-        listManager = MusicPlayerService.getListManager(this.context);
+        this.context = context.getApplicationContext(); listManager = MusicPlayerService.getListManager(this.context);
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
         musicPlayerManager.addMusicPlayerListener(this);
         sp = PreferenceUtil.getInstance(this.context);
 
+        initWindowManager();
+
         if (sp.isShowGlobalLyric()) {
             initGlobalLyricView();
+
+            if (sp.isGlobalLyricLock()){
+                lock();
+            }
         }
     }
 
@@ -88,11 +96,16 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     @Override
     public void tryHide() {
 
+        if (sp.isShowGlobalLyric()){
+            globalLyricView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void tryShow() {
-
+        if (sp.isShowGlobalLyric()){
+            globalLyricView.setVisibility(View.VISIBLE);
+        }
     }
 
     /*
@@ -120,6 +133,8 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
             layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
             layoutParams.y = 100;
 
+            //设置全局歌词view状态
+            setGlobalLyricStatus();
         }
 
 
@@ -142,6 +157,15 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
 
         showLyricData();
 
+        //显示播放状态
+        globalLyricView.setPlay(musicPlayerManager.isPlaying());
+
+        //显示音乐通知
+        NotificationUtil.showMusicNotification(context,
+                listManager.getData(),
+                musicPlayerManager.isPlaying(),
+                true);
+
     }
 
     //全局歌词监听器////////////////////////////////////////////////////////////////////////////
@@ -160,8 +184,9 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
 
     @Override
     public void onLockClick() {
-
+        lock();
     }
+
 
     @Override
     public void onPreviousClick() {
@@ -211,7 +236,7 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     @Override
     public void onProgress(Song data) {
 
-        if (globalLyricView != null){
+        if (globalLyricView != null) {
             globalLyricView.onProgress(data);
         }
     }
@@ -234,18 +259,105 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
      */
     private void showLyricData() {
 
-        if (globalLyricView == null){
+        if (globalLyricView == null) {
             return;
         }
 
-        if (listManager.getData() == null || listManager.getData().getParsedLyric() == null){
+        if (listManager.getData() == null || listManager.getData().getParsedLyric() == null) {
             globalLyricView.clearLyric();
-        }else {
+        } else {
             globalLyricView.showSecondLyricView();
             globalLyricView.setAccurate(listManager.getData().getParsedLyric().isAccurate());
 
             onProgress(listManager.getData());
         }
+
+    }
+
+    /*
+     * 歌词锁定
+     * */
+    private void lock() {
+
+        sp.setGlobalLyricLock(true);
+
+        globalLyricView.simpleStyle();
+
+        setGlobalLyricStatus();
+
+        updateView();
+
+        NotificationUtil.showUnlockGlobalLyricNotification(context);
+
+        registerUnlockGlobalLyricReceiver();
+
+    }
+
+    /*
+     * 歌词解锁
+     * */
+    private void unlock() {
+
+        sp.setGlobalLyricLock(false);
+        globalLyricView.normalStyle();
+        setGlobalLyricStatus();
+        updateView();
+        unregisterUnlockGlobalLyricReceiver();
+        //清除歌词解锁通知
+        //不用清除
+        NotificationUtil.clearUnlockGlobalLyricNotification(context);
+    }
+
+    /**
+     * 注册接收解锁全局歌词广告接收器
+     */
+    private void registerUnlockGlobalLyricReceiver() {
+
+        if (unlockGlobalLyricBroadcastReceiver == null){
+            unlockGlobalLyricBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    if (intent.getAction().equals(ACTION_UNLOCK_LYRIC)){
+                        unlock();
+                    }
+                }
+            };
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ACTION_UNLOCK_LYRIC);
+            context.registerReceiver(unlockGlobalLyricBroadcastReceiver,intentFilter);
+        }
+
+    }
+    /**
+     * 解除接收全局歌词事件广播接受者
+     */
+    private void unregisterUnlockGlobalLyricReceiver() {
+        if (unlockGlobalLyricBroadcastReceiver != null){
+            context.unregisterReceiver(unlockGlobalLyricBroadcastReceiver);
+            unlockGlobalLyricBroadcastReceiver = null;
+        }
+    }
+
+    /**
+     * 更新布局
+     */
+    private void updateView() {
+        windowManager.updateViewLayout(globalLyricView,layoutParams);
+    }
+
+    /**
+     * 设置全局歌词控件状态
+     */
+    private void setGlobalLyricStatus() {
+
+        if (sp.isGlobalLyricLock()) {
+            layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        } else {
+            layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        }
+
 
     }
 }

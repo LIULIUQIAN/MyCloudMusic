@@ -93,6 +93,10 @@ public class Constant {
      * 音乐播放通知id
      */
     public static final int NOTIFICATION_MUSIC_ID = 10000;
+    /**
+     * 解锁全局歌词Id
+     */
+    public static final int NOTIFICATION_UNLOCK_LYRIC_ID = 10001;
 
     /**
      * 音乐播放通知-播放

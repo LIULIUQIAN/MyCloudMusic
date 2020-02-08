@@ -134,7 +134,7 @@
                     android:id="@+id/rb_1"
                     android:layout_width="@dimen/icon_height"
                     android:layout_height="@dimen/icon_height"
-                    android:background="@drawable/shape_lyric_color0"
+                    android:background="@drawable/shape_lyric_color1"
                     android:button="@drawable/selector_global_lyric_radio_button"
                     android:tag="1" />
             </LinearLayout>
@@ -151,7 +151,7 @@
                     android:id="@+id/rb_2"
                     android:layout_width="@dimen/icon_height"
                     android:layout_height="@dimen/icon_height"
-                    android:background="@drawable/shape_lyric_color0"
+                    android:background="@drawable/shape_lyric_color2"
                     android:button="@drawable/selector_global_lyric_radio_button"
                     android:tag="2" />
             </LinearLayout>
@@ -168,7 +168,7 @@
                     android:id="@+id/rb_3"
                     android:layout_width="@dimen/icon_height"
                     android:layout_height="@dimen/icon_height"
-                    android:background="@drawable/shape_lyric_color0"
+                    android:background="@drawable/shape_lyric_color3"
                     android:button="@drawable/selector_global_lyric_radio_button"
                     android:tag="3" />
             </LinearLayout>
@@ -185,7 +185,7 @@
                     android:id="@+id/rb_4"
                     android:layout_width="@dimen/icon_height"
                     android:layout_height="@dimen/icon_height"
-                    android:background="@drawable/shape_lyric_color0"
+                    android:background="@drawable/shape_lyric_color4"
                     android:button="@drawable/selector_global_lyric_radio_button"
                     android:tag="4" />
             </LinearLayout>

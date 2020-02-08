@@ -353,4 +353,12 @@ public class LyricLineView extends View {
     }
 
 
+    /*
+    * 更改字体颜色
+    * */
+    public void setLyricSelectedTextColor(int color) {
+        lyricSelectedTextColor = color;
+        foregroundTextPaint.setColor(color);
+        invalidate();
+    }
 }

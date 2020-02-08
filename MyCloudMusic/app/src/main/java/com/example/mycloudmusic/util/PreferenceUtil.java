@@ -41,9 +41,21 @@ public class PreferenceUtil {
      */
     private static final String KEY_GLOBAL_LYRIC_TEXT_SIZE = "KEY_GLOBAL_LYRIC_TEXT_SIZE";
 
+    /**
+     * 全局歌词颜色 key
+     */
+    private static final String KEY_GLOBAL_LYRIC_TEXT_COLOR = "KEY_GLOBAL_LYRIC_TEXT_COLOR";
+
+    /**
+     * 全局歌词锁定 key
+     */
+    private static final String KEY_GLOBAL_LYRIC_LOCK = "KEY_GLOBAL_LYRIC_LOCK";
+
+
     private static PreferenceUtil instance;
     private final Context context;
     private final SharedPreferences preference;
+
 
     public PreferenceUtil(Context context) {
         this.context = context.getApplicationContext();
@@ -171,6 +183,35 @@ public class PreferenceUtil {
         putInt(KEY_GLOBAL_LYRIC_TEXT_SIZE, data);
     }
 
+    /**
+     * 获取全局歌词颜色索引
+     */
+    public int getGlobalLyricTextColorIndex() {
+        return getInt(KEY_GLOBAL_LYRIC_TEXT_COLOR, 0);
+    }
+
+    /**
+     * 设置全局歌词颜色索引
+     */
+    public void setGlobalLyricTextColorIndex(int index) {
+        putInt(KEY_GLOBAL_LYRIC_TEXT_COLOR, index);
+    }
+
+    /**
+     * 获取全局歌词是否锁定
+     *
+     * @return
+     */
+    public boolean isGlobalLyricLock() {
+        return getBoolean(KEY_GLOBAL_LYRIC_LOCK, false);
+    }
+
+    /**
+     * 设置全局歌词是否锁定
+     */
+    public void setGlobalLyricLock(boolean data) {
+        putBoolean(KEY_GLOBAL_LYRIC_LOCK, data);
+    }
 
 
     //辅助方法

@@ -25,8 +25,25 @@ import com.example.mycloudmusic.util.lyric.LyricUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.shihao.library.XRadioGroup;
 
 public class GlobalLyricView extends LinearLayout {
+
+    private static final int[] LYRIC_COLORS = new int[]{
+            R.color.lyric_color0,
+            R.color.lyric_color1,
+            R.color.lyric_color2,
+            R.color.lyric_color3,
+            R.color.lyric_color4,
+    };
+
+    private static final int[] RADIO_BUTTONS = new int[]{
+            R.id.rb_0,
+            R.id.rb_1,
+            R.id.rb_2,
+            R.id.rb_3,
+            R.id.rb_4,
+    };
 
     @BindView(R.id.iv_logo)
     ImageView iv_logo;
@@ -48,6 +65,9 @@ public class GlobalLyricView extends LinearLayout {
 
     @BindView(R.id.ll_lyric_edit_container)
     View ll_lyric_edit_container;
+
+    @BindView(R.id.rg)
+    XRadioGroup rg;
 
 
     /**
@@ -94,6 +114,10 @@ public class GlobalLyricView extends LinearLayout {
         llv1.setLyricTextSize(textSize);
         llv2.setLyricTextSize(textSize);
 
+        int textColorIndex = sp.getGlobalLyricTextColorIndex();
+        llv1.setLyricSelectedTextColor(getResources().getColor(LYRIC_COLORS[textColorIndex]));
+        rg.check(RADIO_BUTTONS[textColorIndex]);
+
     }
 
     private void initViews() {
@@ -123,6 +147,18 @@ public class GlobalLyricView extends LinearLayout {
             }
         };
         this.setOnClickListener(onClickListener);
+
+        rg.setOnCheckedChangeListener(new XRadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(XRadioGroup group, int checkedId) {
+
+                String tag = (String) group.findViewById(checkedId).getTag();
+                int index = Integer.parseInt(tag);
+                llv1.setLyricSelectedTextColor(getResources().getColor(LYRIC_COLORS[index]));
+
+                sp.setGlobalLyricTextColorIndex(index);
+            }
+        });
 
     }
 
@@ -161,7 +197,7 @@ public class GlobalLyricView extends LinearLayout {
 
     @OnClick(R.id.iv_lock)
     public void onLockClick() {
-        globalLyricListener.onLogoClick();
+        globalLyricListener.onLockClick();
     }
 
     @OnClick(R.id.iv_previous)
