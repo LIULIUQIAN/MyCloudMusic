@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.activity.ImagePreviewActivity;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.event.OnRecordClickEvent;
 import com.example.mycloudmusic.domain.event.OnStartRecordEvent;
@@ -27,6 +28,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MusicRecordFragment extends BaseCommonFragment {
@@ -145,13 +147,21 @@ public class MusicRecordFragment extends BaseCommonFragment {
         };
 
         timer = new Timer();
-        timer.schedule(timerTask, 0,16);
+        timer.schedule(timerTask, 0, 16);
     }
 
     @OnClick(R.id.cl_container)
-    public void onContainerClick(){
+    public void onContainerClick() {
 
         EventBus.getDefault().post(new OnRecordClickEvent());
     }
+
+    @OnLongClick(R.id.cl_container)
+    public void onLoneContainerClick() {
+
+        String uri = String.format(Constant.RESOURCE_ENDPOINT, song.getBanner());
+        ImagePreviewActivity.start(getMainActivity(), song.getId(), uri);
+    }
+
 
 }
