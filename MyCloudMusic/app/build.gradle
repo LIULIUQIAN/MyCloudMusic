@@ -304,5 +304,10 @@ dependencies {
     //http://commons.apache.org/proper/commons-io/
     implementation 'commons-io:commons-io:2.6'
 
+    //动态处理权限
+    //https://github.com/permissions-dispatcher/PermissionsDispatcher
+    implementation 'org.permissionsdispatcher:permissionsdispatcher:4.5.0'
+    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.5.0"
+
 
 }

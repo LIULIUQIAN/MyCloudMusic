@@ -4,7 +4,9 @@
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 全局歌词悬浮窗权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" /> <!-- 读存储卡权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 写存储卡权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".AppContext"
@@ -15,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.ImagePreviewActivity"></activity>
+        <activity android:name=".activity.SelectLyricActivity"
+            android:label="@string/activity_select_lyric"></activity>
+        <activity android:name=".activity.ImagePreviewActivity" />
         <activity android:name=".activity.MusicPlayerActivity" />
 
         <service

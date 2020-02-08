@@ -351,6 +351,14 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             }
         });
 
+        lyricAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                SelectLyricActivity.start(getMainActivity(),listManager.getData());
+                return true;
+            }
+        });
+
         //添加布局监听器
         viewPager.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
