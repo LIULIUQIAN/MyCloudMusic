@@ -19,6 +19,7 @@ import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.lyric.Line;
 import com.example.mycloudmusic.domain.lyric.Lyric;
 import com.example.mycloudmusic.listener.GlobalLyricListener;
+import com.example.mycloudmusic.util.PreferenceUtil;
 import com.example.mycloudmusic.util.lyric.LyricUtil;
 
 import butterknife.BindView;
@@ -53,6 +54,7 @@ public class GlobalLyricView extends LinearLayout {
      * 全局歌词控件监听器
      */
     private GlobalLyricListener globalLyricListener;
+    private PreferenceUtil sp;
 
 
     public GlobalLyricView(Context context) {
@@ -80,7 +82,18 @@ public class GlobalLyricView extends LinearLayout {
     private void init() {
 
         initViews();
+        initDatum();
         initListener();
+    }
+
+    private void initDatum() {
+
+        sp = PreferenceUtil.getInstance(getContext());
+
+        int textSize = sp.getGlobalLyricTextSize();
+        llv1.setLyricTextSize(textSize);
+        llv2.setLyricTextSize(textSize);
+
     }
 
     private void initViews() {
@@ -181,12 +194,16 @@ public class GlobalLyricView extends LinearLayout {
     public void onLyricFontSizeDecrementClick() {
         int textSize = llv1.decrementTextSize();
         llv2.setLyricTextSize(textSize);
+
+        sp.setGlobalLyricTextSize(textSize);
     }
 
     @OnClick(R.id.iv_font_size_large)
     public void onLyricFontSizeIncrementClick() {
         int textSize = llv1.incrementTextSize();
         llv2.setLyricTextSize(textSize);
+
+        sp.setGlobalLyricTextSize(textSize);
     }
 
     /**

@@ -36,6 +36,11 @@ public class PreferenceUtil {
      */
     private static final String KEY_SHOW_GLOBAL_LYRIC = "KEY_SHOW_GLOBAL_LYRIC";
 
+    /**
+     * 全局歌词大小 key
+     */
+    private static final String KEY_GLOBAL_LYRIC_TEXT_SIZE = "KEY_GLOBAL_LYRIC_TEXT_SIZE";
+
     private static PreferenceUtil instance;
     private final Context context;
     private final SharedPreferences preference;
@@ -146,6 +151,27 @@ public class PreferenceUtil {
     public void setShowGlobalLyric(boolean data) {
         putBoolean(KEY_SHOW_GLOBAL_LYRIC, data);
     }
+
+    /**
+     * 获取全局歌词大小
+     * 默认16sp
+     *
+     * @return
+     */
+    public int getGlobalLyricTextSize() {
+        return getInt(KEY_GLOBAL_LYRIC_TEXT_SIZE, DensityUtil.dipTopx(context, 16));
+    }
+
+    /**
+     * 设置全局歌词大小
+     *
+     * @param data
+     */
+    public void setGlobalLyricTextSize(int data) {
+        putInt(KEY_GLOBAL_LYRIC_TEXT_SIZE, data);
+    }
+
+
 
     //辅助方法
     /**
