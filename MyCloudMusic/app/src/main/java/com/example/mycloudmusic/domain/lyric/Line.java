@@ -33,6 +33,11 @@ public class Line extends BaseModel {
      */
     private long endTime;
 
+    /*
+    * 是否选中
+    * */
+    private boolean chooseState;
+
     public String getData() {
         return data;
     }
@@ -71,5 +76,13 @@ public class Line extends BaseModel {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
+    }
+
+    public boolean isChooseState() {
+        return chooseState;
+    }
+
+    public void setChooseState(boolean chooseState) {
+        this.chooseState = chooseState;
     }
 }
