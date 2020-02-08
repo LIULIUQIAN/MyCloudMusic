@@ -31,4 +31,9 @@ public interface GlobalLyricListener {
      * 下一首点击
      */
     void onNextClick();
+
+    /**
+     * 拖拽的方法
+     */
+    void onGlobalLyricDrag(int y);
 }

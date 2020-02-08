@@ -26,6 +26,7 @@ import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.NotificationUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
+import com.example.mycloudmusic.util.SizeUtil;
 import com.example.mycloudmusic.view.GlobalLyricView;
 
 import static com.example.mycloudmusic.util.Constant.ACTION_UNLOCK_LYRIC;
@@ -43,7 +44,8 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     private BroadcastReceiver unlockGlobalLyricBroadcastReceiver;
 
     private GlobalLyricManagerImpl(Context context) {
-        this.context = context.getApplicationContext(); listManager = MusicPlayerService.getListManager(this.context);
+        this.context = context.getApplicationContext();
+        listManager = MusicPlayerService.getListManager(this.context);
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
         musicPlayerManager.addMusicPlayerListener(this);
         sp = PreferenceUtil.getInstance(this.context);
@@ -53,7 +55,7 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
         if (sp.isShowGlobalLyric()) {
             initGlobalLyricView();
 
-            if (sp.isGlobalLyricLock()){
+            if (sp.isGlobalLyricLock()) {
                 lock();
             }
         }
@@ -96,14 +98,14 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     @Override
     public void tryHide() {
 
-        if (sp.isShowGlobalLyric()){
+        if (sp.isShowGlobalLyric()) {
             globalLyricView.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void tryShow() {
-        if (sp.isShowGlobalLyric()){
+        if (sp.isShowGlobalLyric()) {
             globalLyricView.setVisibility(View.VISIBLE);
         }
     }
@@ -131,7 +133,7 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
             windowManager.getDefaultDisplay().getMetrics(dm);
             layoutParams.width = dm.widthPixels;
             layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            layoutParams.y = 100;
+            layoutParams.y = sp.getGlobalLyricViewY();
 
             //设置全局歌词view状态
             setGlobalLyricStatus();
@@ -206,6 +208,14 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     @Override
     public void onNextClick() {
         listManager.play(listManager.next());
+    }
+
+    @Override
+    public void onGlobalLyricDrag(int y) {
+
+        layoutParams.y = y - SizeUtil.getStatusBarHeight(context);
+        updateView();
+        sp.setGlobalLyricViewY(layoutParams.y);
     }
 
 
@@ -313,12 +323,12 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
      */
     private void registerUnlockGlobalLyricReceiver() {
 
-        if (unlockGlobalLyricBroadcastReceiver == null){
+        if (unlockGlobalLyricBroadcastReceiver == null) {
             unlockGlobalLyricBroadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
 
-                    if (intent.getAction().equals(ACTION_UNLOCK_LYRIC)){
+                    if (intent.getAction().equals(ACTION_UNLOCK_LYRIC)) {
                         unlock();
                     }
                 }
@@ -326,15 +336,16 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
 
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(ACTION_UNLOCK_LYRIC);
-            context.registerReceiver(unlockGlobalLyricBroadcastReceiver,intentFilter);
+            context.registerReceiver(unlockGlobalLyricBroadcastReceiver, intentFilter);
         }
 
     }
+
     /**
      * 解除接收全局歌词事件广播接受者
      */
     private void unregisterUnlockGlobalLyricReceiver() {
-        if (unlockGlobalLyricBroadcastReceiver != null){
+        if (unlockGlobalLyricBroadcastReceiver != null) {
             context.unregisterReceiver(unlockGlobalLyricBroadcastReceiver);
             unlockGlobalLyricBroadcastReceiver = null;
         }
@@ -344,7 +355,7 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
      * 更新布局
      */
     private void updateView() {
-        windowManager.updateViewLayout(globalLyricView,layoutParams);
+        windowManager.updateViewLayout(globalLyricView, layoutParams);
     }
 
     /**

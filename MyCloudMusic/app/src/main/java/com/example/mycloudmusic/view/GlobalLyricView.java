@@ -76,6 +76,21 @@ public class GlobalLyricView extends LinearLayout {
     private GlobalLyricListener globalLyricListener;
     private PreferenceUtil sp;
 
+    /**
+     * 是否拦截事件
+     */
+    private boolean isIntercept;
+
+    /**
+     * 按下y坐标
+     */
+    private float lastY;
+
+    /**
+     * 最小滑动距离
+     * 目的是过滤不必要的滑动
+     */
+    private float touchSlop;
 
     public GlobalLyricView(Context context) {
         super(context);
@@ -129,6 +144,10 @@ public class GlobalLyricView extends LinearLayout {
         ButterKnife.bind(this);
 
         llv1.setLineSelected(true);
+
+        //获取最小滑动距离
+        ViewConfiguration viewConfiguration = ViewConfiguration.get(getContext());
+        touchSlop = viewConfiguration.getScaledTouchSlop();
 
     }
 
@@ -314,5 +333,52 @@ public class GlobalLyricView extends LinearLayout {
             llv2.setData(nextLine);
         }
 
+    }
+
+    /**
+     * 用来判断是否拦截该事件
+     */
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        isIntercept = false;
+        switch (ev.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                isIntercept = false;
+                lastY = ev.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (Math.abs(ev.getY() - lastY) > touchSlop) {
+                    isIntercept = true;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                isIntercept = false;
+                break;
+        }
+        return isIntercept;
+    }
+
+    /**
+     * 如果当前控件拦截了事件
+     * 就会执行现在这个方法
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_MOVE:
+
+                float distanceY = event.getY() - lastY;
+                if (Math.abs(distanceY) > touchSlop) {
+
+                    float rawY = event.getRawY();
+                    float moveY = rawY - lastY;
+
+                    globalLyricListener.onGlobalLyricDrag((int) moveY);
+                }
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 }

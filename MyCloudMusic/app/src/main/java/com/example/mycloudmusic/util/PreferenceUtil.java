@@ -51,6 +51,11 @@ public class PreferenceUtil {
      */
     private static final String KEY_GLOBAL_LYRIC_LOCK = "KEY_GLOBAL_LYRIC_LOCK";
 
+    /**
+     * 全局歌词y坐标 key
+     */
+    private static final String KEY_GLOBAL_LYRIC_VIEW_Y = "KEY_GLOBAL_LYRIC_VIEW_Y";
+
 
     private static PreferenceUtil instance;
     private final Context context;
@@ -211,6 +216,24 @@ public class PreferenceUtil {
      */
     public void setGlobalLyricLock(boolean data) {
         putBoolean(KEY_GLOBAL_LYRIC_LOCK, data);
+    }
+
+    /**
+     * 获取全局歌词y坐标
+     *
+     * @return
+     */
+    public int getGlobalLyricViewY() {
+        return getInt(KEY_GLOBAL_LYRIC_VIEW_Y, 0);
+    }
+
+    /**
+     * 设置全局歌词y坐标
+     *
+     * @param data
+     */
+    public void setGlobalLyricViewY(int data) {
+        putInt(KEY_GLOBAL_LYRIC_VIEW_Y, data);
     }
 
 
