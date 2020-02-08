@@ -45,6 +45,10 @@ public class GlobalLyricView extends LinearLayout {
     @BindView(R.id.iv_play)
     ImageView iv_play;
 
+    @BindView(R.id.ll_lyric_edit_container)
+    View ll_lyric_edit_container;
+
+
     /**
      * 全局歌词控件监听器
      */
@@ -129,6 +133,7 @@ public class GlobalLyricView extends LinearLayout {
         iv_logo.setVisibility(View.GONE);
         iv_close.setVisibility(GONE);
         ll_play_container.setVisibility(GONE);
+        ll_lyric_edit_container.setVisibility(GONE);
     }
 
     @OnClick(R.id.iv_logo)
@@ -165,6 +170,23 @@ public class GlobalLyricView extends LinearLayout {
     @OnClick(R.id.iv_settings)
     public void onSettingsClick() {
 
+        if (ll_lyric_edit_container.getVisibility() == GONE) {
+            ll_lyric_edit_container.setVisibility(VISIBLE);
+        } else {
+            ll_lyric_edit_container.setVisibility(GONE);
+        }
+    }
+
+    @OnClick(R.id.iv_font_size_small)
+    public void onLyricFontSizeDecrementClick() {
+        int textSize = llv1.decrementTextSize();
+        llv2.setLyricTextSize(textSize);
+    }
+
+    @OnClick(R.id.iv_font_size_large)
+    public void onLyricFontSizeIncrementClick() {
+        int textSize = llv1.incrementTextSize();
+        llv2.setLyricTextSize(textSize);
     }
 
     /**
@@ -178,8 +200,8 @@ public class GlobalLyricView extends LinearLayout {
     }
 
     /*
-    * 清楚歌词
-    * */
+     * 清楚歌词
+     * */
     public void clearLyric() {
 
         llv1.setData(null);
@@ -188,6 +210,7 @@ public class GlobalLyricView extends LinearLayout {
         llv2.setVisibility(INVISIBLE);
 
     }
+
     /**
      * 显示第二个歌词控件
      */
@@ -213,7 +236,7 @@ public class GlobalLyricView extends LinearLayout {
 
         Lyric lyric = data.getParsedLyric();
 
-        if (lyric == null){
+        if (lyric == null) {
             return;
         }
 
@@ -221,7 +244,7 @@ public class GlobalLyricView extends LinearLayout {
 
         Line line = LyricUtil.getLyricLine(lyric, progress);
         llv1.setData(line);
-        if (lyric.isAccurate()){
+        if (lyric.isAccurate()) {
 
             int wordIndex = LyricUtil.getWordIndex(line, progress);
             float wordPlayedTime = LyricUtil.getWordPlayedTime(line, progress);
@@ -233,7 +256,7 @@ public class GlobalLyricView extends LinearLayout {
 
 
         int lineNumber = LyricUtil.getLineNumber(lyric, progress);
-        if (lineNumber < lyric.getDatum().size() - 1){
+        if (lineNumber < lyric.getDatum().size() - 1) {
             Line nextLine = lyric.getDatum().get(lineNumber + 1);
             llv2.setData(nextLine);
         }

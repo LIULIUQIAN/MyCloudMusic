@@ -316,5 +316,41 @@ public class LyricLineView extends View {
         }
     }
 
+    /**
+     * 减小字体大小
+     */
+    public int decrementTextSize() {
+        lyricTextSize--;
+        updateTextSize();
+        return lyricTextSize;
+
+    }
+
+    /**
+     * 增大字体大小
+     */
+    public int incrementTextSize() {
+        lyricTextSize++;
+        updateTextSize();
+        return lyricTextSize;
+    }
+
+    /**
+     * 重新设置字体大小
+     */
+    private void updateTextSize() {
+        foregroundTextPaint.setTextSize(lyricTextSize);
+        backgroundTextPaint.setTextSize(lyricTextSize);
+        invalidate();
+    }
+
+    /**
+     * 设置歌词字体大小
+     */
+    public void setLyricTextSize(int lyricTextSize) {
+        this.lyricTextSize = lyricTextSize;
+        updateTextSize();
+    }
+
 
 }

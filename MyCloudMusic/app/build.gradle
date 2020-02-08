@@ -292,5 +292,9 @@ dependencies {
     //https://github.com/hdodenhof/CircleImageView
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    //可以嵌套的RadioGroup
+    //https://github.com/fodroid/XRadioGroup
+    implementation 'com.github.fodroid:XRadioGroup:1.5'
+
 
 }
