@@ -2,35 +2,25 @@ package com.example.mycloudmusic.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.TimeUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.Inflater;
-
+import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
-
-    private final Context context;
-    List<Comment> datum = new ArrayList<>();
-    private final LayoutInflater inflater;
+public class CommentAdapter extends BaseRecyclerViewAdapter<Comment,CommentAdapter.CommentViewHolder> {
 
     public CommentAdapter(Context context) {
-        this.context = context;
-        inflater = LayoutInflater.from(context);
+        super(context);
     }
 
     @NonNull
@@ -41,39 +31,36 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        holder.bindData(datum.get(position));
+        super.onBindViewHolder(holder,position);
+        holder.bindData(getData(position));
     }
 
-    @Override
-    public int getItemCount() {
-        return datum.size();
-    }
 
-    public void setDatum(List<Comment> datum) {
-        this.datum.clear();
-        this.datum.addAll(datum);
-        notifyDataSetChanged();
-    }
+    public class CommentViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
 
-    public class CommentViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.iv_avatar)
+        CircleImageView iv_avatar;
 
-        private final CircleImageView iv_avatar;
-        private final TextView tv_nickname;
-        private final TextView tv_time;
-        private final TextView tv_like_count;
-        private final ImageView iv_like;
-        private final TextView tv_content;
-        private final Context context;
+        @BindView(R.id.tv_nickname)
+        TextView tv_nickname;
+
+        @BindView(R.id.tv_time)
+        TextView tv_time;
+
+        @BindView(R.id.tv_like_count)
+        TextView tv_like_count;
+
+        @BindView(R.id.iv_like)
+        ImageView iv_like;
+
+        @BindView(R.id.tv_content)
+        TextView tv_content;
+
+        Context context;
 
         public CommentViewHolder(Context context, @NonNull View itemView) {
             super(itemView);
             this.context = context;
-            iv_avatar = itemView.findViewById(R.id.iv_avatar);
-            tv_nickname = itemView.findViewById(R.id.tv_nickname);
-            tv_time = itemView.findViewById(R.id.tv_time);
-            tv_like_count = itemView.findViewById(R.id.tv_like_count);
-            iv_like = itemView.findViewById(R.id.iv_like);
-            tv_content = itemView.findViewById(R.id.tv_content);
         }
 
         public void bindData(Comment comment) {
@@ -83,7 +70,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             tv_like_count.setText(String.valueOf(comment.getLikes_count()));
             iv_like.setImageResource(comment.isLiked() ? R.drawable.ic_comment_liked : R.drawable.ic_comment_like);
             tv_content.setText(comment.getContent());
-
             //时间
             tv_time.setText(TimeUtil.commonFormat(comment.getCreated_at()));
         }

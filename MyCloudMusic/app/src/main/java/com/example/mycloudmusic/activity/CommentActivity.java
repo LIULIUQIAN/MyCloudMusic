@@ -11,11 +11,13 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.adapter.BaseRecyclerViewAdapter;
 import com.example.mycloudmusic.adapter.CommentAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+import com.example.mycloudmusic.listener.OnItemClickListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
@@ -78,9 +80,21 @@ public class CommentActivity extends BaseTitleActivity {
 
     }
 
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseRecyclerViewAdapter.ViewHolder holder, int position) {
+                Log.e("OnItemClickListener", "===========" + position);
+            }
+        });
+    }
+
     /*
-    * 请求网络数据
-    * */
+     * 请求网络数据
+     * */
     private void fetchData() {
 
         Map<String, String> map = new HashMap<>();
@@ -95,7 +109,7 @@ public class CommentActivity extends BaseTitleActivity {
     }
 
     @OnClick(R.id.bt_send)
-    public void onSendClick(){
-        Log.e("aa","aaa");
+    public void onSendClick() {
+        Log.e("aa", "aaa");
     }
 }
