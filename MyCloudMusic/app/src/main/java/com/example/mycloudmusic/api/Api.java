@@ -242,4 +242,22 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 评论点赞
+     */
+    public Observable<DetailResponse<BaseModel>> like(String data){
+        return service.like(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 取消评论点赞
+     */
+    public Observable<Response<Void>> deleteLike(String id){
+        return service.deleteLike(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

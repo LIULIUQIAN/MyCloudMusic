@@ -19,12 +19,15 @@ import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.BaseRecyclerViewAdapter;
 import com.example.mycloudmusic.adapter.CommentAdapter;
 import com.example.mycloudmusic.api.Api;
+import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.fragment.CommentMoreDialogFragment;
+import com.example.mycloudmusic.listener.CommentAdapterListener;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.listener.OnItemClickListener;
+import com.example.mycloudmusic.util.ClipboardUtil;
 import com.example.mycloudmusic.util.KeyboardUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
@@ -35,6 +38,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import retrofit2.Response;
 
 import static com.example.mycloudmusic.util.Constant.SHEET_ID;
 
@@ -115,12 +119,43 @@ public class CommentActivity extends BaseTitleActivity {
             }
         });
 
+        adapter.setCommentAdapterListener(new CommentAdapterListener() {
+            @Override
+            public void onAvatarClick(Comment data) {
+                UserDetailActivity.start(getMainActivity(),data.getUser().getId(),null);
+            }
+
+            @Override
+            public void onLikeClick(Comment data) {
+
+                if (data.isLiked()){
+                    Api.getInstance().deleteLike(data.getLike_id()).subscribe(new HttpObserver<Response<Void>>() {
+                        @Override
+                        public void onSucceeded(Response<Void> d) {
+                            data.setLikes_count(data.getLikes_count() - 1);
+                            data.setLike_id(null);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }else {
+                    Api.getInstance().like(data.getId()).subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                        @Override
+                        public void onSucceeded(DetailResponse<BaseModel> d) {
+                            data.setLikes_count(data.getLikes_count()+1);
+                            data.setLike_id(d.getData().getId());
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
+
         recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (Math.abs(dy) > 50) {
+                if (Math.abs(dy) > 30) {
                     if (TextUtils.isEmpty(et_content.getText().toString().trim())) {
                         clearInputContent();
                     }
@@ -205,7 +240,8 @@ public class CommentActivity extends BaseTitleActivity {
                         et_content.setHint(getResources().getString(R.string.reply_hint, data.getUser().getNickname()));
                         break;
                     case 1:
-                        Log.e("", "复制评论" + data.getContent());
+                        ClipboardUtil.copyText(getMainActivity(), data.getContent());
+                        ToastUtil.successShortToast(R.string.copy_success);
                         break;
                 }
             }

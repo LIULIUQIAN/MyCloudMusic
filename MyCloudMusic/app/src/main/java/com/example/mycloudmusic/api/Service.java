@@ -129,4 +129,17 @@ public interface Service {
     @POST("v1/comments")
     Observable<DetailResponse<Comment>> createComment(@Body Comment data);
 
+    /**
+     * 评论点赞
+     */
+    @FormUrlEncoded
+    @POST("v1/likes")
+    Observable<DetailResponse<BaseModel>> like(@Field("comment_id") String data);
+
+    /**
+     * 取消评论点赞
+     */
+    @DELETE("v1/likes/{id}")
+    Observable<Response<Void>> deleteLike(@Path("id") String id);
+
 }

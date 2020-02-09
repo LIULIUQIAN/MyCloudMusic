@@ -17,15 +17,19 @@ import com.example.mycloudmusic.activity.TopicDetailActivity;
 import com.example.mycloudmusic.activity.UserDetailActivity;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.MatchResult;
+import com.example.mycloudmusic.listener.CommentAdapterListener;
 import com.example.mycloudmusic.listener.OnTagClickListener;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.TimeUtil;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdapter.CommentViewHolder> {
+
+    private CommentAdapterListener commentAdapterListener;
 
     public CommentAdapter(Context context) {
         super(context);
@@ -41,6 +45,10 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         holder.bindData(getData(position));
+    }
+
+    public void setCommentAdapterListener(CommentAdapterListener commentAdapterListener) {
+        this.commentAdapterListener = commentAdapterListener;
     }
 
     public class CommentViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
@@ -71,6 +79,23 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
         TextView tv_reply_content;
 
         Context context;
+        Comment data;
+
+        @OnClick(R.id.iv_avatar)
+        public void onAvatarClick() {
+
+            if (commentAdapterListener != null) {
+                commentAdapterListener.onAvatarClick(data);
+            }
+
+        }
+
+        @OnClick(R.id.ll_like_container)
+        public void onLikeContainerClick() {
+            if (commentAdapterListener != null) {
+                commentAdapterListener.onLikeClick(data);
+            }
+        }
 
         public CommentViewHolder(Context context, @NonNull View itemView) {
             super(itemView);
@@ -79,11 +104,15 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
 
         public void bindData(Comment comment) {
 
+            data = comment;
+
             ImageUtil.showAvatar((Activity) context, iv_avatar, comment.getUser().getAvatar());
             tv_nickname.setText(comment.getUser().getNickname());
             tv_like_count.setText(String.valueOf(comment.getLikes_count()));
             iv_like.setImageResource(comment.isLiked() ? R.drawable.ic_comment_liked : R.drawable.ic_comment_like);
-//            tv_content.setText(comment.getContent());
+            int colorid = comment.isLiked() ? R.color.colorPrimary : R.color.light_grey;
+            tv_like_count.setTextColor(context.getResources().getColor(colorid));
+            //            tv_content.setText(comment.getContent());
 //            tv_content.setText(StringUtil.processHighlight(context, comment.getContent()));
             tv_content.setText(processContent(comment.getContent()));
             tv_content.setLinkTextColor(context.getResources().getColor(R.color.text_highlight));
@@ -118,14 +147,14 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
                     @Override
                     public void onTagClick(String data, MatchResult matchResult) {
                         String clickText = StringUtil.removePlaceholderString(data);
-                        TopicDetailActivity.start((Activity) context,clickText);
+                        TopicDetailActivity.start((Activity) context, clickText);
                     }
                 },
                 new OnTagClickListener() {
                     @Override
                     public void onTagClick(String data, MatchResult matchResult) {
                         String clickText = StringUtil.removePlaceholderString(data);
-                        UserDetailActivity.start((Activity) context,null,clickText);
+                        UserDetailActivity.start((Activity) context, null, clickText);
                     }
                 });
 
