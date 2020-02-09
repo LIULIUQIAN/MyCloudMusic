@@ -154,4 +154,14 @@ public class Constant {
      */
     public static final int REQUEST_OVERLAY_PERMISSION = 100;
 
+    /**
+     * mention开始
+     */
+    public static final String MENTION = "@";
+
+    /**
+     * hashTag开始
+     */
+    public static final String HAST_TAG = "#";
+
 }

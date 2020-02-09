@@ -17,8 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.ShareLyricImageActivity"
-            android:label="@string/activity_share_lyric_image"/>
+        <activity android:name=".activity.TopicDetailActivity"
+            android:label="@string/activity_topic_detail"></activity>
+        <activity
+            android:name=".activity.ShareLyricImageActivity"
+            android:label="@string/activity_share_lyric_image" />
         <activity
             android:name=".activity.SelectLyricActivity"
             android:label="@string/activity_select_lyric" />
@@ -70,10 +73,10 @@
         <activity android:name=".activity.GuideActivity" />
         <activity android:name=".activity.SplashActivity">
 
-<!--             <intent-filter>-->
-<!--             <action android:name="android.intent.action.MAIN" />-->
-<!--             <category android:name="android.intent.category.LAUNCHER" />-->
-<!--             </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".MainActivity"

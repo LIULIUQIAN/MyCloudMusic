@@ -10,15 +10,13 @@ import android.text.TextUtils;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.util.Constant;
 
-public class UserDetailActivity extends BaseTitleActivity {
+public class TopicDetailActivity extends BaseTitleActivity {
 
-    public static void start(Activity activity, String id, String nickname) {
-        Intent intent = new Intent(activity, UserDetailActivity.class);
-        if (!TextUtils.isEmpty(id)) {
-            intent.putExtra(Constant.ID, id);
-        }
-        if (!TextUtils.isEmpty(nickname)) {
-            intent.putExtra(Constant.NICKNAME, nickname);
+    public static void start(Activity activity, String title) {
+
+        Intent intent = new Intent(activity, TopicDetailActivity.class);
+        if (!TextUtils.isEmpty(title)) {
+            intent.putExtra(Constant.TITLE, title);
         }
         activity.startActivity(intent);
     }
@@ -26,6 +24,13 @@ public class UserDetailActivity extends BaseTitleActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_detail);
+        setContentView(R.layout.activity_topic_detail);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+
     }
 }
