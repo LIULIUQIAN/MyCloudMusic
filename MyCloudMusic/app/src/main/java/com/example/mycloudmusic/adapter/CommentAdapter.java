@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.util.ImageUtil;
+import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.TimeUtil;
 
 import butterknife.BindView;
@@ -68,7 +69,8 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment,CommentAdapt
             tv_nickname.setText(comment.getUser().getNickname());
             tv_like_count.setText(String.valueOf(comment.getLikes_count()));
             iv_like.setImageResource(comment.isLiked() ? R.drawable.ic_comment_liked : R.drawable.ic_comment_like);
-            tv_content.setText(comment.getContent());
+//            tv_content.setText(comment.getContent());
+            tv_content.setText(StringUtil.processHighlight(context,comment.getContent()));
             //时间
             tv_time.setText(TimeUtil.commonFormat(comment.getCreated_at()));
         }

@@ -1,5 +1,13 @@
 package com.example.mycloudmusic.util;
 
+import android.content.Context;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+
+import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.domain.MatchResult;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +22,7 @@ public class StringUtil {
      * @param value
      * @return
      */
-    public static boolean isPhone(String value){
+    public static boolean isPhone(String value) {
         return value.matches(REGEX_PHONE);
     }
 
@@ -24,7 +32,7 @@ public class StringUtil {
      * @param value
      * @return
      */
-    public static boolean isEmail(String value){
+    public static boolean isEmail(String value) {
         return value.matches(REGEX_EMAIL);
     }
 
@@ -34,8 +42,8 @@ public class StringUtil {
      * @param value
      * @return
      */
-    public static boolean isPassword(String value){
-        return value.trim().length() >=6 && value.trim().length() <=15;
+    public static boolean isPassword(String value) {
+        return value.trim().length() >= 6 && value.trim().length() <= 15;
     }
 
     /**
@@ -75,4 +83,20 @@ public class StringUtil {
         return results.toArray(new String[results.size()]);
     }
 
+    /**
+     * 文本进行高亮
+     */
+    public static SpannableString processHighlight(Context context, String data) {
+
+        List<MatchResult> mentionsAndHashTags = RegUtil.findHashTags(data);
+        mentionsAndHashTags.addAll(RegUtil.findMentions(data));
+
+        SpannableString result = new SpannableString(data);
+
+        for (MatchResult matchResult : mentionsAndHashTags) {
+            ForegroundColorSpan span = new ForegroundColorSpan(context.getResources().getColor(R.color.text_highlight));
+            result.setSpan(span, matchResult.getStart(), matchResult.getEnd(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return result;
+    }
 }
