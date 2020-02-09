@@ -10,7 +10,9 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -40,6 +42,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import retrofit2.Response;
 
+import static com.example.mycloudmusic.util.Constant.HAST_TAG;
 import static com.example.mycloudmusic.util.Constant.SHEET_ID;
 
 public class CommentActivity extends BaseTitleActivity {
@@ -160,6 +163,28 @@ public class CommentActivity extends BaseTitleActivity {
                         clearInputContent();
                     }
                 }
+            }
+        });
+
+        et_content.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                String data = s.toString();
+                if (data.endsWith(HAST_TAG)){
+                    startActivity(SelectTopicActivity.class);
+                }
+
             }
         });
     }
