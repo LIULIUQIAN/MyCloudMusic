@@ -5,6 +5,7 @@ import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.BuildConfig;
 import com.example.mycloudmusic.domain.Advert;
 import com.example.mycloudmusic.domain.BaseModel;
+import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
@@ -19,6 +20,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,6 +38,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.QueryMap;
 
 
 public class Api {
@@ -216,6 +219,15 @@ public class Api {
      */
     public Observable<Response<Void>> deleteCollect(String id) {
         return service.deleteCollect(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 评论列表
+     */
+    public Observable<ListResponse<Comment>> comments(Map<String, String> data) {
+        return service.comments(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

@@ -3,6 +3,7 @@ package com.example.mycloudmusic.api;
 
 import com.example.mycloudmusic.domain.Advert;
 import com.example.mycloudmusic.domain.BaseModel;
+import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
@@ -115,5 +116,11 @@ public interface Service {
      */
     @DELETE("v1/collections/{id}")
     Observable<Response<Void>> deleteCollect(@Path("id") String id);
+
+    /**
+     * 评论列表
+     */
+    @GET("v1/comments")
+    Observable<ListResponse<Comment>> comments(@QueryMap Map<String,String> data);
 
 }

@@ -314,5 +314,8 @@ dependencies {
     implementation 'org.permissionsdispatcher:permissionsdispatcher:4.5.0'
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.5.0"
 
+    //封装RecyclerView
+    //https://github.com/jdsjlzx/LRecyclerView
+    implementation 'com.github.jdsjlzx:LRecyclerView:1.5.4.4'
 
 }
