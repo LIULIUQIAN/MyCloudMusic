@@ -63,6 +63,13 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
         @BindView(R.id.tv_content)
         TextView tv_content;
 
+
+        @BindView(R.id.reply_container)
+        View reply_container;
+
+        @BindView(R.id.tv_reply_content)
+        TextView tv_reply_content;
+
         Context context;
 
         public CommentViewHolder(Context context, @NonNull View itemView) {
@@ -84,6 +91,21 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
 
             //时间
             tv_time.setText(TimeUtil.commonFormat(comment.getCreated_at()));
+
+            //被回复的评论
+            if (comment.getParent() == null) {
+                reply_container.setVisibility(View.GONE);
+            } else {
+                reply_container.setVisibility(View.VISIBLE);
+
+                tv_reply_content.setLinkTextColor(context.getResources().getColor(R.color.text_highlight));
+                tv_reply_content.setMovementMethod(LinkMovementMethod.getInstance());
+                String content = context.getString(R.string.reply_comment,
+                        comment.getParent().getUser().getNickname(),
+                        comment.getParent().getContent());
+                tv_reply_content.setText(processContent(content));
+            }
+
         }
     }
 

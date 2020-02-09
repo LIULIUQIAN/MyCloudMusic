@@ -76,5 +76,33 @@
         android:text="这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容"
         android:textColor="@color/text" />
 
+    <!--被回复评论容器-->
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/reply_container"
+        android:layout_marginTop="@dimen/padding_meddle"
+        android:layout_marginRight="@dimen/padding_meddle"
+        android:layout_marginLeft="40dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--分割线-->
+        <View
+            android:layout_width="@dimen/divider_comment_reply"
+            android:layout_height="match_parent"
+            android:background="@color/divider_color" />
+
+        <!--被回复评论的内容-->
+        <TextView
+            android:id="@+id/tv_reply_content"
+            android:layout_marginLeft="@dimen/padding_meddle"
+            android:text="这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容"
+            android:lineSpacingMultiplier="@dimen/line_space"
+            android:textColor="@color/light_grey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
 
 </LinearLayout>

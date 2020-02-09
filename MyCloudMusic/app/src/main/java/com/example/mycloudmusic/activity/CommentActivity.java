@@ -1,8 +1,10 @@
 package com.example.mycloudmusic.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -10,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 
 import com.example.mycloudmusic.R;
@@ -108,8 +111,20 @@ public class CommentActivity extends BaseTitleActivity {
             public void onItemClick(BaseRecyclerViewAdapter.ViewHolder holder, int position) {
                 Log.e("OnItemClickListener", "===========" + position);
 
-                parentId = adapter.getData(position).getParent_id();
                 showCommentMoreDialog(adapter.getData(position));
+            }
+        });
+
+        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (Math.abs(dy) > 50) {
+                    if (TextUtils.isEmpty(et_content.getText().toString().trim())) {
+                        clearInputContent();
+                    }
+                }
             }
         });
     }
@@ -141,10 +156,13 @@ public class CommentActivity extends BaseTitleActivity {
         }
 
         Comment data = new Comment();
+        //设置被回复评论的id
         data.setParent_id(parentId);
-
+        //设置内容
         data.setContent(content);
+        //设置歌单id
         data.setSheet_id(sheetId);
+
         Api.getInstance().createComment(data).subscribe(new HttpObserver<DetailResponse<Comment>>() {
             @Override
             public void onSucceeded(DetailResponse<Comment> data) {
@@ -183,7 +201,8 @@ public class CommentActivity extends BaseTitleActivity {
 
                 switch (which) {
                     case 0:
-                        Log.e("", "回复评论" + data.getContent());
+                        parentId = data.getId();
+                        et_content.setHint(getResources().getString(R.string.reply_hint, data.getUser().getNickname()));
                         break;
                     case 1:
                         Log.e("", "复制评论" + data.getContent());
