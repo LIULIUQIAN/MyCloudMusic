@@ -9,6 +9,7 @@ import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
@@ -245,7 +246,7 @@ public class Api {
     /**
      * 评论点赞
      */
-    public Observable<DetailResponse<BaseModel>> like(String data){
+    public Observable<DetailResponse<BaseModel>> like(String data) {
         return service.like(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -254,8 +255,17 @@ public class Api {
     /**
      * 取消评论点赞
      */
-    public Observable<Response<Void>> deleteLike(String id){
+    public Observable<Response<Void>> deleteLike(String id) {
         return service.deleteLike(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 话题列表
+     */
+    public Observable<ListResponse<Topic>> topics() {
+        return service.topics()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

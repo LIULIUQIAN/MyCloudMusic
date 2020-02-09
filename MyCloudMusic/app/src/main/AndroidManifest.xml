@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.SelectTopicActivity"></activity>
+        <activity android:name=".activity.SelectTopicActivity"
+            android:label="@string/activity_select_topic"></activity>
         <activity
             android:name=".activity.TopicDetailActivity"
             android:label="@string/activity_topic_detail" />

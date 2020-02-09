@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.example.mycloudmusic.adapter.CommentAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Comment;
+import com.example.mycloudmusic.domain.event.SelectedTopicEvent;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.fragment.CommentMoreDialogFragment;
@@ -31,9 +33,14 @@ import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.listener.OnItemClickListener;
 import com.example.mycloudmusic.util.ClipboardUtil;
 import com.example.mycloudmusic.util.KeyboardUtil;
+import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +74,11 @@ public class CommentActivity extends BaseTitleActivity {
     private String parentId;
 
     /**
+     * 输入框上一次长度
+     */
+    private int lastContentLength;
+
+    /**
      * 启动评论界面
      */
     public static void start(Activity activity, String sheetId) {
@@ -84,6 +96,12 @@ public class CommentActivity extends BaseTitleActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void initViews() {
         super.initViews();
 
@@ -98,6 +116,7 @@ public class CommentActivity extends BaseTitleActivity {
     protected void initDatum() {
         super.initDatum();
 
+        EventBus.getDefault().register(this);
         sheetId = extraString(SHEET_ID);
 
         adapter = new CommentAdapter(getMainActivity());
@@ -125,13 +144,13 @@ public class CommentActivity extends BaseTitleActivity {
         adapter.setCommentAdapterListener(new CommentAdapterListener() {
             @Override
             public void onAvatarClick(Comment data) {
-                UserDetailActivity.start(getMainActivity(),data.getUser().getId(),null);
+                UserDetailActivity.start(getMainActivity(), data.getUser().getId(), null);
             }
 
             @Override
             public void onLikeClick(Comment data) {
 
-                if (data.isLiked()){
+                if (data.isLiked()) {
                     Api.getInstance().deleteLike(data.getLike_id()).subscribe(new HttpObserver<Response<Void>>() {
                         @Override
                         public void onSucceeded(Response<Void> d) {
@@ -140,11 +159,11 @@ public class CommentActivity extends BaseTitleActivity {
                             adapter.notifyDataSetChanged();
                         }
                     });
-                }else {
+                } else {
                     Api.getInstance().like(data.getId()).subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
                         @Override
                         public void onSucceeded(DetailResponse<BaseModel> d) {
-                            data.setLikes_count(data.getLikes_count()+1);
+                            data.setLikes_count(data.getLikes_count() + 1);
                             data.setLike_id(d.getData().getId());
                             adapter.notifyDataSetChanged();
                         }
@@ -169,21 +188,24 @@ public class CommentActivity extends BaseTitleActivity {
         et_content.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
-                String data = s.toString();
-                if (data.endsWith(HAST_TAG)){
-                    startActivity(SelectTopicActivity.class);
+                int currentLength = s.toString().length();
+
+                if (currentLength > lastContentLength) {
+                    String data = s.toString();
+                    if (data.endsWith(HAST_TAG)) {
+                        startActivity(SelectTopicActivity.class);
+                    }
                 }
+                lastContentLength = currentLength;
 
             }
         });
@@ -271,5 +293,19 @@ public class CommentActivity extends BaseTitleActivity {
                 }
             }
         });
+    }
+
+    /*
+     * 话题选择回调
+     * */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectTopicClickEvent(SelectedTopicEvent event) {
+
+        et_content.append(event.getData().getTitle());
+        et_content.append("# ");
+
+        SpannableString spannableString = StringUtil.processHighlight(getMainActivity(), et_content.getText().toString());
+        et_content.setText(spannableString);
+        et_content.setSelection(et_content.getText().toString().length());
     }
 }

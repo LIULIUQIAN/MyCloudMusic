@@ -7,6 +7,7 @@ import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
@@ -141,5 +142,11 @@ public interface Service {
      */
     @DELETE("v1/likes/{id}")
     Observable<Response<Void>> deleteLike(@Path("id") String id);
+
+    /**
+     * 话题列表
+     */
+    @GET("v1/topics")
+    Observable<ListResponse<Topic>> topics();
 
 }
