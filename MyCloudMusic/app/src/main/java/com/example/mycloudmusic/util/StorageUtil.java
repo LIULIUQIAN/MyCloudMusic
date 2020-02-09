@@ -1,10 +1,13 @@
 package com.example.mycloudmusic.util;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 
@@ -17,6 +20,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class StorageUtil {
+
+    public static final String JPG = "jpg";
+
+    /**
+     * MediaStore，ContentProviders内容提供者data列
+     */
+    private static final String COLUMN_DATA = "_data";
+
 
     /**
      * 保存图片到系统相册
@@ -99,5 +110,42 @@ public class StorageUtil {
         return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
 
 
+    }
+
+    /**
+     * 获取应用扩展sdcard中的路径
+     */
+    public static File getExternalPath(Context context, String userId, String title, String suffix) {
+
+        //获取下载文件类型目录
+        File dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+
+        String path = String.format("MyCloudMusic/%s/%s/%s.%s", userId, suffix, title, suffix);
+
+        File file = new File(dir, path);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        return file;
+    }
+
+    /**
+     * 获取uri对应的data列值(文件路径)
+     * 这种写法支持MediaStore，ContentProviders
+     */
+    public static String getMediaStorePath(Context context, Uri uri) {
+        try (Cursor cursor = context.getContentResolver().query(uri, new String[]{COLUMN_DATA}, null, null, null)) {
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+                int index = cursor.getColumnIndexOrThrow(COLUMN_DATA);
+                return cursor.getString(index);
+            }
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

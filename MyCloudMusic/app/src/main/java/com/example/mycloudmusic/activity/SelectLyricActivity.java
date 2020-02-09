@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -16,8 +17,17 @@ import com.example.mycloudmusic.adapter.SelectLyricAdapter;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.lyric.Line;
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.ShareUtil;
+import com.example.mycloudmusic.util.TextUtil;
+import com.example.mycloudmusic.util.ToastUtil;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class SelectLyricActivity extends BaseTitleActivity {
 
@@ -75,5 +85,45 @@ public class SelectLyricActivity extends BaseTitleActivity {
 
             }
         });
+    }
+
+    @OnClick(R.id.bt_share_lyric)
+    public void onShareLyricClick() {
+        String lyricString = getSelectLyricString("，");
+        if (TextUtils.isEmpty(lyricString)) {
+            ToastUtil.errorShortToast(R.string.hint_select_lyric);
+            return;
+        }
+
+        //分享
+        ShareUtil.shareLyricText(getMainActivity(), data, lyricString);
+
+    }
+
+
+    @OnClick(R.id.bt_share_lyric_image)
+    public void onShareLyricImageClick() {
+
+        String lyricString = getSelectLyricString("\n");
+        if (TextUtils.isEmpty(lyricString)) {
+            ToastUtil.errorShortToast(R.string.hint_select_lyric);
+            return;
+        }
+
+        ShareLyricImageActivity.start(getMainActivity(), data, lyricString);
+    }
+
+    private String getSelectLyricString(String separator) {
+
+        List<String> lines = new ArrayList<>();
+
+        for (int i = 0; i < adapter.getData().size(); i++) {
+            Line line = adapter.getItem(i);
+            if (line.isChooseState()) {
+                lines.add(line.getData());
+            }
+        }
+
+        return StringUtils.join(lines, separator);
     }
 }

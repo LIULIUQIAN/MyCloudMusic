@@ -22,6 +22,44 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_meddle"
+            android:layout_marginBottom="@dimen/padding_meddle">
+
+            <include layout="@layout/fill" />
+
+            <Button
+                android:id="@+id/bt_share_lyric"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height_small"
+                android:background="@drawable/shape_button_border_white"
+                android:text="@string/share_lyric"
+                android:textColor="@color/white" />
+
+            <include layout="@layout/fill" />
+
+            <Button
+                android:id="@+id/bt_share_lyric_image"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height_small"
+                android:background="@drawable/shape_button_border_white"
+                android:text="@string/lyric_image"
+                android:textColor="@color/white" />
+
+            <include layout="@layout/fill" />
+
+            <Button
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height_small"
+                android:background="@drawable/shape_button_border_white"
+                android:text="@string/lyric_video"
+                android:textColor="@color/white" />
+
+            <include layout="@layout/fill" />
+        </LinearLayout>
+
     </LinearLayout>
 
 

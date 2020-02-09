@@ -223,12 +223,6 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         if (item.getItemId() == R.id.action_share) {
             ToastUtil.successShortToast("点击了分享");
             return true;
-        } else if (item.getItemId() == R.id.action_sort) {
-            ToastUtil.successShortToast("点击了排序");
-            return true;
-        } else if (item.getItemId() == R.id.action_report) {
-            ToastUtil.successShortToast("点击了举报");
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }

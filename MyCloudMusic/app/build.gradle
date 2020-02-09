@@ -93,6 +93,11 @@ MobSDK {
     //第三方平台配置
     ShareSDK {
         devInfo {
+            ShortMessage {
+                id 13
+                sortId 13
+                enable true
+            }
             SinaWeibo {
                 id 1
                 sortId 1
