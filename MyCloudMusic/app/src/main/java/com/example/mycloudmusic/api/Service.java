@@ -149,4 +149,10 @@ public interface Service {
     @GET("v1/topics")
     Observable<ListResponse<Topic>> topics();
 
+    /**
+     * 好友列表（我关注的人）
+     */
+    @GET("v1/users/{id}/following")
+    Observable<ListResponse<User>> friends(@Path("id") String id);
+
 }

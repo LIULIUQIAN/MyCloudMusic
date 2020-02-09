@@ -270,4 +270,13 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 好友列表（我关注的人）
+     */
+    public Observable<ListResponse<User>> friends(String id){
+        return service.friends(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

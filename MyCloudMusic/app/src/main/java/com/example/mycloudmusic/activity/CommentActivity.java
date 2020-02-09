@@ -24,6 +24,7 @@ import com.example.mycloudmusic.adapter.CommentAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Comment;
+import com.example.mycloudmusic.domain.event.SelectedFriendEvent;
 import com.example.mycloudmusic.domain.event.SelectedTopicEvent;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
@@ -50,6 +51,7 @@ import butterknife.OnClick;
 import retrofit2.Response;
 
 import static com.example.mycloudmusic.util.Constant.HAST_TAG;
+import static com.example.mycloudmusic.util.Constant.MENTION;
 import static com.example.mycloudmusic.util.Constant.SHEET_ID;
 
 public class CommentActivity extends BaseTitleActivity {
@@ -203,6 +205,8 @@ public class CommentActivity extends BaseTitleActivity {
                     String data = s.toString();
                     if (data.endsWith(HAST_TAG)) {
                         startActivity(SelectTopicActivity.class);
+                    } else if (data.endsWith(MENTION)) {
+                        startActivity(SelectFriendActivity.class);
                     }
                 }
                 lastContentLength = currentLength;
@@ -304,8 +308,27 @@ public class CommentActivity extends BaseTitleActivity {
         et_content.append(event.getData().getTitle());
         et_content.append("# ");
 
+        highlightText();
+    }
+    /**
+     * 用户选择回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectFriendClickEvent(SelectedFriendEvent event){
+        et_content.append(event.getData().getNickname());
+        et_content.append(" ");
+
+        highlightText();
+    }
+
+    /**
+     * 文本高亮
+     */
+    private void highlightText() {
         SpannableString spannableString = StringUtil.processHighlight(getMainActivity(), et_content.getText().toString());
         et_content.setText(spannableString);
         et_content.setSelection(et_content.getText().toString().length());
     }
+
+
 }
