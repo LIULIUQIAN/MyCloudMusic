@@ -123,4 +123,10 @@ public interface Service {
     @GET("v1/comments")
     Observable<ListResponse<Comment>> comments(@QueryMap Map<String,String> data);
 
+    /**
+     * 创建评论
+     */
+    @POST("v1/comments")
+    Observable<DetailResponse<Comment>> createComment(@Body Comment data);
+
 }

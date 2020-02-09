@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -15,9 +16,12 @@ import com.example.mycloudmusic.adapter.BaseRecyclerViewAdapter;
 import com.example.mycloudmusic.adapter.CommentAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Comment;
+import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.listener.OnItemClickListener;
+import com.example.mycloudmusic.util.KeyboardUtil;
+import com.example.mycloudmusic.util.ToastUtil;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
@@ -36,8 +40,19 @@ public class CommentActivity extends BaseTitleActivity {
 
     @BindView(R.id.et_content)
     EditText et_content;
+
     private LRecyclerViewAdapter adapterWrapper;
     private CommentAdapter adapter;
+
+    /**
+     * 歌单id
+     */
+    private String sheetId;
+
+    /**
+     * 被回复评论的id
+     */
+    private String parentId;
 
     /**
      * 启动评论界面
@@ -71,6 +86,8 @@ public class CommentActivity extends BaseTitleActivity {
     protected void initDatum() {
         super.initDatum();
 
+        sheetId = extraString(SHEET_ID);
+
         adapter = new CommentAdapter(getMainActivity());
         adapterWrapper = new LRecyclerViewAdapter(adapter);
 
@@ -88,6 +105,8 @@ public class CommentActivity extends BaseTitleActivity {
             @Override
             public void onItemClick(BaseRecyclerViewAdapter.ViewHolder holder, int position) {
                 Log.e("OnItemClickListener", "===========" + position);
+
+                parentId = adapter.getData(position).getParent_id();
             }
         });
     }
@@ -103,6 +122,7 @@ public class CommentActivity extends BaseTitleActivity {
             public void onSucceeded(ListResponse<Comment> data) {
 
                 adapter.setDatum(data.getData());
+
             }
         });
 
@@ -110,6 +130,37 @@ public class CommentActivity extends BaseTitleActivity {
 
     @OnClick(R.id.bt_send)
     public void onSendClick() {
-        Log.e("aa", "aaa");
+
+        String content = et_content.getText().toString().trim();
+        if (TextUtils.isEmpty(content)){
+            ToastUtil.errorShortToast(R.string.enter_comment);
+            return;
+        }
+
+        Comment data = new Comment();
+        data.setParent_id(parentId);
+
+        data.setContent(content);
+        data.setSheet_id(sheetId);
+        Api.getInstance().createComment(data).subscribe(new HttpObserver<DetailResponse<Comment>>() {
+            @Override
+            public void onSucceeded(DetailResponse<Comment> data) {
+                ToastUtil.successShortToast(R.string.comment_create_success);
+                fetchData();
+                clearInputContent();
+
+                //关闭键盘
+                KeyboardUtil.hideKeyboard(getMainActivity());
+            }
+        });
+    }
+
+    /**
+     * 清空输入框
+     */
+    private void clearInputContent() {
+        parentId = null;
+        et_content.setText("");
+        et_content.setHint(R.string.enter_comment);
     }
 }

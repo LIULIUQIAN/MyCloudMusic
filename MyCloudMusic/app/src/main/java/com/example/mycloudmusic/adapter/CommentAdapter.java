@@ -35,7 +35,6 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment,CommentAdapt
         holder.bindData(getData(position));
     }
 
-
     public class CommentViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
 
         @BindView(R.id.iv_avatar)
