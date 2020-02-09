@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
+import com.example.mycloudmusic.fragment.CommentMoreDialogFragment;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.listener.OnItemClickListener;
 import com.example.mycloudmusic.util.KeyboardUtil;
@@ -107,6 +109,7 @@ public class CommentActivity extends BaseTitleActivity {
                 Log.e("OnItemClickListener", "===========" + position);
 
                 parentId = adapter.getData(position).getParent_id();
+                showCommentMoreDialog(adapter.getData(position));
             }
         });
     }
@@ -132,7 +135,7 @@ public class CommentActivity extends BaseTitleActivity {
     public void onSendClick() {
 
         String content = et_content.getText().toString().trim();
-        if (TextUtils.isEmpty(content)){
+        if (TextUtils.isEmpty(content)) {
             ToastUtil.errorShortToast(R.string.enter_comment);
             return;
         }
@@ -162,5 +165,31 @@ public class CommentActivity extends BaseTitleActivity {
         parentId = null;
         et_content.setText("");
         et_content.setHint(R.string.enter_comment);
+    }
+
+    /**
+     * 显示评论更多对话框
+     *
+     * @param data
+     */
+    private void showCommentMoreDialog(Comment data) {
+
+        CommentMoreDialogFragment fragment = CommentMoreDialogFragment.getInstance();
+        fragment.show(getSupportFragmentManager(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+
+                switch (which) {
+                    case 0:
+                        Log.e("", "回复评论" + data.getContent());
+                        break;
+                    case 1:
+                        Log.e("", "复制评论" + data.getContent());
+                        break;
+                }
+            }
+        });
     }
 }
