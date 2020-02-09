@@ -27,7 +27,8 @@
             android:paddingHorizontal="@dimen/padding_meddle"
             android:paddingVertical="@dimen/padding_small"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
 
             <EditText
                 android:id="@+id/et_content"
