@@ -54,6 +54,11 @@ public class Constant {
     public static final int TYPE_SONG = 2;
 
     /**
+     * 用户
+     */
+    public static final int TYPE_USER = 3;
+
+    /**
      * 歌单 id
      */
     public static final String SHEET_ID = "SHEET_ID";

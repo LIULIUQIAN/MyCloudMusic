@@ -322,4 +322,12 @@ dependencies {
     //https://www.joda.org/joda-time/index.html
     implementation 'joda-time:joda-time:2.10.5'
 
+    //中文转拼音
+    //https://github.com/belerweb/pinyin4j
+    implementation 'com.belerweb:pinyin4j:2.5.0'
+
+    //Google实现的Java核心工具类
+    //https://github.com/google/guava
+    implementation 'com.google.guava:guava:28.1-android'
+
 }

@@ -28,6 +28,7 @@ import com.example.mycloudmusic.adapter.MainAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.User;
+import com.example.mycloudmusic.domain.UserResult;
 import com.example.mycloudmusic.domain.UserTest;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.fragment.DiscoveryFragment;
@@ -36,7 +37,9 @@ import com.example.mycloudmusic.fragment.MeFragment;
 import com.example.mycloudmusic.fragment.VideoFragment;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.DataUtil;
 import com.example.mycloudmusic.util.ImageUtil;
+import com.example.mycloudmusic.util.PinyinUtil;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
