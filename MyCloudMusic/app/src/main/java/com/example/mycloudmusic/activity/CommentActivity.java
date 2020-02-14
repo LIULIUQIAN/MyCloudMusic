@@ -36,13 +36,17 @@ import com.example.mycloudmusic.util.ClipboardUtil;
 import com.example.mycloudmusic.util.KeyboardUtil;
 import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.ToastUtil;
+import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.time.Year;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,6 +83,8 @@ public class CommentActivity extends BaseTitleActivity {
      * 输入框上一次长度
      */
     private int lastContentLength;
+
+    private int pageMeta;
 
     /**
      * 启动评论界面
@@ -213,6 +219,27 @@ public class CommentActivity extends BaseTitleActivity {
 
             }
         });
+
+        recycler_view.setLoadMoreEnabled(true);
+        recycler_view.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pageMeta = 1;
+                fetchData();
+
+            }
+        });
+
+        recycler_view.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                pageMeta++;
+                fetchData();
+            }
+        });
+
+
+
     }
 
     /*
@@ -221,12 +248,25 @@ public class CommentActivity extends BaseTitleActivity {
     private void fetchData() {
 
         Map<String, String> map = new HashMap<>();
+        //添加歌单id
+        if (StringUtils.isNotBlank(sheetId)) {
+            map.put(SHEET_ID, sheetId);
+        }
+        //添加分页参数
+        map.put("page", String.valueOf(pageMeta));
+
         Api.getInstance().comments(map).subscribe(new HttpObserver<ListResponse<Comment>>() {
             @Override
             public void onSucceeded(ListResponse<Comment> data) {
 
-                adapter.setDatum(data.getData());
+                if (pageMeta == 1){
+                    adapter.setDatum(data.getData());
+                }else {
+                    adapter.addDatum(data.getData());
+                }
 
+                recycler_view.setNoMore(data.getData().size() < 10);
+                recycler_view.refreshComplete(10);
             }
         });
 

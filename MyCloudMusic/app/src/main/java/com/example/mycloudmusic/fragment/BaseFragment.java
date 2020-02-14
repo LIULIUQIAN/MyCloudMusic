@@ -11,8 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.activity.BaseCommonActivity;
+import com.example.mycloudmusic.util.PreferenceUtil;
 
 public abstract class BaseFragment extends Fragment {
+
+    protected PreferenceUtil sp;
 
     /**
      * 找控件
@@ -25,6 +29,8 @@ public abstract class BaseFragment extends Fragment {
      * 设置数据
      */
     protected void initDatum() {
+
+        sp = PreferenceUtil.getInstance(getMainActivity());
 
     }
 
@@ -54,5 +60,13 @@ public abstract class BaseFragment extends Fragment {
 
     public final <T extends View> T findViewById(@IdRes int id){
         return getView().findViewById(id);
+    }
+
+    /**
+     * 获取界面方法
+     * @return
+     */
+    protected BaseCommonActivity getMainActivity() {
+        return (BaseCommonActivity) getActivity();
     }
 }

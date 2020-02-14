@@ -273,8 +273,27 @@ public class Api {
     /**
      * 好友列表（我关注的人）
      */
-    public Observable<ListResponse<User>> friends(String id){
+    public Observable<ListResponse<User>> friends(String id) {
         return service.friends(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取用户创建的歌单
+     */
+    public Observable<ListResponse<Sheet>> createSheets(String userId) {
+        return service.createSheets(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取用户收藏的歌单
+     */
+    public Observable<ListResponse<Sheet>> collectSheets(String userId) {
+
+        return service.collectSheets(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
