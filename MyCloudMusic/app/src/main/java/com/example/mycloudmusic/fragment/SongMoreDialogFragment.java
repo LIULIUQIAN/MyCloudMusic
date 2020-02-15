@@ -15,9 +15,12 @@ import androidx.fragment.app.FragmentManager;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.event.CollectSongClickEvent;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.Serializable;
 
@@ -96,7 +99,7 @@ public class SongMoreDialogFragment extends BaseBottomSheetDialogFragment {
     public void onCollectSongClick(){
         dismiss();
 
-        System.out.println("===============2");
+        EventBus.getDefault().post(new CollectSongClickEvent(song));
     }
 
     @OnClick(R.id.ll_delete_song_in_sheet)

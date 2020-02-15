@@ -11,7 +11,10 @@ import androidx.annotation.Nullable;
 
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.activity.BaseCommonActivity;
+import com.example.mycloudmusic.domain.Sheet;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -65,5 +68,6 @@ public abstract class BaseBottomSheetDialogFragment extends BottomSheetDialogFra
     protected BaseCommonActivity getMainActivity() {
         return (BaseCommonActivity) getActivity();
     }
+
 
 }

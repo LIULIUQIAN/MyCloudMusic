@@ -298,4 +298,13 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 创建歌单
+     */
+    public Observable<DetailResponse<Sheet>> createSheet(Sheet data) {
+        return service.createSheet(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

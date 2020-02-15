@@ -12,6 +12,7 @@ import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
+import com.example.mycloudmusic.listener.ObserverAdapter;
 
 import java.util.List;
 import java.util.Map;
@@ -172,5 +173,11 @@ public interface Service {
      */
     @GET("v1/users/{userId}/collect")
     Observable<ListResponse<Sheet>> collectSheets(@Path("userId") String userId);
+
+    /**
+     * 创建歌单
+     */
+    @POST("v1/sheets")
+    Observable<DetailResponse<Sheet>> createSheet(@Body Sheet data);
 
 }

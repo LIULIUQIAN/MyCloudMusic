@@ -16,8 +16,10 @@ import com.example.mycloudmusic.domain.MeGroup;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.event.CreateSheetClickEvent;
 import com.example.mycloudmusic.domain.event.CreateSheetEvent;
+import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+import com.example.mycloudmusic.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,6 +73,11 @@ public class MeFragment extends BaseCommonFragment {
         adapter = new MeAdapter(getMainActivity());
         elv.setAdapter(adapter);
 
+        fetchData();
+    }
+
+    private void fetchData() {
+        datum.clear();
         Api.getInstance().createSheets(sp.getUserId()).subscribe(new HttpObserver<ListResponse<Sheet>>() {
             @Override
             public void onSucceeded(ListResponse<Sheet> data) {
@@ -117,6 +124,17 @@ public class MeFragment extends BaseCommonFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCreateSheetEvent(CreateSheetEvent event) {
-        Log.e("onCreateSheetEvent","onCreateSheetEvent"+event.getData());
+
+        Sheet data = new Sheet();
+        data.setTitle(event.getData());
+
+        Api.getInstance().createSheet(data).subscribe(new HttpObserver<DetailResponse<Sheet>>() {
+            @Override
+            public void onSucceeded(DetailResponse<Sheet> data) {
+
+                ToastUtil.successShortToast(R.string.success_create_sheet);
+                fetchData();
+            }
+        });
     }
 }

@@ -13,6 +13,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,12 +33,19 @@ import com.example.mycloudmusic.adapter.SongAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.event.CollectSongClickEvent;
 import com.example.mycloudmusic.domain.response.DetailResponse;
+import com.example.mycloudmusic.domain.response.ListResponse;
+import com.example.mycloudmusic.fragment.SelectSheetDialogFragment;
 import com.example.mycloudmusic.fragment.SongMoreDialogFragment;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -96,6 +104,11 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
     protected void onResume() {
         super.onResume();
         scrollPosition();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -361,6 +374,19 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
                 } else {
                     adapter.setSelectIndex(-1);
                 }
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCollectSongClickEvent(CollectSongClickEvent event){
+        Log.e("CollectSongClickEvent",event.getData().getTitle());
+
+        Api.getInstance().createSheets(sp.getUserId()).subscribe(new HttpObserver<ListResponse<Sheet>>() {
+            @Override
+            public void onSucceeded(ListResponse<Sheet> data) {
+
+                SelectSheetDialogFragment.show(getSupportFragmentManager(),data.getData());
             }
         });
     }

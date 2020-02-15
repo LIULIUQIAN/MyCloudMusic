@@ -19,15 +19,15 @@ public class ImageUtil {
     /**
      * 显示图片
      */
-    public static void showAvatar(Activity activity, ImageView view, String uri) {
+    public static void showAvatar(Context context, ImageView view, String uri) {
         if (TextUtils.isEmpty(uri)){
-            show(activity,view,R.drawable.placeholder);
+            show(context,view,R.drawable.placeholder);
             return;
         }
         if (!uri.startsWith("http")) {
             uri = String.format(Constant.RESOURCE_ENDPOINT,uri);
         }
-        showFull(activity, view, uri);
+        showFull(context, view, uri);
     }
 
     /**
@@ -48,9 +48,9 @@ public class ImageUtil {
     /**
      * 显示资源目录图片
      */
-    public static void show(Activity activity, ImageView view, @RawRes @DrawableRes @Nullable int resourceId) {
+    public static void show(Context context, ImageView view, @RawRes @DrawableRes @Nullable int resourceId) {
 
-        Glide.with(activity)
+        Glide.with(context)
                 .load(resourceId)
                 .apply(getCommonRequestOptions())
                 .into(view);
@@ -58,9 +58,9 @@ public class ImageUtil {
     /**
      * 显示网络图片
      */
-    private static void showFull(Activity activity, ImageView view, String uri) {
+    private static void showFull(Context context, ImageView view, String uri) {
 
-        Glide.with(activity)
+        Glide.with(context)
                 .load(uri)
                 .apply(getCommonRequestOptions())
                 .into(view);
