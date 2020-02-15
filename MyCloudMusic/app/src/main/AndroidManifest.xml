@@ -17,8 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.SelectFriendActivity"
-            android:label="@string/activity_select_friend"></activity>
+        <activity android:name=".activity.ScanLocalMusicActivity"
+            android:label="@string/scan_local_music"></activity>
+        <activity
+            android:name=".activity.LocalMusicActivity"
+            android:label="@string/local_music" />
+        <activity
+            android:name=".activity.SelectFriendActivity"
+            android:label="@string/activity_select_friend" />
         <activity
             android:name=".activity.SelectTopicActivity"
             android:label="@string/activity_select_topic" />

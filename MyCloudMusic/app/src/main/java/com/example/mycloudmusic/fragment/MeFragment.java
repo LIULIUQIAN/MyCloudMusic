@@ -9,6 +9,7 @@ import android.widget.ExpandableListView;
 
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.activity.CommentActivity;
+import com.example.mycloudmusic.activity.LocalMusicActivity;
 import com.example.mycloudmusic.activity.SheetDetailActivity;
 import com.example.mycloudmusic.adapter.MeAdapter;
 import com.example.mycloudmusic.api.Api;
@@ -34,7 +35,9 @@ import butterknife.BindView;
 public class MeFragment extends BaseCommonFragment {
 
     //    @BindView(R.id.elv)
-    ExpandableListView elv;
+    private ExpandableListView elv;
+    private View ll_local_music;
+    private View ll_download_manager;
 
     private List<MeGroup> datum = new ArrayList<>();
 
@@ -63,6 +66,11 @@ public class MeFragment extends BaseCommonFragment {
     protected void initViews() {
         super.initViews();
         elv = findViewById(R.id.elv);
+
+        View view = LayoutInflater.from(getMainActivity()).inflate(R.layout.header_me, elv, false);
+        ll_local_music = view.findViewById(R.id.ll_local_music);
+        ll_download_manager = view.findViewById(R.id.ll_download_manager);
+        elv.addHeaderView(view);
     }
 
     @Override
@@ -114,6 +122,19 @@ public class MeFragment extends BaseCommonFragment {
                 startActivityExtraId(SheetDetailActivity.class, sheet.getId());
 
                 return true;
+            }
+        });
+
+        ll_local_music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(LocalMusicActivity.class);
+            }
+        });
+        ll_download_manager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("ll_download_manager","ll_download_manager");
             }
         });
     }

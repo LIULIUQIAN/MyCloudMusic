@@ -128,6 +128,31 @@ public class ORMUtil {
     }
 
     /**
+     * 查询本地音乐
+     *
+     * @param sortIndex
+     * @return
+     */
+    public List<Song> queryLocalMusic(int sortIndex) {
+        //获取数据库实例
+        Realm realm = getRealm();
+
+        //查询所有本地音乐
+        RealmResults<SongLocal> songLocals = realm.where(SongLocal.class)
+                .equalTo("source", SongLocal.SOURCE_LOCAL)
+                .findAll()
+                .sort(SongLocal.SORT_KEYS[sortIndex]);
+
+        List<Song> songs = new ArrayList<>();
+        for (SongLocal songLocal : songLocals) {
+            songs.add(songLocal.toSong());
+        }
+        realm.close();
+        return songs;
+
+    }
+
+    /**
      * 获取数据库对象
      */
     private Realm getRealm() {
