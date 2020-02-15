@@ -8,6 +8,7 @@ import static com.example.mycloudmusic.util.Constant.TYPE_SHEET;
 
 public class Sheet extends BaseMultiItemEntity {
 
+
     /**
      * 歌单标题
      */
@@ -159,6 +160,13 @@ public class Sheet extends BaseMultiItemEntity {
      */
     public boolean isCollection() {
         return collection_id != null;
+    }
+
+    public int getSongsCount(){
+        if (getSongs() != null) {
+            return getSongs().size();
+        }
+        return 0;
     }
 
 

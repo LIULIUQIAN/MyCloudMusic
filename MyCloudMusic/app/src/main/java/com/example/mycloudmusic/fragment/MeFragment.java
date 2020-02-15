@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.activity.CommentActivity;
+import com.example.mycloudmusic.activity.SheetDetailActivity;
 import com.example.mycloudmusic.adapter.MeAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.MeGroup;
@@ -20,9 +22,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class MeFragment extends BaseFragment {
+public class MeFragment extends BaseCommonFragment {
 
-//    @BindView(R.id.elv)
+    //    @BindView(R.id.elv)
     ExpandableListView elv;
 
     private List<MeGroup> datum = new ArrayList<>();
@@ -69,6 +71,23 @@ public class MeFragment extends BaseFragment {
                     }
                 });
 
+            }
+        });
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        elv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                Sheet sheet = datum.get(groupPosition).getDatum().get(childPosition);
+
+                startActivityExtraId(SheetDetailActivity.class, sheet.getId());
+
+                return true;
             }
         });
     }

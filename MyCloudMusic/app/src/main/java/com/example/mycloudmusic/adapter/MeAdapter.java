@@ -1,16 +1,24 @@
 package com.example.mycloudmusic.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.MeGroup;
+import com.example.mycloudmusic.domain.Sheet;
+import com.example.mycloudmusic.util.ImageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MeAdapter extends BaseExpandableListAdapter {
 
@@ -65,12 +73,12 @@ public class MeAdapter extends BaseExpandableListAdapter {
         GroupViewHolder viewHolder;
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_title_me, parent, false);
-            viewHolder = new GroupViewHolder();
+            viewHolder = new GroupViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (GroupViewHolder) convertView.getTag();
         }
-
+        viewHolder.bindData(datum.get(groupPosition));
         return convertView;
     }
 
@@ -80,12 +88,13 @@ public class MeAdapter extends BaseExpandableListAdapter {
         ChildViewHolder viewHolder;
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_topic, parent, false);
-            viewHolder = new ChildViewHolder();
+            viewHolder = new ChildViewHolder(convertView);
             convertView.setTag(viewHolder);
 
         } else {
             viewHolder = (ChildViewHolder) convertView.getTag();
         }
+        viewHolder.bindData(datum.get(groupPosition).getDatum().get(childPosition));
 
         return convertView;
     }
@@ -103,9 +112,41 @@ public class MeAdapter extends BaseExpandableListAdapter {
 
     class GroupViewHolder {
 
+        @BindView(R.id.tv_title)
+        TextView tv_title;
+
+        public GroupViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        public void bindData(MeGroup meGroup) {
+
+            tv_title.setText(meGroup.getTitle());
+
+        }
     }
 
     class ChildViewHolder {
 
+        @BindView(R.id.iv_banner)
+        ImageView iv_banner;
+
+        @BindView(R.id.tv_title)
+        TextView tv_title;
+
+        @BindView(R.id.tv_info)
+        TextView tv_info;
+
+        public ChildViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        public void bindData(Sheet sheet) {
+
+            ImageUtil.showAvatar((Activity) context,iv_banner,sheet.getBanner());
+            tv_title.setText(sheet.getTitle());
+            tv_info.setText(context.getResources().getString(R.string.song_count,sheet.getSongsCount()));
+
+        }
     }
 }
