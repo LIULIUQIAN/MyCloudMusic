@@ -16,6 +16,7 @@ import com.example.mycloudmusic.domain.MeGroup;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.event.CreateSheetClickEvent;
 import com.example.mycloudmusic.domain.event.CreateSheetEvent;
+import com.example.mycloudmusic.domain.event.SheetChangedEvent;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
@@ -137,4 +138,10 @@ public class MeFragment extends BaseCommonFragment {
             }
         });
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSheetChangedEvent(SheetChangedEvent event){
+        fetchData();
+    }
+
 }

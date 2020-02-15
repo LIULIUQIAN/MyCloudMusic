@@ -307,4 +307,17 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 将歌曲收藏到歌单
+     */
+    public Observable<Response<Void>> addSongToSheet(String sheetId, String songId) {
+
+        Map<String, String> data = new HashMap<>();
+        data.put("id", songId);
+
+        return service.addSongToSheet(sheetId, data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

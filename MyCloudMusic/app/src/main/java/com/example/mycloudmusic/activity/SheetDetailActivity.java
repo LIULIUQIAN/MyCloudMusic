@@ -34,6 +34,8 @@ import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.event.CollectSongClickEvent;
+import com.example.mycloudmusic.domain.event.OnSelectSheetEvent;
+import com.example.mycloudmusic.domain.event.SheetChangedEvent;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.fragment.SelectSheetDialogFragment;
@@ -89,6 +91,8 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
     //歌单详情数据
     private Sheet data;
     private SongAdapter adapter;
+
+    private Song song;
 
 
     @Override
@@ -299,6 +303,7 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
                     data.setCollection_id(null);
                     data.setCollections_count(data.getCollections_count() - 1);
                     showCollectionStatus();
+                    publishSheetChangedEvent();
                 }
             });
         } else {
@@ -309,6 +314,7 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
                     data.setCollection_id(1);
                     data.setCollections_count(data.getCollections_count() + 1);
                     showCollectionStatus();
+                    publishSheetChangedEvent();
                 }
             });
         }
@@ -380,7 +386,8 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCollectSongClickEvent(CollectSongClickEvent event){
-        Log.e("CollectSongClickEvent",event.getData().getTitle());
+
+        song = event.getData();
 
         Api.getInstance().createSheets(sp.getUserId()).subscribe(new HttpObserver<ListResponse<Sheet>>() {
             @Override
@@ -389,6 +396,25 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
                 SelectSheetDialogFragment.show(getSupportFragmentManager(),data.getData());
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectSheetEvent(OnSelectSheetEvent event){
+
+        Api.getInstance().addSongToSheet(event.getData().getId(),song.getId()).subscribe(new HttpObserver<Response<Void>>() {
+            @Override
+            public void onSucceeded(Response<Void> data) {
+
+                ToastUtil.successShortToast(R.string.success_collect_song_to_sheet);
+
+                publishSheetChangedEvent();
+            }
+        });
+
+    }
+
+    private void publishSheetChangedEvent() {
+        EventBus.getDefault().post(new SheetChangedEvent());
     }
 
 

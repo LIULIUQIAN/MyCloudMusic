@@ -1,6 +1,8 @@
 package com.example.mycloudmusic.api;
 
 
+import android.graphics.PostProcessor;
+
 import com.example.mycloudmusic.domain.Advert;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Comment;
@@ -179,5 +181,11 @@ public interface Service {
      */
     @POST("v1/sheets")
     Observable<DetailResponse<Sheet>> createSheet(@Body Sheet data);
+
+    /**
+     * 将歌曲收藏到歌单
+     */
+    @POST("v1/sheets/{sheetId}/relations")
+    Observable<Response<Void>> addSongToSheet(@Path("sheetId") String sheetId, @Body Map<String,String> data);
 
 }

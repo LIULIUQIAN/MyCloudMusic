@@ -10,9 +10,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.SheetAdapter;
 import com.example.mycloudmusic.domain.Sheet;
+import com.example.mycloudmusic.domain.event.OnSelectSheetEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -50,6 +54,20 @@ public class SelectSheetDialogFragment extends BaseBottomSheetDialogFragment {
         recycler_view.setAdapter(adapter);
 
         adapter.replaceData(this.datum);
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Sheet data = (Sheet) adapter.getItem(position);
+                EventBus.getDefault().post(new OnSelectSheetEvent(data));
+                dismiss();
+            }
+        });
     }
 
     public static SelectSheetDialogFragment getInstance() {
