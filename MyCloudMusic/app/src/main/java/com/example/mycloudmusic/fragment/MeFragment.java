@@ -14,8 +14,14 @@ import com.example.mycloudmusic.adapter.MeAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.MeGroup;
 import com.example.mycloudmusic.domain.Sheet;
+import com.example.mycloudmusic.domain.event.CreateSheetClickEvent;
+import com.example.mycloudmusic.domain.event.CreateSheetEvent;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +51,12 @@ public class MeFragment extends BaseCommonFragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void initViews() {
         super.initViews();
         elv = findViewById(R.id.elv);
@@ -53,6 +65,8 @@ public class MeFragment extends BaseCommonFragment {
     @Override
     protected void initDatum() {
         super.initDatum();
+
+        EventBus.getDefault().register(this);
 
         adapter = new MeAdapter(getMainActivity());
         elv.setAdapter(adapter);
@@ -65,9 +79,13 @@ public class MeFragment extends BaseCommonFragment {
                 Api.getInstance().collectSheets(sp.getUserId()).subscribe(new HttpObserver<ListResponse<Sheet>>() {
                     @Override
                     public void onSucceeded(ListResponse<Sheet> model) {
-                        datum.add(new MeGroup("收藏的歌单", model.getData(), true));
+                        datum.add(new MeGroup("收藏的歌单", model.getData(), false));
 
                         adapter.setDatum(datum);
+
+                        for (int i=0;i < datum.size();i++){
+                            elv.expandGroup(i);
+                        }
                     }
                 });
 
@@ -90,5 +108,15 @@ public class MeFragment extends BaseCommonFragment {
                 return true;
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCreateSheetClickEvent(CreateSheetClickEvent event){
+        CreateSheetDialogFragment.show(getChildFragmentManager());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCreateSheetEvent(CreateSheetEvent event) {
+        Log.e("onCreateSheetEvent","onCreateSheetEvent"+event.getData());
     }
 }

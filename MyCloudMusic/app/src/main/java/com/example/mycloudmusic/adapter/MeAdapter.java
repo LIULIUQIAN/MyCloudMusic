@@ -12,13 +12,18 @@ import android.widget.TextView;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.MeGroup;
 import com.example.mycloudmusic.domain.Sheet;
+import com.example.mycloudmusic.domain.event.CreateSheetClickEvent;
 import com.example.mycloudmusic.util.ImageUtil;
+
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MeAdapter extends BaseExpandableListAdapter {
 
@@ -115,6 +120,15 @@ public class MeAdapter extends BaseExpandableListAdapter {
         @BindView(R.id.tv_title)
         TextView tv_title;
 
+        @BindView(R.id.iv_more)
+        ImageView iv_more;
+
+        @OnClick(R.id.iv_more)
+        public void onMoreClick(){
+
+            EventBus.getDefault().post(new CreateSheetClickEvent());
+        }
+
         public GroupViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
@@ -122,6 +136,12 @@ public class MeAdapter extends BaseExpandableListAdapter {
         public void bindData(MeGroup meGroup) {
 
             tv_title.setText(meGroup.getTitle());
+
+            if (meGroup.isMore()){
+                iv_more.setVisibility(View.VISIBLE);
+            }else {
+                iv_more.setVisibility(View.GONE);
+            }
 
         }
     }
