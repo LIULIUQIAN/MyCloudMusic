@@ -320,4 +320,14 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 从歌单中删除音乐
+     */
+    public Observable<Response<Void>> deleteSongInSheet(String sheetId,String songId){
+        return service.deleteSongInSheet(sheetId, songId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
 }

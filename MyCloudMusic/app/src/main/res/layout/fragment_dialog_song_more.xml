@@ -60,20 +60,6 @@
 
     <include layout="@layout/divider_small" />
 
-    <LinearLayout style="@style/ItemContainer">
-
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <TextView
-            style="@style/ItemText"
-            android:text="@string/next_play" />
-
-    </LinearLayout>
-
-    <include layout="@layout/divider_small" />
-
     <LinearLayout
         android:id="@+id/ll_collect_song"
         style="@style/ItemContainer">
@@ -117,19 +103,6 @@
 
     </LinearLayout>
 
-    <include layout="@layout/divider_small" />
-
-    <LinearLayout style="@style/ItemContainer">
-
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <TextView
-            style="@style/ItemText"
-            android:text="@string/share" />
-
-    </LinearLayout>
 
     <include layout="@layout/divider_small" />
 

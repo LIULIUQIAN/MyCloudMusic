@@ -188,4 +188,10 @@ public interface Service {
     @POST("v1/sheets/{sheetId}/relations")
     Observable<Response<Void>> addSongToSheet(@Path("sheetId") String sheetId, @Body Map<String,String> data);
 
+    /**
+     * 从歌单中删除音乐
+     */
+    @DELETE("v1/sheets/{sheetId}/relations/{songId}")
+    Observable<Response<Void>> deleteSongInSheet(@Path("sheetId") String sheetId, @Path("songId") String songId);
+
 }

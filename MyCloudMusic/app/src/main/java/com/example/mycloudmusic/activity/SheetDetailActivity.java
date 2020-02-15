@@ -49,6 +49,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -209,6 +210,7 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
             tv_count.setText(getResources().getString(R.string.music_count, sheet.getSongs().size()));
         } else {
             tv_count.setText(getResources().getString(R.string.music_count, 0));
+            adapter.replaceData(new ArrayList<>());
         }
 
         tv_title.setText(sheet.getTitle());
@@ -411,6 +413,11 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
             }
         });
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSheetChangedEvent(SheetChangedEvent event){
+        fetchData();
     }
 
     private void publishSheetChangedEvent() {

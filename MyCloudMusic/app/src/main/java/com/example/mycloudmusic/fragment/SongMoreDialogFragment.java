@@ -13,12 +13,16 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.event.CollectSongClickEvent;
+import com.example.mycloudmusic.domain.event.SheetChangedEvent;
+import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
+import com.example.mycloudmusic.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -26,6 +30,7 @@ import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import retrofit2.Response;
 
 public class SongMoreDialogFragment extends BaseBottomSheetDialogFragment {
 
@@ -105,6 +110,19 @@ public class SongMoreDialogFragment extends BaseBottomSheetDialogFragment {
     @OnClick(R.id.ll_delete_song_in_sheet)
     public void onDeleteSongInSheetClick(){
         dismiss();
-        System.out.println("===============1");
+
+        Api.getInstance().deleteSongInSheet(sheet.getId(),song.getId()).subscribe(new HttpObserver<Response<Void>>() {
+            @Override
+            public void onSucceeded(Response<Void> data) {
+
+                ToastUtil.successShortToast(R.string.success_delete_song_in_sheet);
+
+                //发布事件
+                EventBus.getDefault().post(new SheetChangedEvent());
+
+            }
+        });
+
+
     }
 }
