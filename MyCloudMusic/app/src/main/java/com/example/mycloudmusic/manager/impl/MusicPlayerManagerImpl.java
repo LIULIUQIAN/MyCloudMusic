@@ -2,6 +2,7 @@ package com.example.mycloudmusic.manager.impl;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -89,7 +90,13 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
 
             //释放播放器
             player.reset();
-            player.setDataSource(uri);
+
+            if (uri.startsWith("content://")) {
+                player.setDataSource(context, Uri.parse(uri));
+            }else {
+                player.setDataSource(uri);
+            }
+
             player.prepare();
             player.start();
 

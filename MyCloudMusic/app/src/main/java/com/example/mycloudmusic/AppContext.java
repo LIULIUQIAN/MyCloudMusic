@@ -3,6 +3,7 @@ package com.example.mycloudmusic;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
 import androidx.multidex.MultiDex;
 
@@ -13,6 +14,9 @@ import com.example.mycloudmusic.util.ORMUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 import com.facebook.stetho.Stetho;
+import com.ixuea.android.downloader.DownloadService;
+import com.ixuea.android.downloader.callback.DownloadManager;
+import com.ixuea.android.downloader.config.Config;
 import com.mob.MobSDK;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,6 +36,7 @@ public class AppContext extends Application {
      * 偏好设置
      */
     private PreferenceUtil sp;
+    private DownloadManager downloadManager;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -118,6 +123,11 @@ public class AppContext extends Application {
 
     private void onLogout() {
         ORMUtil.destroy();
+
+        if (downloadManager != null){
+            downloadManager.destroy();
+            downloadManager = null;
+        }
     }
 
     /**
@@ -128,5 +138,24 @@ public class AppContext extends Application {
         if (platform.isAuthValid()) {
             platform.removeAccount(true);
         }
+    }
+
+    /**
+     * 获取下载管理器
+     */
+    public DownloadManager getDownloadManager() {
+
+        if (downloadManager == null) {
+
+            PreferenceUtil sp = PreferenceUtil.getInstance(getApplicationContext());
+            Config config = new Config();
+            config.setDatabaseName(String.format("%s_download_info.db", sp.getUserId()));
+
+            downloadManager = DownloadService.getDownloadManager(getApplicationContext(), config);
+
+        }
+
+        return downloadManager;
+
     }
 }

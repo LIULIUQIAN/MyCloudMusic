@@ -4,16 +4,22 @@ import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Song;
+import com.ixuea.android.downloader.callback.DownloadManager;
+import com.ixuea.android.downloader.domain.DownloadInfo;
 
 
 public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
 
     private int selectIndex = -1;
+    private final DownloadManager downloadManager;
 
     public SongAdapter(int layoutResId) {
         super(layoutResId);
+
+        downloadManager = AppContext.getInstance().getDownloadManager();
     }
 
     @Override
@@ -30,6 +36,14 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
         }
 
         helper.addOnClickListener(R.id.ib_more);
+
+        DownloadInfo downloadInfo = downloadManager.getDownloadById(item.getId());
+
+        if (downloadInfo!= null && downloadInfo.getStatus() == DownloadInfo.STATUS_COMPLETED){
+            helper.setVisible(R.id.iv_download,true);
+        }else {
+            helper.setVisible(R.id.iv_download,false);
+        }
 
     }
 

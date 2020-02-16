@@ -226,4 +226,13 @@ public class Song extends BaseMultiItemEntity {
         //返回
         return songLocal;
     }
+
+    /**
+     * 是否是本地音乐
+     *
+     * @return
+     */
+    public boolean isLocal() {
+        return source == SongLocal.SOURCE_LOCAL;
+    }
 }

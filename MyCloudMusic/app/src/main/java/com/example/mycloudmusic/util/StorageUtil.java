@@ -22,6 +22,7 @@ import java.io.IOException;
 public class StorageUtil {
 
     public static final String JPG = "jpg";
+    public static final String MP3 = "mp3";
 
     /**
      * MediaStore，ContentProviders内容提供者data列

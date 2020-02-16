@@ -3,7 +3,9 @@ package com.example.mycloudmusic.manager.impl;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.event.OnPlayEvent;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
@@ -14,6 +16,8 @@ import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.DataUtil;
 import com.example.mycloudmusic.util.ORMUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
+import com.ixuea.android.downloader.callback.DownloadManager;
+import com.ixuea.android.downloader.domain.DownloadInfo;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -33,6 +37,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
     private final MusicPlayerManager musicPlayerManager;
     private final ORMUtil orm;
     private final PreferenceUtil sp;
+    private final DownloadManager downloadManager;
 
     List<Song> datum = new LinkedList<>();
     private Song data;
@@ -56,6 +61,8 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
         orm = ORMUtil.getInstance(this.context);
         sp = PreferenceUtil.getInstance(this.context);
+
+        downloadManager = AppContext.getInstance().getDownloadManager();
 
         initPlayList();
     }
@@ -131,11 +138,27 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
         this.data = data;
 
-        String uri = data.getUri();
-        if (!uri.startsWith("http")) {
-            uri = String.format(Constant.RESOURCE_ENDPOINT, uri);
+        if (data.isLocal()){
+            musicPlayerManager.play(data.getUri(),data);
+        }else {
+
+            DownloadInfo downloadInfo = downloadManager.getDownloadById(data.getId());
+
+            if (downloadInfo != null && downloadInfo.getStatus() == DownloadInfo.STATUS_COMPLETED){
+                musicPlayerManager.play(downloadInfo.getPath(), data);
+                Log.e("play", "play offline:" + downloadInfo.getPath() + "," + data.getUri());
+            }else {
+                String uri = data.getUri();
+                if (!uri.startsWith("http")) {
+                    uri = String.format(Constant.RESOURCE_ENDPOINT, uri);
+                }
+                musicPlayerManager.play(uri, data);
+
+                Log.e("play", "play online:" + uri);
+            }
+
         }
-        musicPlayerManager.play(uri, data);
+
         //标记已经播放了
         isPlay = true;
 

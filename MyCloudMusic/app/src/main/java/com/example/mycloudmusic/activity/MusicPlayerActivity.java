@@ -31,6 +31,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.LyricAdapter;
 import com.example.mycloudmusic.adapter.MusicPlayerAdapter;
@@ -44,23 +45,29 @@ import com.example.mycloudmusic.domain.event.PlayListChangedEvent;
 import com.example.mycloudmusic.domain.lyric.Line;
 import com.example.mycloudmusic.domain.lyric.Lyric;
 import com.example.mycloudmusic.fragment.PlayListDialogFragment;
+import com.example.mycloudmusic.listener.DownloadListener;
 import com.example.mycloudmusic.listener.MusicPlayerListener;
 import com.example.mycloudmusic.manager.ListManager;
 import com.example.mycloudmusic.manager.MusicPlayerManager;
 import com.example.mycloudmusic.service.MusicPlayerService;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.DensityUtil;
+import com.example.mycloudmusic.util.FileUtil;
 import com.example.mycloudmusic.util.ImageUtil;
+import com.example.mycloudmusic.util.StorageUtil;
 import com.example.mycloudmusic.util.SwitchDrawableUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 import com.example.mycloudmusic.util.lyric.LyricUtil;
 import com.example.mycloudmusic.view.LyricLineView;
+import com.ixuea.android.downloader.callback.DownloadManager;
+import com.ixuea.android.downloader.domain.DownloadInfo;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.SoftReference;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +129,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @BindView(R.id.ib_loop_model)
     ImageButton ib_loop_model;
 
+    @BindView(R.id.ib_download)
+    ImageButton ib_download;
+
 
     private ListManager listManager;
     private MusicPlayerManager musicPlayerManager;
@@ -142,6 +152,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private Timer lyricTimer;
 
     private Line scrollSelectedLyricLine;
+    private DownloadManager downloadManager;
+    private DownloadInfo downloadInfo;
 
     public static void start(Activity activity) {
 
@@ -252,6 +264,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         listManager = MusicPlayerService.getListManager(getApplicationContext());
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
 
+        downloadManager = AppContext.getInstance().getDownloadManager();
+
         recordAdapter = new MusicPlayerAdapter(getMainActivity(), getSupportFragmentManager());
         viewPager.setAdapter(recordAdapter);
         recordAdapter.setDatum(listManager.getDatum());
@@ -348,7 +362,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         lyricAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                SelectLyricActivity.start(getMainActivity(),listManager.getData());
+                SelectLyricActivity.start(getMainActivity(), listManager.getData());
                 return true;
             }
         });
@@ -439,11 +453,94 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
             }
         });
+
+        downloadInfo = downloadManager.getDownloadById(song.getId());
+        if (downloadInfo != null) {
+            //设置下载回调
+            setDownloadCallback();
+        }
+        refresh();
+    }
+
+    /**
+     * 刷新下载状态
+     */
+    private void refresh() {
+
+        if (downloadInfo != null) {
+            switch (downloadInfo.getStatus()) {
+                case DownloadInfo.STATUS_COMPLETED:
+                    ib_download.setImageResource(R.drawable.ic_downloaded);
+                    break;
+                default:
+                    ib_download.setImageResource(R.drawable.ic_download);
+                    break;
+            }
+
+            //打印下载进度
+            String start = FileUtil.formatFileSize(downloadInfo.getProgress());
+            String size = FileUtil.formatFileSize(downloadInfo.getSize());
+
+            Log.d("downloadInfo", "refresh:" + start + "," + size);
+        } else {
+            ib_download.setImageResource(R.drawable.ic_download);
+        }
+
+    }
+
+    /**
+     * 设置下载回调
+     */
+    private void setDownloadCallback() {
+        downloadInfo.setDownloadListener(new DownloadListener(new SoftReference(this)) {
+            @Override
+            public void onRefresh() {
+
+                if (getUserTag() != null && getUserTag().get()!= null){
+                    MusicPlayerActivity activity = (MusicPlayerActivity) getUserTag().get();
+                    activity.refresh();
+                }
+
+            }
+        });
     }
 
     @OnClick(R.id.ib_download)
     public void onDownloadClick() {
-        System.out.println("========ib_download");
+
+        if (downloadInfo != null){
+
+            if (downloadInfo.getStatus() == DownloadInfo.STATUS_COMPLETED){
+                ToastUtil.successShortToast("该歌曲已经下载了!");
+            }else {
+                ToastUtil.successShortToast("已经在下载列表中了!");
+            }
+        }else {
+            createDownload();
+        }
+    }
+    /**
+     * 创建下载任务
+     */
+    private void createDownload() {
+
+        Song data = listManager.getData();
+        String urlString = String.format(Constant.RESOURCE_ENDPOINT, data.getUri());
+
+        String path = StorageUtil.getExternalPath(getMainActivity(), sp.getUserId(), data.getTitle(), StorageUtil.MP3).getAbsolutePath();
+        Log.d("createDownload", "createDownload:" + path);
+
+        downloadInfo = new DownloadInfo.Builder()
+                .setId(data.getId())
+                .setUrl(urlString)
+                .setPath(path)
+                .build();
+        downloadInfo.setCreateAt(System.currentTimeMillis());
+        setDownloadCallback();
+        downloadManager.download(downloadInfo);
+        orm.saveSong(data);
+        ToastUtil.successShortToast("下载任务添加成功!");
+
     }
 
     @OnClick(R.id.ib_loop_model)
@@ -740,7 +837,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
                 View view = layoutManager.findViewByPosition(lineNumber);
 
-                if (view != null){
+                if (view != null) {
                     LyricLineView llv = view.findViewById(R.id.llv);
                     llv.setLyricCurrentWordIndex(lyricCurrentWordIndex);
                     llv.setWordPlayedTime(wordPlayedTime);
