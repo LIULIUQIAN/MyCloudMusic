@@ -128,7 +128,7 @@ public class MainActivity extends BaseMusicPlayerActivity {
         List<Fragment> pageList = new ArrayList<>();
         pageList.add(MeFragment.newInstance());
         pageList.add(DiscoveryFragment.newInstance());
-        pageList.add(FeedFragment.newInstance());
+        pageList.add(FeedFragment.newInstance(null));
         pageList.add(VideoFragment.newInstance());
         adapter.setDatum(pageList);
 

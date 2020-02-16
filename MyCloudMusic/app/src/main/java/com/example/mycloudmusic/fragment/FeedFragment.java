@@ -6,13 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.util.Constant;
 
 public class FeedFragment extends BaseFragment {
 
-    public static FeedFragment newInstance() {
+    public static FeedFragment newInstance(String userId) {
 
         FeedFragment fragment = new FeedFragment();
         Bundle args = new Bundle();
+        args.putString(Constant.ID, userId);
         fragment.setArguments(args);
         return fragment;
     }
