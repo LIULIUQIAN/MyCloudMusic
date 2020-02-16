@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.adapter.DownloadAdapter;
 import com.example.mycloudmusic.adapter.DownloadedAdapter;
 import com.example.mycloudmusic.fragment.DownloadedFragment;
 import com.example.mycloudmusic.fragment.DownloadingFragment;
@@ -36,7 +37,7 @@ public class DownloadActivity extends BaseTitleActivity {
     @BindView(R.id.magic_indicator)
     MagicIndicator magicIndicator;
 
-    private DownloadedAdapter adapter;
+    private DownloadAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class DownloadActivity extends BaseTitleActivity {
     protected void initDatum() {
         super.initDatum();
 
-        adapter = new DownloadedAdapter(getMainActivity(), getSupportFragmentManager());
+        adapter = new DownloadAdapter(getMainActivity(), getSupportFragmentManager());
         view_pager.setAdapter(adapter);
 
         List<Fragment> list = new ArrayList<>();

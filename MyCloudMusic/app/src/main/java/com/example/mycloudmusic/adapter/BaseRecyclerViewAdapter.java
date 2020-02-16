@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.listener.OnItemClickListener;
 
 import java.util.ArrayList;
@@ -129,5 +130,6 @@ public abstract class BaseRecyclerViewAdapter<D,VH extends BaseRecyclerViewAdapt
         public void bindData(D data) {
 
         }
+
     }
 }

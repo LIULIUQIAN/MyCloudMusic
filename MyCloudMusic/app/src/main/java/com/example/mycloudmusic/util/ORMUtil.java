@@ -199,4 +199,15 @@ public class ORMUtil {
         }
 
     }
+
+    /**
+     * 根据id查询音乐对象
+     */
+    public Song querySongById(String id) {
+
+        Realm realm = getRealm();
+        SongLocal songLocal = realm.where(SongLocal.class).equalTo("id", id).findFirst();
+        return songLocal.toSong();
+
+    }
 }

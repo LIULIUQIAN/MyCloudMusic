@@ -1,30 +1,25 @@
 package com.example.mycloudmusic.adapter;
 
-import android.content.Context;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.annotation.NonNull;
 
-public class DownloadedAdapter extends BaseFragmentPagerAdapter<Fragment> {
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.domain.Song;
 
-    /**
-     * 标题数据
-     */
-    private static final String[] titles = {"下载完成", "正在下载"};
+public class DownloadedAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
 
-    public DownloadedAdapter(Context context, FragmentManager fm) {
-        super(context, fm);
+    public DownloadedAdapter(int layoutResId) {
+        super(layoutResId);
     }
 
     @Override
-    public Fragment getItem(int position) {
-        return datum.get(position);
-    }
+    protected void convert(@NonNull BaseViewHolder helper, Song item) {
+        helper.setText(R.id.tv_position, String.valueOf(helper.getAdapterPosition()+1));
+        helper.setText(R.id.tv_title, item.getTitle());
+        helper.setText(R.id.tv_info, item.getSinger().getNickname());
 
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return titles[position];
+        helper.addOnClickListener(R.id.ib_delete);
     }
 }
