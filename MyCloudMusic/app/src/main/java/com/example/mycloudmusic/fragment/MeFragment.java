@@ -9,6 +9,7 @@ import android.widget.ExpandableListView;
 
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.activity.CommentActivity;
+import com.example.mycloudmusic.activity.DownloadActivity;
 import com.example.mycloudmusic.activity.LocalMusicActivity;
 import com.example.mycloudmusic.activity.SheetDetailActivity;
 import com.example.mycloudmusic.adapter.MeAdapter;
@@ -134,7 +135,7 @@ public class MeFragment extends BaseCommonFragment {
         ll_download_manager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("ll_download_manager","ll_download_manager");
+                startActivity(DownloadActivity.class);
             }
         });
     }

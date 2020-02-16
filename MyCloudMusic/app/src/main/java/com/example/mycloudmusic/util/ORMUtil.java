@@ -168,4 +168,35 @@ public class ORMUtil {
         instance = null;
     }
 
+    /**
+     * 保存本地音乐
+     *
+     * @param data
+     */
+    public void saveSongLocal(SongLocal data) {
+        //获取数据库框架实例
+        Realm realm = getRealm();
+
+        try {
+            //开始事务
+            realm.beginTransaction();
+
+            //信息或者更新到数据库
+            realm.copyToRealmOrUpdate(data);
+
+            //提交事务
+            realm.commitTransaction();
+
+        } catch (Exception e) {
+            //出错了
+            e.printStackTrace();
+
+            //回滚事务
+            realm.cancelTransaction();
+        } finally {
+            //关闭数据库
+            realm.close();
+        }
+
+    }
 }

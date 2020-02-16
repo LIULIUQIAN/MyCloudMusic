@@ -148,4 +148,25 @@ public class StorageUtil {
 
         return null;
     }
+
+    /**
+     * 根据id获取audio content uri
+     *
+     * @param id
+     * @return
+     */
+    public static String getAudioContentUri(long id) {
+        //创建一个builder
+        //并将原来的参数拷贝到新的builder
+        return MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.buildUpon()
+
+                //添加路径
+                .appendPath(String.valueOf(id))
+
+                //创建为uri
+                .build()
+
+                //转为字符串
+                .toString();
+    }
 }

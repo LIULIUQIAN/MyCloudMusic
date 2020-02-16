@@ -1,5 +1,8 @@
 package com.example.mycloudmusic.util;
 
+import android.os.Bundle;
+import android.provider.MediaStore;
+
 import com.example.mycloudmusic.BuildConfig;
 
 public class Constant {
@@ -169,4 +172,22 @@ public class Constant {
      */
     public static final String HAST_TAG = "#";
 
+    public static final String MEDIA_AUDIO_SELECTION = MediaStore.Audio.AudioColumns.IS_MUSIC + " != 0 AND " +
+            MediaStore.Audio.AudioColumns.SIZE + " >= ? AND " +
+            MediaStore.Audio.AudioColumns.DURATION + " >= ?";
+
+    /**
+     * 1M
+     */
+    public static final int MUSIC_FILTER_SIZE = 1 * 1024 * 1024;
+
+    /**
+     * 60s
+     */
+    public static final int MUSIC_FILTER_DURATION = 60 * 1000;
+
+    /**
+     * 扫描本地音乐放大镜圆周半径
+     */
+    public static final double DEFAULT_RADIUS = 30;
 }
