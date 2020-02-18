@@ -6,20 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".activity.UserDetailActivity">
 
-    <include layout="@layout/tool_bar" />
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_meddle"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_scrollFlags="scroll">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_avatar"
@@ -47,40 +55,53 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_marginTop="@dimen/padding_large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_large"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/bt_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/button_height_small"
                     android:background="@drawable/shape_border_color_primary"
                     android:text="@string/follow"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/button_height_small"/>
+                    android:textColor="@color/colorPrimary" />
 
                 <Button
                     android:id="@+id/bt_send_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/button_height_small"
                     android:layout_marginLeft="@dimen/padding_large"
                     android:background="@drawable/shape_border_color_primary"
                     android:text="@string/send_message"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/button_height_small"/>
+                    android:textColor="@color/colorPrimary" />
             </LinearLayout>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/tab_layout_height"
-                android:background="@color/colorPrimary"
-                app:tabIndicatorColor="@color/white"
-                app:tabIndicatorFullWidth="false"
-                app:tabIndicatorHeight="2dp"
-                app:tabSelectedTextColor="@color/white"
-                app:tabTextColor="@color/tab_normal" />
+
         </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_layout_height"
+            android:background="@color/colorPrimary"
+            android:minHeight="@dimen/tab_layout_height"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:tabIndicatorColor="@color/white"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/tab_normal" />
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"

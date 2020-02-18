@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
+import com.example.mycloudmusic.activity.SheetDetailActivity;
 import com.example.mycloudmusic.adapter.UserDetailSheetAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.BaseMultiItemEntity;
@@ -67,6 +69,23 @@ public class UserDetailSheetFragment extends BaseCommonFragment {
         userId = extraId();
         fetchData();
 
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter a, View view, int position) {
+
+                BaseMultiItemEntity item = adapter.getItem(position);
+                if (item instanceof Sheet){
+                    Sheet sheet = (Sheet) item;
+                    startActivityExtraId(SheetDetailActivity.class,sheet.getId());
+                }
+            }
+        });
     }
 
     private void fetchData() {
