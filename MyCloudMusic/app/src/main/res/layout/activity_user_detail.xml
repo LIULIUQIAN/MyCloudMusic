@@ -55,12 +55,15 @@
                 android:textStyle="bold" />
 
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/btn_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_large"
                 android:orientation="horizontal">
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/bt_follow"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/button_height_small"
@@ -69,6 +72,7 @@
                     android:textColor="@color/colorPrimary" />
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/bt_send_message"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/button_height_small"

@@ -9,6 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.UserDetailAdapter;
@@ -20,12 +24,14 @@ import com.example.mycloudmusic.fragment.UserDetailAboutFragment;
 import com.example.mycloudmusic.fragment.UserDetailSheetFragment;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.ImageUtil;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserDetailActivity extends BaseTitleActivity {
 
@@ -34,6 +40,25 @@ public class UserDetailActivity extends BaseTitleActivity {
 
     @BindView(R.id.tab_layout)
     TabLayout tab_layout;
+
+    @BindView(R.id.iv_avatar)
+    CircleImageView iv_avatar;
+
+    @BindView(R.id.tv_nickname)
+    TextView tv_nickname;
+
+    @BindView(R.id.tv_info)
+    TextView tv_info;
+
+    @BindView(R.id.bt_follow)
+    Button bt_follow;
+
+    @BindView(R.id.bt_send_message)
+    Button bt_send_message;
+
+    @BindView(R.id.btn_layout)
+    LinearLayout btnLayout;
+
 
     private String id;
     private String nickname;
@@ -90,6 +115,29 @@ public class UserDetailActivity extends BaseTitleActivity {
 
         this.data = data;
         initUI();
+
+        ImageUtil.showAvatar(getMainActivity(),iv_avatar,data.getAvatar());
+        tv_nickname.setText(data.getNickname());
+
+        String info = getResources().getString(R.string.user_friend_info,data.getFollowings_count(),data.getFollowersCount());
+        tv_info.setText(info);
+
+        if (data.getId().equals(sp.getUserId())){
+            btnLayout.setVisibility(View.GONE);
+        }else {
+            btnLayout.setVisibility(View.VISIBLE);
+            bt_follow.setVisibility(View.VISIBLE);
+
+            if (data.isFollowing()){
+                bt_send_message.setVisibility(View.VISIBLE);
+                bt_follow.setText(R.string.cancel_follow);
+
+            }else {
+                bt_send_message.setVisibility(View.GONE);
+                bt_follow.setText(R.string.follow);
+            }
+        }
+
     }
 
     private void initUI() {
