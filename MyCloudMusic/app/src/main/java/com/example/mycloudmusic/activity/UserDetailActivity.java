@@ -20,6 +20,7 @@ import com.example.mycloudmusic.fragment.UserDetailAboutFragment;
 import com.example.mycloudmusic.fragment.UserDetailSheetFragment;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,9 @@ public class UserDetailActivity extends BaseTitleActivity {
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+
+    @BindView(R.id.tab_layout)
+    TabLayout tab_layout;
 
     private String id;
     private String nickname;
@@ -99,6 +103,8 @@ public class UserDetailActivity extends BaseTitleActivity {
         list.add(UserDetailAboutFragment.getInstance(this.data.getId()));
 
         adapter.setDatum(list);
+
+        tab_layout.setupWithViewPager(viewPager);
 
     }
 }
