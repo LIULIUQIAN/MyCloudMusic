@@ -11,6 +11,7 @@ import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
+import com.example.mycloudmusic.domain.Video;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
@@ -206,5 +207,11 @@ public interface Service {
      */
     @DELETE("v1/friends/{userId}")
     Observable<DetailResponse<BaseModel>> deleteFollow(@Path("userId") String userId);
+
+    /**
+     * 视频列表
+     */
+    @GET("v1/videos")
+    Observable<ListResponse<Video>> videos();
 
 }

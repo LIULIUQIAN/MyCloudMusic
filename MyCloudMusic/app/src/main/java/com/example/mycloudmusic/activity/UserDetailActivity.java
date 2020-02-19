@@ -190,4 +190,9 @@ public class UserDetailActivity extends BaseTitleActivity {
 
         }
     }
+    @OnClick(R.id.bt_send_message)
+    public void onSendMessageClick(){
+        startActivity(ChatActivity.class);
+    }
+
 }

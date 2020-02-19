@@ -17,8 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.DownloadActivity"
-            android:label="@string/activity_download"></activity>
+        <activity android:name=".activity.VideoDetailActivity"
+            android:label=""></activity>
+        <activity
+            android:name=".activity.ChatActivity"
+            android:label="" />
+        <activity
+            android:name=".activity.DownloadActivity"
+            android:label="@string/activity_download" />
         <activity
             android:name=".activity.ScanLocalMusicActivity"
             android:label="@string/scan_local_music" />

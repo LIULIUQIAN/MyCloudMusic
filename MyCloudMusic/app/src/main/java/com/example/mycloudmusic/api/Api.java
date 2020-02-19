@@ -11,6 +11,7 @@ import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
+import com.example.mycloudmusic.domain.Video;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
@@ -323,7 +324,7 @@ public class Api {
     /**
      * 从歌单中删除音乐
      */
-    public Observable<Response<Void>> deleteSongInSheet(String sheetId,String songId){
+    public Observable<Response<Void>> deleteSongInSheet(String sheetId, String songId) {
         return service.deleteSongInSheet(sheetId, songId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -332,7 +333,7 @@ public class Api {
     /**
      * 关注用户
      */
-   public Observable<DetailResponse<BaseModel>> follow(String userId){
+    public Observable<DetailResponse<BaseModel>> follow(String userId) {
         return service.follow(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -341,8 +342,17 @@ public class Api {
     /**
      * 取消关注用户
      */
-   public Observable<DetailResponse<BaseModel>> deleteFollow(String userId){
+    public Observable<DetailResponse<BaseModel>> deleteFollow(String userId) {
         return service.deleteFollow(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 视频列表
+     */
+    public Observable<ListResponse<Video>> videos() {
+        return service.videos()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

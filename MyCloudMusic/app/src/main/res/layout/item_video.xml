@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_video_height"
+        android:layout_margin="@dimen/padding_meddle">
+
+        <ImageView
+            android:id="@+id/iv_banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/padding_meddle">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/button_height_small"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/shape_button_11ff"
+                android:text="创意视频"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:drawableStart="@drawable/ic_clicks_count"
+                android:drawablePadding="@dimen/padding_small"
+                android:text="0"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:drawableStart="@drawable/ic_video_time"
+                android:drawablePadding="@dimen/padding_small"
+                android:text="0"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/padding_meddle"
+        android:layout_marginBottom="@dimen/padding_meddle"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="1.2"
+        android:maxLines="2"
+        android:text="测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本" />
+
+    <include layout="@layout/divider_small" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_meddle"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/avatar_width_meddle"
+            android:layout_height="@dimen/avatar_width_meddle"
+            android:src="@drawable/placeholder" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_weight="1"
+            android:text="昵称"
+            android:textColor="@color/light_grey" />
+
+        <TextView
+            android:id="@+id/tv_likes_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_comment_like"
+            android:drawablePadding="@dimen/padding_small"
+            android:text="0"
+            android:textColor="@color/light_grey" />
+
+        <TextView
+            android:id="@+id/tv_comments_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_large"
+            android:drawableStart="@drawable/ic_comment_count_small"
+            android:drawablePadding="@dimen/padding_small"
+            android:text="0"
+            android:textColor="@color/light_grey" />
+
+    </LinearLayout>
+
+    <include layout="@layout/divider_meddle"/>
+</LinearLayout>
