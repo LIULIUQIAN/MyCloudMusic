@@ -194,4 +194,17 @@ public interface Service {
     @DELETE("v1/sheets/{sheetId}/relations/{songId}")
     Observable<Response<Void>> deleteSongInSheet(@Path("sheetId") String sheetId, @Path("songId") String songId);
 
+    /**
+     * 关注用户
+     */
+    @FormUrlEncoded
+    @POST("v1/friends")
+    Observable<DetailResponse<BaseModel>> follow(@Field("id") String userId);
+
+    /**
+     * 取消关注用户
+     */
+    @DELETE("v1/friends/{userId}")
+    Observable<DetailResponse<BaseModel>> deleteFollow(@Path("userId") String userId);
+
 }

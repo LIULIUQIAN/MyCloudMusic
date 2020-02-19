@@ -329,5 +329,23 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 关注用户
+     */
+   public Observable<DetailResponse<BaseModel>> follow(String userId){
+        return service.follow(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 取消关注用户
+     */
+   public Observable<DetailResponse<BaseModel>> deleteFollow(String userId){
+        return service.deleteFollow(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
 }

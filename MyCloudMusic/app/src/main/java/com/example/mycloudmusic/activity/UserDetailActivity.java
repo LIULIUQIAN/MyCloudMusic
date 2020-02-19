@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.UserDetailAdapter;
 import com.example.mycloudmusic.api.Api;
+import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.fragment.FeedFragment;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserDetailActivity extends BaseTitleActivity {
@@ -122,6 +124,14 @@ public class UserDetailActivity extends BaseTitleActivity {
         String info = getResources().getString(R.string.user_friend_info,data.getFollowings_count(),data.getFollowersCount());
         tv_info.setText(info);
 
+        showFollowStatus();
+
+    }
+
+    /**
+     * 显示关注按钮状态
+     */
+    private void showFollowStatus() {
         if (data.getId().equals(sp.getUserId())){
             btnLayout.setVisibility(View.GONE);
         }else {
@@ -137,7 +147,6 @@ public class UserDetailActivity extends BaseTitleActivity {
                 bt_follow.setText(R.string.follow);
             }
         }
-
     }
 
     private void initUI() {
@@ -154,5 +163,31 @@ public class UserDetailActivity extends BaseTitleActivity {
 
         tab_layout.setupWithViewPager(viewPager);
 
+    }
+
+    /**
+     * 关注和取消关注
+     */
+    @OnClick(R.id.bt_follow)
+    public void onFollowClick(){
+
+        if (data.isFollowing()){
+            Api.getInstance().deleteFollow(data.getId()).subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                @Override
+                public void onSucceeded(DetailResponse<BaseModel> d) {
+                    data.setFollowing(null);
+                    showFollowStatus();
+                }
+            });
+        }else {
+            Api.getInstance().follow(data.getId()).subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                @Override
+                public void onSucceeded(DetailResponse<BaseModel> d) {
+                    data.setFollowing(1);
+                    showFollowStatus();
+                }
+            });
+
+        }
     }
 }
