@@ -334,4 +334,9 @@ dependencies {
     //https://github.com/ixuea/AndroidDownloader
     implementation 'com.ixuea:AndroidDownloader:2.0.6'
 
+    //流式标签布局框架
+    //用在视频详情的标签
+    //https://github.com/hongyangAndroid/FlowLayout
+    implementation 'com.hyman:flowlayout-lib:1.1.2'
+
 }

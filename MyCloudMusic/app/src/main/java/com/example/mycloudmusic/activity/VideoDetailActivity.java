@@ -9,8 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -25,11 +28,13 @@ import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.TimeUtil;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.google.android.material.appbar.AppBarLayout;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,6 +80,12 @@ public class VideoDetailActivity extends BaseTitleActivity {
     private VideoDetailAdapter adapter;
     private DividerItemDecoration decoration;
     private LRecyclerViewAdapter adapterWrapper;
+    private TextView tv_title;
+    private TextView tv_created_at;
+    private TextView tv_count;
+    private TagFlowLayout fl;
+    private ImageView iv_avatar;
+    private TextView tv_nickname;
 
 
     @Override
@@ -116,6 +127,8 @@ public class VideoDetailActivity extends BaseTitleActivity {
         rv.setPullRefreshEnabled(false);
         rv.setLoadMoreEnabled(false);
 
+        adapterWrapper.addHeaderView(createHeaderView());
+
 
         Api.getInstance().videoDetail(id).subscribe(new HttpObserver<DetailResponse<Video>>() {
             @Override
@@ -123,6 +136,18 @@ public class VideoDetailActivity extends BaseTitleActivity {
                 next(data.getData());
             }
         });
+    }
+
+    private View createHeaderView() {
+
+        View view = getLayoutInflater().inflate(R.layout.header_video_detail, (ViewGroup) rv.getParent(), false);
+        tv_title = view.findViewById(R.id.tv_title);
+        tv_created_at = view.findViewById(R.id.tv_created_at);
+        tv_count = view.findViewById(R.id.tv_count);
+        fl = view.findViewById(R.id.fl);
+        iv_avatar = view.findViewById(R.id.iv_avatar);
+        tv_nickname = view.findViewById(R.id.tv_nickname);
+        return view;
     }
 
     @Override
@@ -155,6 +180,15 @@ public class VideoDetailActivity extends BaseTitleActivity {
         this.data = data;
 
         setTitle(data.getTitle());
+
+        tv_title.setText(data.getTitle());
+        String createdAt = TimeUtil.yyyyMMddHHmm(data.getCreated_at());
+        tv_created_at.setText(getResources().getString(R.string.video_created_at, createdAt));
+        String clicksCount = getResources().getString(R.string.video_clicks_count, data.getClicks_count());
+        tv_count.setText(getResources().getString(R.string.video_created_at, clicksCount));
+        ImageUtil.showAvatar(getMainActivity(), iv_avatar, data.getUser().getAvatar());
+        tv_nickname.setText(data.getUser().getNickname());
+
 
         String path = String.format(Constant.RESOURCE_ENDPOINT, data.getUri());
 
@@ -223,14 +257,15 @@ public class VideoDetailActivity extends BaseTitleActivity {
     /**
      * 暂停
      */
-    private void pause(){
+    private void pause() {
         vv.pause();
         ib_play.setImageResource(R.drawable.ic_video_play);
     }
+
     /**
      * 播放
      */
-    private void resume(){
+    private void resume() {
         vv.start();
         ib_play.setImageResource(R.drawable.ic_video_pause);
 
@@ -264,8 +299,8 @@ public class VideoDetailActivity extends BaseTitleActivity {
 
     }
 
-    private void cancelTask(){
-        if (downTimer != null){
+    private void cancelTask() {
+        if (downTimer != null) {
             downTimer.cancel();
             downTimer = null;
         }
