@@ -1,11 +1,14 @@
 package com.example.mycloudmusic.api;
 
+import android.text.TextUtils;
+
 import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.BuildConfig;
 import com.example.mycloudmusic.domain.Advert;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Comment;
+import com.example.mycloudmusic.domain.Feed;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
@@ -362,6 +365,21 @@ public class Api {
      */
     public Observable<DetailResponse<Video>> videoDetail(String id){
         return service.videoDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 动态列表
+     */
+    public Observable<ListResponse<Feed>> feeds(String userId){
+        Map<String,String> data = new HashMap<>();
+
+        if (!TextUtils.isEmpty(userId)){
+            data.put("user_id",userId);
+        }
+
+        return service.feeds(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

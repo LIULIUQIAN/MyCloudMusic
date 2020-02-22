@@ -6,6 +6,7 @@ import android.graphics.PostProcessor;
 import com.example.mycloudmusic.domain.Advert;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Comment;
+import com.example.mycloudmusic.domain.Feed;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
@@ -220,4 +221,9 @@ public interface Service {
     @GET("v1/videos/{id}")
     Observable<DetailResponse<Video>> videoDetail(@Path("id") String id);
 
+    /**
+     * 动态列表
+     */
+    @GET("v1/feeds")
+    Observable<ListResponse<Feed>> feeds(@QueryMap Map<String,String> data);
 }

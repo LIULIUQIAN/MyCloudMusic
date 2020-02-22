@@ -205,6 +205,31 @@ public class VideoDetailActivity extends BaseTitleActivity {
                 tv_info.setVisibility(View.VISIBLE);
             }
         });
+
+        vv.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+
+                switch (extra) {
+                    case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
+                        //超时了
+                        showMessage(R.string.play_failed_time_out);
+                        break;
+                    default:
+                        showMessage(R.string.play_failed);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    /**
+     * 显示提示
+     */
+    private void showMessage(int resourceId) {
+        tv_info.setVisibility(View.VISIBLE);
+        tv_info.setText(resourceId);
     }
 
     /**
@@ -350,8 +375,10 @@ public class VideoDetailActivity extends BaseTitleActivity {
             public void onTick(long millisUntilFinished) {
                 tv_start.setText(TimeUtil.ms2ms(vv.getCurrentPosition()));
 
-                int percent = vv.getCurrentPosition()*100/ duration;
-                sb_progress.setProgress(percent);
+                if (duration > 0) {
+                    int percent = vv.getCurrentPosition() * 100 / duration;
+                    sb_progress.setProgress(percent);
+                }
             }
 
             @Override
