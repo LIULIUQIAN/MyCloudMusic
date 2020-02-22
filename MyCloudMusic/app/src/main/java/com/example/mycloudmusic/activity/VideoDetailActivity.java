@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,7 +62,7 @@ public class VideoDetailActivity extends BaseTitleActivity {
     TextView tv_start;
 
     @BindView(R.id.sb)
-    SeekBar sb;
+    SeekBar sb_progress;
 
     @BindView(R.id.tv_end)
     TextView tv_end;
@@ -89,12 +90,31 @@ public class VideoDetailActivity extends BaseTitleActivity {
     private TagFlowLayout fl;
     private ImageView iv_avatar;
     private TextView tv_nickname;
+    private int duration;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_detail);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //屏幕常亮
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //清除屏幕常亮
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
     }
 
     @Override
@@ -161,8 +181,19 @@ public class VideoDetailActivity extends BaseTitleActivity {
         vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                sb.setMax(mp.getDuration());
-                tv_end.setText(TimeUtil.ms2ms(mp.getDuration()));
+
+                duration = mp.getDuration();
+
+                tv_end.setText(TimeUtil.ms2ms(duration));
+
+                //监听缓存进度
+                mp.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+                    @Override
+                    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+
+                        sb_progress.setSecondaryProgress(percent);
+                    }
+                });
             }
         });
         //视频播放完成
@@ -318,7 +349,9 @@ public class VideoDetailActivity extends BaseTitleActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 tv_start.setText(TimeUtil.ms2ms(vv.getCurrentPosition()));
-                sb.setProgress(vv.getCurrentPosition());
+
+                int percent = vv.getCurrentPosition()*100/ duration;
+                sb_progress.setProgress(percent);
             }
 
             @Override
