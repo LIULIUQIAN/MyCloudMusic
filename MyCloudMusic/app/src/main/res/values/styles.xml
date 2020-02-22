@@ -19,6 +19,11 @@
 
     </style>
 
+    <!--状态栏黑色-->
+    <style name="AppTheme.NoActionBar.StatusBarBlack">
+
+    </style>
+
     <style name="TextSmall">
         <item name="android:textColor">@color/light_grey</item>
         <item name="android:textSize">@dimen/text_small</item>

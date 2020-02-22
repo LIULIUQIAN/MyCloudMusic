@@ -6,19 +6,120 @@
     android:layout_height="match_parent"
     tools:context=".activity.VideoDetailActivity">
 
-    <include layout="@layout/tool_bar" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_margin"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:background="@color/background"
+        android:orientation="vertical">
 
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="视频详情"/>
+        <RelativeLayout
+            android:id="@+id/video_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/video_container_height"
+            android:background="@color/black">
+
+            <VideoView
+                android:id="@+id/vv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:id="@+id/video_touch_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/abl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:theme="@style/AppTheme.AppBarOverlay"
+                app:elevation="0dp">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/transparent"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <LinearLayout
+                android:id="@+id/control_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/padding_meddle"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="@color/white" />
+
+                <SeekBar
+                    android:id="@+id/sb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxHeight="@dimen/music_seek_bar_height"
+                    android:minHeight="@dimen/music_seek_bar_height"
+                    android:progressDrawable="@drawable/shape_seek_bar" />
+
+                <TextView
+                    android:id="@+id/tv_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="@color/white" />
+
+                <ImageButton
+                    android:id="@+id/ib_screen"
+                    android:layout_width="@dimen/icon_height"
+                    android:layout_height="@dimen/icon_height"
+                    android:layout_marginStart="@dimen/padding_meddle"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_full_screen" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ib_play"
+                android:layout_width="@dimen/button_height"
+                android:layout_height="@dimen/button_height"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_video_play" />
+
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ib_play"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/padding_meddle"
+                android:text="视频播放完成，点击重播"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+
+        <com.github.jdsjlzx.recyclerview.LRecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <include layout="@layout/input_comment" />
 
     </LinearLayout>
 

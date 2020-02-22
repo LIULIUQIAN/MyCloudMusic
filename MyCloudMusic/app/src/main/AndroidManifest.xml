@@ -18,7 +18,8 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity android:name=".activity.VideoDetailActivity"
-            android:label=""></activity>
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar.StatusBarBlack"></activity>
         <activity
             android:name=".activity.ChatActivity"
             android:label="" />

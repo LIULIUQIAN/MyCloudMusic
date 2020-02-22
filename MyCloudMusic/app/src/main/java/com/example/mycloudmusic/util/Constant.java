@@ -62,6 +62,16 @@ public class Constant {
     public static final int TYPE_USER = 3;
 
     /**
+     * 评论
+     */
+    public static final int TYPE_COMMENT = 4;
+
+    /**
+     * 视频
+     */
+    public static final int TYPE_VIDEO = 5;
+
+    /**
      * 歌单 id
      */
     public static final String SHEET_ID = "SHEET_ID";

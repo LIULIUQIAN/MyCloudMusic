@@ -20,35 +20,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <include layout="@layout/divider_small"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/padding_meddle"
-            android:paddingVertical="@dimen/padding_small"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical">
-
-            <EditText
-                android:id="@+id/et_content"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:hint="@string/hint_comment"
-                android:maxLength="140"
-                android:textColor="@color/text"/>
-
-            <Button
-                android:id="@+id/bt_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:text="@string/send"
-                android:textColor="@color/light_grey"/>
-
-        </LinearLayout>
+        <include layout="@layout/input_comment"/>
 
     </LinearLayout>
 
