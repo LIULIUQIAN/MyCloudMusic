@@ -200,4 +200,19 @@ public class Constant {
      * 扫描本地音乐放大镜圆周半径
      */
     public static final double DEFAULT_RADIUS = 30;
+
+    /**
+     * 阿里云OSS Bucket
+     */
+    public static final String ALIYUN_OSS_BUCKET_NAME = "dev-courses-misuc";
+
+    /**
+     * 阿里云OSS AK
+     */
+    public static final String ALIYUN_OSS_AK = "LTAIvvrRFHYlwoEj";
+
+    /**
+     * 阿里云OSS SK
+     */
+    public static final String ALIYUN_OSS_SK = "xDpTSeBM0PqDUWtlVPQfTfMb97CbPD";
 }

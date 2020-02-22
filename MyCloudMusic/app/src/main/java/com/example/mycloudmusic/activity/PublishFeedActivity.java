@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -18,17 +19,27 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.adapter.ImageSelectAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.Feed;
+import com.example.mycloudmusic.domain.Resource;
 import com.example.mycloudmusic.domain.event.OnFeedChangedEvent;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+import com.example.mycloudmusic.util.Constant;
+import com.example.mycloudmusic.util.LoadingUtil;
+import com.example.mycloudmusic.util.OSSUtil;
 import com.example.mycloudmusic.util.TextUtil;
 import com.example.mycloudmusic.util.ToastUtil;
+import com.example.mycloudmusic.util.UUIDUtil;
 import com.google.common.collect.Lists;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -68,7 +79,7 @@ public class PublishFeedActivity extends BaseTitleActivity {
         super.initViews();
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(),3));
+        recyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
 
     }
 
@@ -109,7 +120,7 @@ public class PublishFeedActivity extends BaseTitleActivity {
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
 
-            if (adapter.getItem(position) instanceof Integer){
+            if (adapter.getItem(position) instanceof Integer) {
                 selectImage();
             }
         });
@@ -117,7 +128,7 @@ public class PublishFeedActivity extends BaseTitleActivity {
         adapter.setOnItemChildClickListener((adapter, view, position) -> {
             adapter.remove(position);
 
-            if (adapter.getItem(adapter.getData().size() -1) instanceof LocalMedia){
+            if (adapter.getItem(adapter.getData().size() - 1) instanceof LocalMedia) {
                 adapter.addData(R.drawable.ic_add_grey);
             }
 
@@ -150,8 +161,123 @@ public class PublishFeedActivity extends BaseTitleActivity {
             return;
         }
 
+        //获取选中的图片
+        List<LocalMedia> selectedImages = getSelectedImages();
+        if (selectedImages.size() > 0) {
+            uploadImages(selectedImages);
+        } else {
+            saveFeed(null);
+        }
+
+
+    }
+
+
+    /**
+     * 获取要上传的图片
+     */
+    private List<LocalMedia> getSelectedImages() {
+
+        List<Object> data = adapter.getData();
+
+        List<LocalMedia> datum = new ArrayList<>();
+        for (Object o : data) {
+            if (o instanceof LocalMedia) {
+                datum.add((LocalMedia) o);
+            }
+        }
+        return datum;
+    }
+
+    /**
+     * 上传图片
+     */
+    private void uploadImages(List<LocalMedia> datum) {
+
+        new AsyncTask<List<LocalMedia>, Integer, List<Resource>>() {
+
+            /**
+             * 异步任务执行前调用
+             * 主线程中调用
+             */
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                LoadingUtil.showLoading(getMainActivity(), "图片上传中...");
+            }
+
+            /**
+             * 子线程中执行
+             */
+            @Override
+            protected List<Resource> doInBackground(List<LocalMedia>... params) {
+
+                OSSClient oss = OSSUtil.getInstance(getMainActivity());
+
+                ArrayList<Resource> results = new ArrayList<>();
+
+                List<LocalMedia> images = params[0];
+                try {
+
+                    for (int i = 0; i < images.size(); i++) {
+
+                        LocalMedia localMedia = images.get(i);
+                        publishProgress(i);
+
+                        String destFileName = UUIDUtil.getUUID() + ".jpg";
+                        Log.e("doInBackground", "upload images:" + destFileName);
+                        PutObjectRequest request = new PutObjectRequest(Constant.ALIYUN_OSS_BUCKET_NAME, destFileName, localMedia.getCompressPath());
+                        PutObjectResult putObjectResult = oss.putObject(request);
+
+                        results.add(new Resource(destFileName));
+                    }
+                    return results;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            /**
+             * 进度回调
+             * 主线程中执行
+             */
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+                Integer index = values[0] + 1;
+                LoadingUtil.showLoading(getMainActivity(), "正在上传第" + index + "张图片");
+            }
+
+            /**
+             * 异步任务执行完成了
+             */
+            @Override
+            protected void onPostExecute(List<Resource> resources) {
+                super.onPostExecute(resources);
+                LoadingUtil.hideLoading();
+
+                if (datum != null && resources.size() == datum.size()) {
+                    saveFeed(resources);
+                } else {
+                    ToastUtil.errorShortToast(R.string.error_upload_image);
+                }
+            }
+        }.execute(datum);
+    }
+
+    /**
+     * 发布动态
+     */
+    private void saveFeed(List<Resource> images) {
+
+        String content = et_content.getText().toString().trim();
+
         Feed feed = new Feed();
         feed.setContent(content);
+        feed.setImages(images);
 
         Api.getInstance().createFeed(feed).subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
             @Override
@@ -162,7 +288,6 @@ public class PublishFeedActivity extends BaseTitleActivity {
                 finish();
             }
         });
-
     }
 
     /**
@@ -218,7 +343,7 @@ public class PublishFeedActivity extends BaseTitleActivity {
      * @param datum
      */
     private void setData(List<Object> datum) {
-        if (datum.size() != 9){
+        if (datum.size() != 9) {
             datum.add(R.drawable.ic_add_grey);
         }
         adapter.replaceData(datum);
