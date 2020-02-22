@@ -212,22 +212,22 @@ public class PublishFeedActivity extends BaseTitleActivity {
             @Override
             protected List<Resource> doInBackground(List<LocalMedia>... params) {
 
-                OSSClient oss = OSSUtil.getInstance(getMainActivity());
-
-                ArrayList<Resource> results = new ArrayList<>();
-
-                List<LocalMedia> images = params[0];
                 try {
+                    OSSClient oss = OSSUtil.getInstance(getMainActivity());
+                    ArrayList<Resource> results = new ArrayList<>();
+                    List<LocalMedia> images = params[0];
 
                     for (int i = 0; i < images.size(); i++) {
 
-                        LocalMedia localMedia = images.get(i);
                         publishProgress(i);
+
+                        LocalMedia localMedia = images.get(i);
 
                         String destFileName = UUIDUtil.getUUID() + ".jpg";
                         Log.e("doInBackground", "upload images:" + destFileName);
                         PutObjectRequest request = new PutObjectRequest(Constant.ALIYUN_OSS_BUCKET_NAME, destFileName, localMedia.getCompressPath());
-                        PutObjectResult putObjectResult = oss.putObject(request);
+                        //上传
+                        oss.putObject(request);
 
                         results.add(new Resource(destFileName));
                     }
