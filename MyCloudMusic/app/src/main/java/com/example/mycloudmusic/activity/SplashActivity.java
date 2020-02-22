@@ -74,7 +74,7 @@ public class SplashActivity extends BaseCommonActivity {
      * 请求相机权限目的是扫描二维码，拍照
      */
     @NeedsPermission({
-//            Manifest.permission.CAMERA,
+            Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
 //            Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -96,7 +96,7 @@ public class SplashActivity extends BaseCommonActivity {
      * 目的是提示用户
      */
     @OnShowRationale({
-//            Manifest.permission.CAMERA,
+            Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
 //            Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -120,7 +120,7 @@ public class SplashActivity extends BaseCommonActivity {
      * 拒绝了权限调用
      */
     @OnPermissionDenied({
-//            Manifest.permission.CAMERA,
+            Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
 //            Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -136,7 +136,7 @@ public class SplashActivity extends BaseCommonActivity {
      * 再次获取权限的提示
      */
     @OnNeverAskAgain({
-//            Manifest.permission.CAMERA,
+            Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
 //            Manifest.permission.ACCESS_COARSE_LOCATION,

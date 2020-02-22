@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.mycloudmusic">
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 全局歌词悬浮窗权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" /> <!-- 读存储卡权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 写存储卡权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 控制屏幕息屏 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 控制屏幕息屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 相机 -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".AppContext"
@@ -17,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:replace="android:theme">
         <activity android:name=".activity.PublishFeedActivity"
             android:label="@string/activity_publish_feed"></activity>
         <activity

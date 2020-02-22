@@ -83,6 +83,17 @@ public class ImageUtil {
     }
 
     /**
+     * 显示资源目录图片
+     */
+    public static void show(Context context, ImageView view, String path) {
+
+        Glide.with(context)
+                .load(path)
+                .apply(getCommonRequestOptions())
+                .into(view);
+    }
+
+    /**
      * 显示网络图片
      */
     private static void showFull(Context context, ImageView view, String uri) {
@@ -138,4 +149,5 @@ public class ImageUtil {
         options.circleCrop();
         return options;
     }
+
 }

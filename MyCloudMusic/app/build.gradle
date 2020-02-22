@@ -343,5 +343,10 @@ dependencies {
     //https://github.com/wanglu1209/PhotoViewer
     implementation 'com.github.wanglu1209:PhotoViewer:0.50'
 
+    //图片选择
+    //https://github.com/LuckSiege/PictureSelector
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.9'
+
+
 
 }
