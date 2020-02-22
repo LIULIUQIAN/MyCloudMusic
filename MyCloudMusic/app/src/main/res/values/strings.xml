@@ -13,7 +13,7 @@
     <string name="activity_select_topic">选择话题</string>
     <string name="activity_select_friend">选择好友</string>
     <string name="activity_download">下载管理</string>
-    <string name="activity_publish_feed">发动态</string>
+    <string name="activity_publish_feed">发布动态</string>
 
     <!--版本文本-->
     <string name="copyright">Copyright © 2019 Ixuea. All Rights Reserved</string>

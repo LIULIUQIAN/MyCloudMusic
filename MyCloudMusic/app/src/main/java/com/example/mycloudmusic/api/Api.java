@@ -384,5 +384,14 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 发布动态
+     */
+    public Observable<DetailResponse<BaseModel>> createFeed(Feed data){
+        return service.createFeed(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
 }

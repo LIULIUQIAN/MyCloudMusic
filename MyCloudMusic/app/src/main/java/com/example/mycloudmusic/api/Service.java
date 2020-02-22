@@ -226,4 +226,10 @@ public interface Service {
      */
     @GET("v1/feeds")
     Observable<ListResponse<Feed>> feeds(@QueryMap Map<String,String> data);
+
+    /**
+     * 发布动态
+     */
+    @POST("v1/feeds")
+    Observable<DetailResponse<BaseModel>> createFeed(@Body Feed data);
 }

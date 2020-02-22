@@ -6,8 +6,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" /> <!-- 读存储卡权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 写存储卡权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 控制屏幕息屏 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 控制屏幕息屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -19,9 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.VideoDetailActivity"
+        <activity android:name=".activity.PublishFeedActivity"
+            android:label="@string/activity_publish_feed"></activity>
+        <activity
+            android:name=".activity.VideoDetailActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar.StatusBarBlack"></activity>
+            android:theme="@style/AppTheme.NoActionBar.StatusBarBlack" />
         <activity
             android:name=".activity.ChatActivity"
             android:label="" />

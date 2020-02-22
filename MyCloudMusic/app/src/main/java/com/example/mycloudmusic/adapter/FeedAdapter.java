@@ -11,12 +11,25 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.Feed;
+import com.example.mycloudmusic.domain.Resource;
+import com.example.mycloudmusic.listener.FeedListener;
+import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.TimeUtil;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
+import org.checkerframework.checker.nullness.compatqual.NullableDecl;
+
+import java.util.List;
 
 public class FeedAdapter extends BaseQuickAdapter<Feed, BaseViewHolder> {
-    public FeedAdapter(int layoutResId) {
+
+    private final FeedListener feedListener;
+
+    public FeedAdapter(int layoutResId, FeedListener feedListener) {
         super(layoutResId);
+        this.feedListener = feedListener;
     }
 
     @Override
@@ -52,6 +65,24 @@ public class FeedAdapter extends BaseQuickAdapter<Feed, BaseViewHolder> {
             ImageAdapter adapter = new ImageAdapter(R.layout.item_image);
             recyclerView.setAdapter(adapter);
             adapter.replaceData(item.getImages());
+
+            adapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                    List<String> imagUrls = Lists.transform(item.getImages(), new Function<Resource, String>() {
+                        @NullableDecl
+                        @Override
+                        public String apply(@NullableDecl Resource input) {
+
+                            return String.format(Constant.RESOURCE_ENDPOINT, input.getUri());
+                        }
+                    });
+
+                    feedListener.onImageClick(recyclerView,imagUrls,position);
+
+                }
+            });
 
         } else {
             recyclerView.setVisibility(View.GONE);
