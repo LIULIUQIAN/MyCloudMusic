@@ -34,11 +34,14 @@ import com.example.mycloudmusic.util.TimeUtil;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.google.android.material.appbar.AppBarLayout;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -188,6 +191,35 @@ public class VideoDetailActivity extends BaseTitleActivity {
         tv_count.setText(getResources().getString(R.string.video_created_at, clicksCount));
         ImageUtil.showAvatar(getMainActivity(), iv_avatar, data.getUser().getAvatar());
         tv_nickname.setText(data.getUser().getNickname());
+
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("爱学啊");
+        tags.add("测试");
+        tags.add("测试标签1");
+        tags.add("标签1");
+        tags.add("测试标签1标签1");
+        tags.add("标签1");
+
+
+        fl.setAdapter(new TagAdapter<String>(tags) {
+
+            @Override
+            public View getView(FlowLayout parent, int position, String s) {
+
+                View view = getLayoutInflater().inflate(R.layout.item_tag, null);
+                TextView tv_title = view.findViewById(R.id.tv_title);
+                tv_title.setText(s);
+                return view;
+            }
+        });
+
+        fl.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                Log.e("setOnTagClickListener",tags.get(position));
+                return true;
+            }
+        });
 
 
         String path = String.format(Constant.RESOURCE_ENDPOINT, data.getUri());
