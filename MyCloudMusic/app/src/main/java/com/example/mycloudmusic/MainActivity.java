@@ -24,6 +24,7 @@ import com.example.mycloudmusic.activity.BaseMusicPlayerActivity;
 import com.example.mycloudmusic.activity.MusicPlayerActivity;
 import com.example.mycloudmusic.activity.SettingActivity;
 import com.example.mycloudmusic.activity.SimplePlayerActivity;
+import com.example.mycloudmusic.activity.UserActivity;
 import com.example.mycloudmusic.activity.UserDetailActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
 import com.example.mycloudmusic.adapter.MainAdapter;
@@ -252,6 +253,27 @@ public class MainActivity extends BaseMusicPlayerActivity {
         startActivityExtraId(UserDetailActivity.class, sp.getUserId());
         closeDrawer();
     }
+
+    /*
+     * 好友点击
+     * */
+    @OnClick(R.id.ll_friend)
+    public void onFriendClick() {
+        UserActivity.start(getMainActivity(),sp.getUserId(),UserActivity.FRIEND);
+        closeDrawer();
+    }
+
+    /*
+     * 粉丝点击
+     * */
+    @OnClick(R.id.ll_fans)
+    public void onFansClick() {
+        UserActivity.start(getMainActivity(),sp.getUserId(),UserActivity.FANS);
+        closeDrawer();
+    }
+
+
+
 
     /*
      * 点击设置

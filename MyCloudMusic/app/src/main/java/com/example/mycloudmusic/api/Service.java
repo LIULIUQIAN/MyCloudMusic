@@ -162,6 +162,12 @@ public interface Service {
     Observable<ListResponse<User>> friends(@Path("id") String id);
 
     /**
+     * 粉丝列表（关注我的人）
+     */
+    @GET("v1/users/{id}/followers")
+    Observable<ListResponse<User>> fans(@Path("id") String id);
+
+    /**
      * 获取用户创建的歌单
      *
      * @param userId

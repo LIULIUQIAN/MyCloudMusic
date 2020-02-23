@@ -14,6 +14,12 @@ public class Constant {
     public static final String ID = "ID";
 
     /**
+     * int值id
+     */
+    public static final String INT = "int";
+
+
+    /**
      * 手机号正则表达式
      * 移动：134 135 136 137 138 139 147 150 151 152 157 158 159 178 182 183 184 187 188 198
      * 联通：130 131 132 145 155 156 166 171 175 176 185 186

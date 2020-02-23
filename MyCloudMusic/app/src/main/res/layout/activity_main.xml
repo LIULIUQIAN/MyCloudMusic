@@ -68,7 +68,8 @@
                         android:text="@string/my_message" />
                 </LinearLayout>
 
-                <LinearLayout style="@style/ItemContainer">
+                <LinearLayout style="@style/ItemContainer"
+                    android:id="@+id/ll_friend">
 
                     <ImageView style="@style/ItemIcon" />
 
@@ -77,7 +78,8 @@
                         android:text="@string/my_friend" />
                 </LinearLayout>
 
-                <LinearLayout style="@style/ItemContainer">
+                <LinearLayout style="@style/ItemContainer"
+                    android:id="@+id/ll_fans">
 
                     <ImageView style="@style/ItemIcon" />
 
