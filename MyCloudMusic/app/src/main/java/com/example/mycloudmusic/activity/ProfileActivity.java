@@ -36,6 +36,8 @@ import com.example.mycloudmusic.util.OSSUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 import com.example.mycloudmusic.util.UUIDUtil;
 import com.google.common.collect.Lists;
+import com.ixuea.regionselector.Region;
+import com.ixuea.regionselector.RegionSelector;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -220,7 +222,9 @@ public class ProfileActivity extends BaseTitleActivity {
 
     @OnClick(R.id.area_container)
     public void onAreaClick() {
-        Log.e("onAvatarClick", "area_container");
+
+        RegionSelector.init(this).start(this);
+
     }
 
     @OnClick(R.id.bt_qq)
@@ -239,8 +243,31 @@ public class ProfileActivity extends BaseTitleActivity {
 
         if (requestCode == PictureConfig.CHOOSE_REQUEST) {
             List<LocalMedia> datum = PictureSelector.obtainMultipleResult(data);
+            if (datum.size() > 0) {
+                updateImage(datum.get(0).getCompressPath());
+            }
 
-            updateImage(datum.get(0).getCompressPath());
+        } else if (requestCode == RegionSelector.REQUEST_REGION) {
+
+            //城市选择
+
+            //省
+            Region province = RegionSelector.getProvince(data);
+            //市
+            Region city = RegionSelector.getCity(data);
+            //区
+            Region area = RegionSelector.getArea(data);
+
+            this.data.setProvince(province.getName());
+            this.data.setProvinceCode(String.valueOf(province.getId()));
+
+            this.data.setCity(city.getName());
+            this.data.setCityCode(String.valueOf(city.getId()));
+
+            this.data.setArea(area.getName());
+            this.data.setAreaCode(String.valueOf(area.getId()));
+
+            next(this.data);
         }
     }
 

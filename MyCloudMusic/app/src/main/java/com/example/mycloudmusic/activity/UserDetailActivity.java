@@ -22,6 +22,7 @@ import com.example.mycloudmusic.adapter.UserDetailAdapter;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.BaseModel;
 import com.example.mycloudmusic.domain.User;
+import com.example.mycloudmusic.domain.event.OnUserChangedEvent;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.fragment.FeedFragment;
 import com.example.mycloudmusic.fragment.UserDetailAboutFragment;
@@ -30,6 +31,10 @@ import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.google.android.material.tabs.TabLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,8 +93,16 @@ public class UserDetailActivity extends BaseTitleActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void initDatum() {
         super.initDatum();
+
+        EventBus.getDefault().register(this);
 
         id = extraId();
         nickname = extraString(Constant.NICKNAME);
@@ -220,5 +233,10 @@ public class UserDetailActivity extends BaseTitleActivity {
             startActivity(ProfileActivity.class);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserChangedEvent(OnUserChangedEvent event){
+        feachData();
     }
 }

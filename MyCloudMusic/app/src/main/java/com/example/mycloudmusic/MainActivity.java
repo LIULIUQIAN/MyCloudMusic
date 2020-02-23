@@ -1,5 +1,6 @@
 package com.example.mycloudmusic;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -175,35 +176,33 @@ public class MainActivity extends BaseMusicPlayerActivity {
         super.initDatum();
 
         fetchUserData();
-        realmTest();
     }
 
-    private void realmTest() {
+    @Override
+    protected void initListeners() {
+        super.initListeners();
 
-//        orm.saveSong(new Song());
+        dl.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
 
-//        Realm realm = Realm.getDefaultInstance();
-//
-//        realm.beginTransaction();
-//
-//        UserTest userTest = realm.createObject(UserTest.class);
-//        userTest.setName("aaaaaaa6666");
-//        userTest.setAge(88);
-//
-//        realm.commitTransaction();
-//
-//        RealmResults<UserTest> userList = realm.where(UserTest.class).findAll();
-//        Log.d("aaa===========",userList.size()+"");
-//
-//
-//        for (int i = 0; i< userList.size();i++){
-//            UserTest u = userList.get(i);
-//            Log.d("aaa============",u.getName());
-//        }
-//
-//        realm.close();
+            }
 
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                fetchUserData();
+            }
 
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     /*
@@ -239,7 +238,7 @@ public class MainActivity extends BaseMusicPlayerActivity {
         //广告点击
         if (Constant.ACTION_AD.equals(intent.getAction())) {
             WebViewActivity.start(getMainActivity(), "广告详情", intent.getStringExtra(Constant.URL));
-        }else if (Constant.ACTION_MUSIC_PLAY_CLICK.equals(intent.getAction())){
+        } else if (Constant.ACTION_MUSIC_PLAY_CLICK.equals(intent.getAction())) {
             //音乐通知点击
             MusicPlayerActivity.start(getMainActivity());
         }
@@ -251,6 +250,7 @@ public class MainActivity extends BaseMusicPlayerActivity {
     @OnClick(R.id.ll_user)
     public void onUserClick() {
         startActivityExtraId(UserDetailActivity.class, sp.getUserId());
+        closeDrawer();
     }
 
     /*
@@ -268,13 +268,13 @@ public class MainActivity extends BaseMusicPlayerActivity {
 
     /**
      * 检查是否有悬浮窗权限
-     * */
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private boolean requestDrawOverlays(){
+    private boolean requestDrawOverlays() {
 
-        if (!Settings.canDrawOverlays(getMainActivity())){
+        if (!Settings.canDrawOverlays(getMainActivity())) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getMainActivity().getPackageName()));
-            startActivityForResult(intent,REQUEST_OVERLAY_PERMISSION);
+            startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
             return false;
         }
         return true;
@@ -283,13 +283,13 @@ public class MainActivity extends BaseMusicPlayerActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_OVERLAY_PERMISSION:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (requestDrawOverlays()){
-                        Log.e("onActivityResult","权限获取成功");
-                    }else {
-                        Log.e("onActivityResult","权限获取失败");
+                    if (requestDrawOverlays()) {
+                        Log.e("onActivityResult", "权限获取成功");
+                    } else {
+                        Log.e("onActivityResult", "权限获取失败");
                     }
                 }
                 break;
