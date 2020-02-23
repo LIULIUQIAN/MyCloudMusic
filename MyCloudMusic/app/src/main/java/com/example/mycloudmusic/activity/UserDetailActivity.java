@@ -1,5 +1,6 @@
 package com.example.mycloudmusic.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -9,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -118,10 +121,10 @@ public class UserDetailActivity extends BaseTitleActivity {
         this.data = data;
         initUI();
 
-        ImageUtil.showAvatar(getMainActivity(),iv_avatar,data.getAvatar());
+        ImageUtil.showAvatar(getMainActivity(), iv_avatar, data.getAvatar());
         tv_nickname.setText(data.getNickname());
 
-        String info = getResources().getString(R.string.user_friend_info,data.getFollowings_count(),data.getFollowersCount());
+        String info = getResources().getString(R.string.user_friend_info, data.getFollowings_count(), data.getFollowersCount());
         tv_info.setText(info);
 
         showFollowStatus();
@@ -132,17 +135,17 @@ public class UserDetailActivity extends BaseTitleActivity {
      * 显示关注按钮状态
      */
     private void showFollowStatus() {
-        if (data.getId().equals(sp.getUserId())){
+        if (data.getId().equals(sp.getUserId())) {
             btnLayout.setVisibility(View.GONE);
-        }else {
+        } else {
             btnLayout.setVisibility(View.VISIBLE);
             bt_follow.setVisibility(View.VISIBLE);
 
-            if (data.isFollowing()){
+            if (data.isFollowing()) {
                 bt_send_message.setVisibility(View.VISIBLE);
                 bt_follow.setText(R.string.cancel_follow);
 
-            }else {
+            } else {
                 bt_send_message.setVisibility(View.GONE);
                 bt_follow.setText(R.string.follow);
             }
@@ -169,9 +172,9 @@ public class UserDetailActivity extends BaseTitleActivity {
      * 关注和取消关注
      */
     @OnClick(R.id.bt_follow)
-    public void onFollowClick(){
+    public void onFollowClick() {
 
-        if (data.isFollowing()){
+        if (data.isFollowing()) {
             Api.getInstance().deleteFollow(data.getId()).subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
                 @Override
                 public void onSucceeded(DetailResponse<BaseModel> d) {
@@ -179,7 +182,7 @@ public class UserDetailActivity extends BaseTitleActivity {
                     showFollowStatus();
                 }
             });
-        }else {
+        } else {
             Api.getInstance().follow(data.getId()).subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
                 @Override
                 public void onSucceeded(DetailResponse<BaseModel> d) {
@@ -190,9 +193,32 @@ public class UserDetailActivity extends BaseTitleActivity {
 
         }
     }
+
     @OnClick(R.id.bt_send_message)
-    public void onSendMessageClick(){
+    public void onSendMessageClick() {
         startActivity(ChatActivity.class);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem item = menu.findItem(R.id.action_edit);
+        item.setVisible(id.equals(sp.getUserId()));
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_edit) {
+            startActivity(ProfileActivity.class);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

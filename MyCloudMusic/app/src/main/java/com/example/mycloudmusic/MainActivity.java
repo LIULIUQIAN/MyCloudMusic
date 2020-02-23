@@ -23,6 +23,7 @@ import com.example.mycloudmusic.activity.BaseMusicPlayerActivity;
 import com.example.mycloudmusic.activity.MusicPlayerActivity;
 import com.example.mycloudmusic.activity.SettingActivity;
 import com.example.mycloudmusic.activity.SimplePlayerActivity;
+import com.example.mycloudmusic.activity.UserDetailActivity;
 import com.example.mycloudmusic.activity.WebViewActivity;
 import com.example.mycloudmusic.adapter.MainAdapter;
 import com.example.mycloudmusic.api.Api;
@@ -249,7 +250,7 @@ public class MainActivity extends BaseMusicPlayerActivity {
      * */
     @OnClick(R.id.ll_user)
     public void onUserClick() {
-        System.out.println("=============用户信息点击");
+        startActivityExtraId(UserDetailActivity.class, sp.getUserId());
     }
 
     /*
