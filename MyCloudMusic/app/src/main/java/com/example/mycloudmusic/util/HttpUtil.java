@@ -2,6 +2,7 @@ package com.example.mycloudmusic.util;
 
 import android.text.TextUtils;
 
+import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 
@@ -93,6 +94,7 @@ public class HttpUtil {
      */
     private static void handleHttpError(int code){
         if (code == 401){
+            AppContext.getInstance().logout();
             ToastUtil.errorShortToast(R.string.error_network_not_auth);
         }else if (code == 403) {
             ToastUtil.errorShortToast(R.string.error_network_not_permission);

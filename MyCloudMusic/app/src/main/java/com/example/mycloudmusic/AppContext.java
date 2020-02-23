@@ -1,15 +1,20 @@
 package com.example.mycloudmusic;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 
 import com.example.mycloudmusic.activity.LoginOrRegisterActivity;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.event.LoginSuccessEvent;
+import com.example.mycloudmusic.manager.impl.ActivityManager;
 import com.example.mycloudmusic.util.ORMUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
 import com.example.mycloudmusic.util.ToastUtil;
@@ -37,6 +42,7 @@ public class AppContext extends Application {
      */
     private PreferenceUtil sp;
     private DownloadManager downloadManager;
+    private ActivityManager activityManager;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -68,7 +74,11 @@ public class AppContext extends Application {
 
         //初始化Realm数据库
         Realm.init(context);
+    //初始化Activity管理器
+        activityManager = ActivityManager.getInstance();
 
+        //注册界面声明周期监听
+        activityLifecycleCallbacks();
     }
 
     /**
@@ -112,6 +122,8 @@ public class AppContext extends Application {
 
         otherLogout(QQ.NAME);
         otherLogout(SinaWeibo.NAME);
+
+        activityManager.clear();
 
         Intent intent = new Intent(getApplicationContext(), LoginOrRegisterActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -157,5 +169,47 @@ public class AppContext extends Application {
 
         return downloadManager;
 
+    }
+    /**
+     * 注册界面声明周期监听
+     */
+    public void activityLifecycleCallbacks(){
+
+       registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+           @Override
+           public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+               activityManager.add(activity);
+           }
+
+           @Override
+           public void onActivityStarted(@NonNull Activity activity) {
+
+           }
+
+           @Override
+           public void onActivityResumed(@NonNull Activity activity) {
+
+           }
+
+           @Override
+           public void onActivityPaused(@NonNull Activity activity) {
+
+           }
+
+           @Override
+           public void onActivityStopped(@NonNull Activity activity) {
+
+           }
+
+           @Override
+           public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+
+           }
+
+           @Override
+           public void onActivityDestroyed(@NonNull Activity activity) {
+               activityManager.remove(activity);
+           }
+       });
     }
 }

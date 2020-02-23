@@ -22,6 +22,8 @@ import com.example.mycloudmusic.domain.event.SheetChangedEvent;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
+import com.example.mycloudmusic.listener.ObserverAdapter;
+import com.example.mycloudmusic.util.HttpUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.functions.BiFunction;
 
 public class MeFragment extends BaseCommonFragment {
 
@@ -87,27 +91,42 @@ public class MeFragment extends BaseCommonFragment {
     }
 
     private void fetchData() {
-        datum.clear();
-        Api.getInstance().createSheets(sp.getUserId()).subscribe(new HttpObserver<ListResponse<Sheet>>() {
+
+
+        Observable<ListResponse<Sheet>> createSheetsApi = Api.getInstance().createSheets(sp.getUserId());
+        Observable<ListResponse<Sheet>> collectSheetsApi = Api.getInstance().collectSheets(sp.getUserId());
+
+        Observable.zip(createSheetsApi, collectSheetsApi, new BiFunction<ListResponse<Sheet>, ListResponse<Sheet>, List<MeGroup>>() {
             @Override
-            public void onSucceeded(ListResponse<Sheet> data) {
+            public List<MeGroup> apply(ListResponse<Sheet> createSheets, ListResponse<Sheet> collectSheets) throws Exception {
 
-                datum.add(new MeGroup("创建的歌单", data.getData(), true));
-                Api.getInstance().collectSheets(sp.getUserId()).subscribe(new HttpObserver<ListResponse<Sheet>>() {
-                    @Override
-                    public void onSucceeded(ListResponse<Sheet> model) {
-                        datum.add(new MeGroup("收藏的歌单", model.getData(), false));
+                List<MeGroup> datum = new ArrayList<>();
+                datum.add(new MeGroup("创建的歌单", createSheets.getData(), true));
+                datum.add(new MeGroup("收藏的歌单", collectSheets.getData(), false));
+                return datum;
+            }
+        }).subscribe(new ObserverAdapter<List<MeGroup>>() {
 
-                        adapter.setDatum(datum);
+            @Override
+            public void onNext(List<MeGroup> meGroups) {
+                super.onNext(meGroups);
+                datum.clear();
+                datum.addAll(meGroups);
+                adapter.setDatum(datum);
 
-                        for (int i=0;i < datum.size();i++){
-                            elv.expandGroup(i);
-                        }
-                    }
-                });
+                for (int i = 0; i < datum.size(); i++) {
+                    elv.expandGroup(i);
+                }
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                HttpUtil.handlerRequest(null, e);
             }
         });
+
+
     }
 
     @Override
@@ -141,7 +160,7 @@ public class MeFragment extends BaseCommonFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onCreateSheetClickEvent(CreateSheetClickEvent event){
+    public void onCreateSheetClickEvent(CreateSheetClickEvent event) {
         CreateSheetDialogFragment.show(getChildFragmentManager());
     }
 
@@ -162,7 +181,7 @@ public class MeFragment extends BaseCommonFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onSheetChangedEvent(SheetChangedEvent event){
+    public void onSheetChangedEvent(SheetChangedEvent event) {
         fetchData();
     }
 
