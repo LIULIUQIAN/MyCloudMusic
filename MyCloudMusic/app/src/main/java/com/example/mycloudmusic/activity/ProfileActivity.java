@@ -26,6 +26,7 @@ import com.example.mycloudmusic.domain.Resource;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.event.OnUserChangedEvent;
 import com.example.mycloudmusic.domain.response.DetailResponse;
+import com.example.mycloudmusic.fragment.DateDialogFragment;
 import com.example.mycloudmusic.fragment.GenderDialogFragment;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.Constant;
@@ -208,7 +209,13 @@ public class ProfileActivity extends BaseTitleActivity {
 
     @OnClick(R.id.birthday_container)
     public void onBirthdayClick() {
-        Log.e("onAvatarClick", "birthday_container");
+        DateDialogFragment.show(getSupportFragmentManager(), new DateDialogFragment.DateListener() {
+            @Override
+            public void onSelected(String date) {
+                data.setBirthday(date);
+                next(data);
+            }
+        });
     }
 
     @OnClick(R.id.area_container)
