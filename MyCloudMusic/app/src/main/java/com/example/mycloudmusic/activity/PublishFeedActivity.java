@@ -302,9 +302,7 @@ public class PublishFeedActivity extends BaseTitleActivity {
      * 选择图片
      */
     private void selectImage() {
-        //进入相册
-        //以下是例子
-        //用不到的api可以不写
+
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
                 .maxSelectNum(9)

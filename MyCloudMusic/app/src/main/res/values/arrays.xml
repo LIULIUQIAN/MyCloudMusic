@@ -4,4 +4,10 @@
         <item>回复评论</item>
         <item>复制评论</item>
     </string-array>
+
+    <string-array name="dialog_gender">
+        <item>保密</item>
+        <item>男</item>
+        <item>女</item>
+    </string-array>
 </resources>

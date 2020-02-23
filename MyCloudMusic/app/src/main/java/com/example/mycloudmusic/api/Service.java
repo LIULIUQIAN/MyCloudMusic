@@ -28,6 +28,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
@@ -90,7 +91,7 @@ public interface Service {
      * 用户详情
      */
     @GET("v1/users/{id}")
-    Observable<DetailResponse<User>> userDetail(@Path("id") String id,@QueryMap Map<String, String> data);
+    Observable<DetailResponse<User>> userDetail(@Path("id") String id, @QueryMap Map<String, String> data);
 
     /**
      * 单曲
@@ -127,7 +128,7 @@ public interface Service {
      * 评论列表
      */
     @GET("v1/comments")
-    Observable<ListResponse<Comment>> comments(@QueryMap Map<String,String> data);
+    Observable<ListResponse<Comment>> comments(@QueryMap Map<String, String> data);
 
     /**
      * 创建评论
@@ -188,7 +189,7 @@ public interface Service {
      * 将歌曲收藏到歌单
      */
     @POST("v1/sheets/{sheetId}/relations")
-    Observable<Response<Void>> addSongToSheet(@Path("sheetId") String sheetId, @Body Map<String,String> data);
+    Observable<Response<Void>> addSongToSheet(@Path("sheetId") String sheetId, @Body Map<String, String> data);
 
     /**
      * 从歌单中删除音乐
@@ -225,11 +226,17 @@ public interface Service {
      * 动态列表
      */
     @GET("v1/feeds")
-    Observable<ListResponse<Feed>> feeds(@QueryMap Map<String,String> data);
+    Observable<ListResponse<Feed>> feeds(@QueryMap Map<String, String> data);
 
     /**
      * 发布动态
      */
     @POST("v1/feeds")
     Observable<DetailResponse<BaseModel>> createFeed(@Body Feed data);
+
+    /**
+     * 更新用户
+     */
+    @PATCH("v1/users/{id}")
+    Observable<DetailResponse<BaseModel>> updateUser(@Path("id") String id, @Body User data);
 }

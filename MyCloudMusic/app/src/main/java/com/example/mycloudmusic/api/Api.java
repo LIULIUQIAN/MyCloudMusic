@@ -42,6 +42,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
@@ -363,7 +364,7 @@ public class Api {
     /**
      * 视频详情
      */
-    public Observable<DetailResponse<Video>> videoDetail(String id){
+    public Observable<DetailResponse<Video>> videoDetail(String id) {
         return service.videoDetail(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -372,11 +373,11 @@ public class Api {
     /**
      * 动态列表
      */
-    public Observable<ListResponse<Feed>> feeds(String userId){
-        Map<String,String> data = new HashMap<>();
+    public Observable<ListResponse<Feed>> feeds(String userId) {
+        Map<String, String> data = new HashMap<>();
 
-        if (!TextUtils.isEmpty(userId)){
-            data.put("user_id",userId);
+        if (!TextUtils.isEmpty(userId)) {
+            data.put("user_id", userId);
         }
 
         return service.feeds(data)
@@ -387,8 +388,17 @@ public class Api {
     /**
      * 发布动态
      */
-    public Observable<DetailResponse<BaseModel>> createFeed(Feed data){
+    public Observable<DetailResponse<BaseModel>> createFeed(Feed data) {
         return service.createFeed(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 更新用户
+     */
+    public Observable<DetailResponse<BaseModel>> updateUser(User data) {
+        return service.updateUser(data.getId(), data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
