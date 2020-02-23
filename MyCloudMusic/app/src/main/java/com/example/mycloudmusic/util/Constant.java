@@ -11,6 +11,12 @@ public class Constant {
 
     public static final String RESOURCE_ENDPOINT = BuildConfig.RESOURCE_ENDPOINT;
 
+    /**
+     * 二维码地址
+     */
+    public static final String QRCODE_URL = String.format("%s/v1/monitors/version?u=", ENDPOINT);
+
+
     public static final String ID = "ID";
 
     /**

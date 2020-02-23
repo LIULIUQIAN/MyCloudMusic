@@ -39,7 +39,8 @@
                 <include layout="@layout/divider_small" />
 
                 <!--item-->
-                <LinearLayout style="@style/ItemContainer">
+                <LinearLayout style="@style/ItemContainer"
+                    android:id="@+id/ll_code">
 
                     <ImageView style="@style/ItemIcon" />
 
@@ -48,7 +49,8 @@
                         android:text="@string/my_code" />
                 </LinearLayout>
 
-                <LinearLayout style="@style/ItemContainer">
+                <LinearLayout style="@style/ItemContainer"
+                    android:id="@+id/ll_scan">
 
                     <ImageView style="@style/ItemIcon" />
 

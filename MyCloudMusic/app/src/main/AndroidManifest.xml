@@ -32,8 +32,14 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
-        <activity android:name=".activity.UserActivity"
-            android:label=""></activity>
+        <activity android:name=".activity.ScanActivity"
+            android:label="@string/scan"></activity>
+        <activity
+            android:name=".activity.CodeActivity"
+            android:label="@string/my_code" />
+        <activity
+            android:name=".activity.UserActivity"
+            android:label="" />
         <activity
             android:name=".activity.ProfileActivity"
             android:label="@string/my_profile" />

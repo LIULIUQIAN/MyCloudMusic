@@ -21,7 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mycloudmusic.activity.BaseMusicPlayerActivity;
+import com.example.mycloudmusic.activity.CodeActivity;
 import com.example.mycloudmusic.activity.MusicPlayerActivity;
+import com.example.mycloudmusic.activity.ScanActivity;
 import com.example.mycloudmusic.activity.SettingActivity;
 import com.example.mycloudmusic.activity.SimplePlayerActivity;
 import com.example.mycloudmusic.activity.UserActivity;
@@ -255,11 +257,30 @@ public class MainActivity extends BaseMusicPlayerActivity {
     }
 
     /*
+     * 我的二维码点击
+     * */
+    @OnClick(R.id.ll_code)
+    public void onCodeClick() {
+        startActivityExtraId(CodeActivity.class, sp.getUserId());
+        closeDrawer();
+    }
+
+    /*
+     * 扫一扫码点击
+     * */
+    @OnClick(R.id.ll_scan)
+    public void onScanClick() {
+        startActivity(ScanActivity.class);
+        closeDrawer();
+    }
+
+
+    /*
      * 好友点击
      * */
     @OnClick(R.id.ll_friend)
     public void onFriendClick() {
-        UserActivity.start(getMainActivity(),sp.getUserId(),UserActivity.FRIEND);
+        UserActivity.start(getMainActivity(), sp.getUserId(), UserActivity.FRIEND);
         closeDrawer();
     }
 
@@ -268,11 +289,9 @@ public class MainActivity extends BaseMusicPlayerActivity {
      * */
     @OnClick(R.id.ll_fans)
     public void onFansClick() {
-        UserActivity.start(getMainActivity(),sp.getUserId(),UserActivity.FANS);
+        UserActivity.start(getMainActivity(), sp.getUserId(), UserActivity.FANS);
         closeDrawer();
     }
-
-
 
 
     /*
