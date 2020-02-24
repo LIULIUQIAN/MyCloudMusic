@@ -9,6 +9,7 @@ import com.example.mycloudmusic.domain.Book;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.Feed;
 import com.example.mycloudmusic.domain.Order;
+import com.example.mycloudmusic.domain.Pay;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
@@ -16,6 +17,7 @@ import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.Video;
 import com.example.mycloudmusic.domain.param.OrderParam;
+import com.example.mycloudmusic.domain.param.PayParam;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
@@ -272,6 +274,12 @@ public interface Service {
      */
     @GET("v1/orders/{id}")
     Observable<DetailResponse<Order>> orderDetail(@Path("id") String id);
+
+    /**
+     * 获取订单支付参数
+     */
+    @POST("v1/orders/{id}/pay")
+    Observable<DetailResponse<Pay>> orderPay(@Path("id") String id, @Body PayParam data);
 
 
 

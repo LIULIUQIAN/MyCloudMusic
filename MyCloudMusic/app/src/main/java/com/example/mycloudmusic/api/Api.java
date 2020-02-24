@@ -11,6 +11,7 @@ import com.example.mycloudmusic.domain.Book;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.Feed;
 import com.example.mycloudmusic.domain.Order;
+import com.example.mycloudmusic.domain.Pay;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
@@ -18,6 +19,7 @@ import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.Video;
 import com.example.mycloudmusic.domain.param.OrderParam;
+import com.example.mycloudmusic.domain.param.PayParam;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
@@ -449,6 +451,15 @@ public class Api {
      */
     public Observable<DetailResponse<Order>> orderDetail(String id) {
         return service.orderDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取订单支付参数
+     */
+    public Observable<DetailResponse<Pay>> orderPay(String id, PayParam data) {
+        return service.orderPay(id, data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

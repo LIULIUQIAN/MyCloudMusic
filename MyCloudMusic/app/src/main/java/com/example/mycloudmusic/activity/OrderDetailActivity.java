@@ -10,16 +10,26 @@ import android.widget.TextView;
 import com.example.mycloudmusic.R;
 import com.example.mycloudmusic.api.Api;
 import com.example.mycloudmusic.domain.Order;
+import com.example.mycloudmusic.domain.Pay;
+import com.example.mycloudmusic.domain.event.OnAlipayStatusChangedEvent;
 import com.example.mycloudmusic.domain.event.OnPaySuccessEvent;
+import com.example.mycloudmusic.domain.param.PayParam;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.listener.HttpObserver;
 import com.example.mycloudmusic.util.ImageUtil;
+import com.example.mycloudmusic.util.LoadingUtil;
+import com.example.mycloudmusic.util.PayUtil;
 import com.example.mycloudmusic.util.TimeUtil;
+import com.example.mycloudmusic.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.example.mycloudmusic.domain.Order.ALIPAY;
 
 public class OrderDetailActivity extends BaseTitleActivity {
 
@@ -62,6 +72,7 @@ public class OrderDetailActivity extends BaseTitleActivity {
      * 是否通知支付状态
      */
     private boolean isNotifyPayStatus;
+    private String orderId;
 
 
     @Override
@@ -71,10 +82,23 @@ public class OrderDetailActivity extends BaseTitleActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void initDatum() {
         super.initDatum();
+        EventBus.getDefault().register(this);
 
-        Api.getInstance().orderDetail(extraId()).subscribe(new HttpObserver<DetailResponse<Order>>() {
+        orderId = extraId();
+
+        fetchData();
+    }
+
+    private void fetchData() {
+        Api.getInstance().orderDetail(orderId).subscribe(new HttpObserver<DetailResponse<Order>>() {
             @Override
             public void onSucceeded(DetailResponse<Order> data) {
                 next(data.getData());
@@ -152,8 +176,54 @@ public class OrderDetailActivity extends BaseTitleActivity {
 
     }
 
+    /**
+     * 立即支付
+     */
     @OnClick(R.id.bt_control)
     public void onControlClick(){
+
+        PayParam payParam = new PayParam();
+        payParam.setChannel(ALIPAY);
+
+        Api.getInstance().orderPay(orderId,payParam).subscribe(new HttpObserver<DetailResponse<Pay>>() {
+            @Override
+            public void onSucceeded(DetailResponse<Pay> data) {
+
+                //调用支付宝支付
+                PayUtil.alipay(getMainActivity(), data.getData().getPay());
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAlipayStatusChangedEvent(OnAlipayStatusChangedEvent event){
+
+        String resultStatus = event.getData().getResultStatus();
+
+        if ("9000".equals(resultStatus)) {
+            //本地支付成功
+
+            //不能依赖本地支付结果
+            //一定要以服务端为准
+            LoadingUtil.showLoading(getMainActivity(), R.string.hint_pay_wait);
+
+            //延时3秒
+            //因为支付宝回调我们服务端可能有延迟
+            tv_status.postDelayed(() -> {
+                fetchData();
+            }, 3000);
+
+            //这里就不根据服务端判断了
+            //购买成功统计
+//            AnalysisUtil.onPurchase(getMainActivity(), true, data);
+        } else {
+            //支付取消
+            //支付失败
+            ToastUtil.errorShortToast(R.string.error_pay_failed);
+
+            //购买事件
+//            AnalysisUtil.onPurchase(getMainActivity(), false, data);
+        }
 
     }
 }
