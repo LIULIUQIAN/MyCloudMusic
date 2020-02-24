@@ -5,14 +5,17 @@ import android.graphics.PostProcessor;
 
 import com.example.mycloudmusic.domain.Advert;
 import com.example.mycloudmusic.domain.BaseModel;
+import com.example.mycloudmusic.domain.Book;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.Feed;
+import com.example.mycloudmusic.domain.Order;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.Video;
+import com.example.mycloudmusic.domain.param.OrderParam;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
@@ -245,4 +248,31 @@ public interface Service {
      */
     @PATCH("v1/users/{id}")
     Observable<DetailResponse<BaseModel>> updateUser(@Path("id") String id, @Body User data);
+
+    /**
+     * 商品列表
+     */
+    @GET("v1/books")
+    Observable<ListResponse<Book>> shops();
+
+    /**
+     * 商品详情
+     */
+    @GET("v1/books/{id}")
+    Observable<DetailResponse<Book>> shopDetail(@Path("id") String id);
+
+    /**
+     * 创建订单
+     */
+    @POST("v1/orders")
+    Observable<DetailResponse<BaseModel>> createOrder(@Body OrderParam param);
+
+    /**
+     * 订单详情
+     */
+    @GET("v1/orders/{id}")
+    Observable<DetailResponse<Order>> orderDetail(@Path("id") String id);
+
+
+
 }

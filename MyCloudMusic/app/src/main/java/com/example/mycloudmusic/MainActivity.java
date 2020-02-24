@@ -25,6 +25,7 @@ import com.example.mycloudmusic.activity.CodeActivity;
 import com.example.mycloudmusic.activity.MusicPlayerActivity;
 import com.example.mycloudmusic.activity.ScanActivity;
 import com.example.mycloudmusic.activity.SettingActivity;
+import com.example.mycloudmusic.activity.ShopActivity;
 import com.example.mycloudmusic.activity.SimplePlayerActivity;
 import com.example.mycloudmusic.activity.UserActivity;
 import com.example.mycloudmusic.activity.UserDetailActivity;
@@ -292,6 +293,16 @@ public class MainActivity extends BaseMusicPlayerActivity {
         UserActivity.start(getMainActivity(), sp.getUserId(), UserActivity.FANS);
         closeDrawer();
     }
+
+    /*
+     * 商城点击
+     * */
+    @OnClick(R.id.ll_shop)
+    public void onShopClick() {
+        startActivity(ShopActivity.class);
+        closeDrawer();
+    }
+
 
 
     /*

@@ -7,14 +7,17 @@ import com.example.mycloudmusic.AppContext;
 import com.example.mycloudmusic.BuildConfig;
 import com.example.mycloudmusic.domain.Advert;
 import com.example.mycloudmusic.domain.BaseModel;
+import com.example.mycloudmusic.domain.Book;
 import com.example.mycloudmusic.domain.Comment;
 import com.example.mycloudmusic.domain.Feed;
+import com.example.mycloudmusic.domain.Order;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
 import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.Video;
+import com.example.mycloudmusic.domain.param.OrderParam;
 import com.example.mycloudmusic.domain.response.BaseResponse;
 import com.example.mycloudmusic.domain.response.DetailResponse;
 import com.example.mycloudmusic.domain.response.ListResponse;
@@ -287,7 +290,7 @@ public class Api {
     /**
      * 粉丝列表（关注我的人）
      */
-    public Observable<ListResponse<User>> fans(String id){
+    public Observable<ListResponse<User>> fans(String id) {
 
         return service.fans(id)
                 .subscribeOn(Schedulers.io())
@@ -410,6 +413,42 @@ public class Api {
      */
     public Observable<DetailResponse<BaseModel>> updateUser(User data) {
         return service.updateUser(data.getId(), data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 商品列表
+     */
+    public Observable<ListResponse<Book>> shops() {
+        return service.shops()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 商品详情
+     */
+    public Observable<DetailResponse<Book>> shopDetail(String id) {
+        return service.shopDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 创建订单
+     */
+    public Observable<DetailResponse<BaseModel>> createOrder(OrderParam param) {
+        return service.createOrder(param)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 订单详情
+     */
+    public Observable<DetailResponse<Order>> orderDetail(String id) {
+        return service.orderDetail(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

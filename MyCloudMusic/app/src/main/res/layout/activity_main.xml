@@ -92,7 +92,8 @@
 
                 <include layout="@layout/divider_meddle" />
 
-                <LinearLayout style="@style/ItemContainer">
+                <LinearLayout style="@style/ItemContainer"
+                    android:id="@+id/ll_shop">
 
                     <ImageView style="@style/ItemIcon" />
 
