@@ -32,6 +32,10 @@ import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.StringUtil;
 import com.example.mycloudmusic.util.TimeUtil;
+import com.fcfrt.netbua.FcfrtNetStatusBus;
+import com.fcfrt.netbua.annotation.FcfrtNetSubscribe;
+import com.fcfrt.netbua.type.Mode;
+import com.fcfrt.netbua.type.NetType;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.google.android.material.appbar.AppBarLayout;
@@ -92,6 +96,11 @@ public class VideoDetailActivity extends BaseTitleActivity {
     private TextView tv_nickname;
     private int duration;
 
+    /**
+     * 是否自动恢复播放
+     */
+    private boolean isResume;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +112,9 @@ public class VideoDetailActivity extends BaseTitleActivity {
     protected void onResume() {
         super.onResume();
 
+        //最好放在BaseActivity内
+        FcfrtNetStatusBus.getInstance().register(this);
+
         //屏幕常亮
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -112,6 +124,8 @@ public class VideoDetailActivity extends BaseTitleActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        //最好放在BaseActivity内
+        FcfrtNetStatusBus.getInstance().unregister(this);
         //清除屏幕常亮
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -396,6 +410,68 @@ public class VideoDetailActivity extends BaseTitleActivity {
             downTimer.cancel();
             downTimer = null;
         }
+    }
+
+    @FcfrtNetSubscribe(mode = Mode.WIFI_CONNECT)
+    public void wifiChange() {
+        if (isResume && !vv.isPlaying()) {
+            //需要自动恢复播放
+            //并且没有播放
+
+            //切换到主线程
+            vv.post(() -> {
+                //清除标记变量
+                isResume = false;
+
+                //继续播放
+                resume();
+            });
+        }
+    }
+
+    /**
+     * 当前移动网络连接可用时
+     */
+    @FcfrtNetSubscribe(mode = Mode.MOBILE_CONNECT)
+    public void onMobileConnected() {
+        Log.e("onMobileConnected", "onMobileConnected");
+
+        if (!vv.isPlaying()) {
+            //没有播放视频直接返回
+            return;
+        }
+
+        //从偏好设置获取配置
+        if (sp.isMobilePlay()) {
+            //不允许播放就直接返回
+            return;
+        }
+
+        vv.post(new Runnable() {
+            @Override
+            public void run() {
+                //设置自动恢复变量
+                isResume = true;
+
+                //暂停
+                pause();
+
+                //真实项目中为了更好的体验
+                //可能会弹窗询问用户是否继续播放
+            }
+        });
+    }
+
+
+    //所有网络变化都会被调用，可以通过 NetType 来判断当前网络具体状态
+    @FcfrtNetSubscribe(mode = Mode.AUTO)
+    public void wifiChange(NetType netType) {
+        vv.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("网络状态", netType.name());
+            }
+        });
     }
 
 }

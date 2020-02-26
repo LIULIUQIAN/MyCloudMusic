@@ -19,6 +19,7 @@ import com.example.mycloudmusic.util.ORMUtil;
 import com.example.mycloudmusic.util.PreferenceUtil;
 import com.example.mycloudmusic.util.ToastUtil;
 import com.facebook.stetho.Stetho;
+import com.fcfrt.netbua.FcfrtNetStatusBus;
 import com.ixuea.android.downloader.DownloadService;
 import com.ixuea.android.downloader.callback.DownloadManager;
 import com.ixuea.android.downloader.config.Config;
@@ -56,6 +57,9 @@ public class AppContext extends Application {
         super.onCreate();
 
         context = this;
+
+        //网络监听器
+        FcfrtNetStatusBus.getInstance().init(this);
 
         //偏好设置工具类
         sp = PreferenceUtil.getInstance(getApplicationContext());
