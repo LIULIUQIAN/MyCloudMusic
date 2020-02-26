@@ -56,6 +56,11 @@ public class PreferenceUtil {
      */
     private static final String KEY_GLOBAL_LYRIC_VIEW_Y = "KEY_GLOBAL_LYRIC_VIEW_Y";
 
+    /**
+     * 移动网络下载播放音乐key
+     */
+    private static final String KEY_MOBILE_PLAY = "KEY_MOBILE_PLAY";
+
 
     private static PreferenceUtil instance;
     private final Context context;
@@ -234,6 +239,25 @@ public class PreferenceUtil {
      */
     public void setGlobalLyricViewY(int data) {
         putInt(KEY_GLOBAL_LYRIC_VIEW_Y, data);
+    }
+
+    /**
+     * 是否在移动网络播放
+     * 这里默认值是开着
+     *
+     * @return
+     */
+    public boolean isMobilePlay() {
+        return getBoolean(KEY_MOBILE_PLAY, true);
+    }
+
+    /**
+     * 设置移动网络播放
+     *
+     * @param data
+     */
+    public void setMobilePlay(boolean data) {
+        putBoolean(KEY_MOBILE_PLAY, data);
     }
 
 

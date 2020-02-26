@@ -4,27 +4,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LoginActivity">
+    tools:context=".activity.SettingActivity">
 
     <include layout="@layout/tool_bar" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background"
         android:orientation="vertical"
-        android:padding="@dimen/activity_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+
+        <include layout="@layout/divider_meddle" />
+
+        <TextView
+            style="@style/ItemTopTitle"
+            android:text="@string/network" />
+
+        <LinearLayout style="@style/ItemContainer">
+
+            <!--容器-->
+            <LinearLayout style="@style/ItemLeftContainer">
+                <!--标题-->
+                <TextView
+                    style="@style/ItemTitle"
+                    android:text="@string/play_mobile_network" />
+
+                <!--描述-->
+                <TextView
+                    style="@style/ItemSummary"
+                    android:text="@string/play_mobile_network_summary" />
+            </LinearLayout>
+
+            <!--控件-->
+            <Switch
+                android:id="@+id/st_play_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <include layout="@layout/divider_meddle" />
+
+        <TextView
+            style="@style/ItemTopTitle"
+            android:text="关于" />
+
+        <LinearLayout style="@style/ItemContainer"
+            android:id="@+id/ll_about">
+
+            <!--容器-->
+            <LinearLayout style="@style/ItemLeftContainer">
+                <!--标题-->
+                <TextView
+                    style="@style/ItemTitle"
+                    android:text="@string/about_music" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/divider_meddle" />
 
         <Button
             android:id="@+id/bt_logout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
-            android:layout_marginTop="@dimen/padding_large"
-            android:background="@drawable/selector_color_primary"
+            android:layout_margin="@dimen/padding_large"
+            android:background="@color/colorPrimary"
             android:text="@string/logout"
             android:textColor="@drawable/selector_text_color_primary_reverse" />
-
 
 
     </LinearLayout>

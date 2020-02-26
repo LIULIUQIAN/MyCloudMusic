@@ -32,9 +32,11 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
+        <activity android:name=".activity.AboutActivity"
+            android:label="@string/about_music"></activity>
         <activity
             android:name=".activity.OrderDetailActivity"
-            android:label="@string/activity_order_detail"></activity>
+            android:label="@string/activity_order_detail" />
         <activity
             android:name=".activity.ShopDetailActivity"
             android:label="@string/activity_shop_detail" />
