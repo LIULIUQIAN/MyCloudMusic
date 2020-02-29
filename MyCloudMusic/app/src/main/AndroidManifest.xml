@@ -32,8 +32,11 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
-        <activity android:name=".activity.AboutActivity"
-            android:label="@string/about_music"></activity>
+        <activity android:name=".activity.SearchActivity"
+            android:label=""></activity>
+        <activity
+            android:name=".activity.AboutActivity"
+            android:label="@string/about_music" />
         <activity
             android:name=".activity.OrderDetailActivity"
             android:label="@string/activity_order_detail" />

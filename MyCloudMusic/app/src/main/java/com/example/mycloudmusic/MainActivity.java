@@ -16,6 +16,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import com.example.mycloudmusic.activity.BaseMusicPlayerActivity;
 import com.example.mycloudmusic.activity.CodeActivity;
 import com.example.mycloudmusic.activity.MusicPlayerActivity;
 import com.example.mycloudmusic.activity.ScanActivity;
+import com.example.mycloudmusic.activity.SearchActivity;
 import com.example.mycloudmusic.activity.SettingActivity;
 import com.example.mycloudmusic.activity.ShopActivity;
 import com.example.mycloudmusic.activity.SimplePlayerActivity;
@@ -346,5 +349,23 @@ public class MainActivity extends BaseMusicPlayerActivity {
                 }
                 break;
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_search){
+
+            startActivity(SearchActivity.class);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

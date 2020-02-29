@@ -3,33 +3,33 @@
 3    package="com.ixuea.regionselector.test" >
 4
 5    <uses-sdk
-5-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:5:5-74
+5-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:5:5-74
 6        android:minSdkVersion="19"
-6-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:5:15-41
+6-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:5:15-41
 7        android:targetSdkVersion="29" />
-7-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:5:42-71
+7-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:5:42-71
 8
 9    <instrumentation
-9-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:11:5-15:79
+9-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:11:5-15:79
 10        android:name="android.test.InstrumentationTestRunner"
-10-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:11:22-75
+10-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:11:22-75
 11        android:functionalTest="false"
-11-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:14:22-52
+11-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:14:22-52
 12        android:handleProfiling="false"
-12-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:13:22-53
+12-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:13:22-53
 13        android:label="Tests for com.ixuea.regionselector.test"
-13-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:15:22-77
+13-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:15:22-77
 14        android:targetPackage="com.ixuea.regionselector.test" />
-14-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:12:22-75
+14-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:12:22-75
 15
 16    <application
-16-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:7:5-9:19
+16-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:7:5-9:19
 17        android:allowBackup="true"
 17-->[__tested_artifact__::RegionSelector] /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:9-35
 18        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-18-->[androidx.core:core:1.1.0] /Users/liuliuqian/.gradle/caches/transforms-2/files-2.1/5f6f473b5d0d1bafe401c12f70b91c36/core-1.1.0/AndroidManifest.xml:24:18-86
+18-->[androidx.core:core:1.1.0] /Users/liuliuqian/.gradle/caches/transforms-2/files-2.1/ae29a19a0636c86c5ef658be2ca08096/core-1.1.0/AndroidManifest.xml:24:18-86
 19        android:debuggable="true"
-19-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:7:18-43
+19-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:7:18-43
 20        android:icon="@mipmap/ic_launcher"
 20-->[__tested_artifact__::RegionSelector] /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:9-43
 21        android:label="@string/app_name"
@@ -39,8 +39,8 @@
 23        android:theme="@style/AppTheme.NoActionBar" >
 23-->[__tested_artifact__::RegionSelector] /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/library_manifest/debug/AndroidManifest.xml:16:9-52
 24        <uses-library android:name="android.test.runner" />
-24-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:8:9-60
-24-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger4505487721291108087.xml:8:23-57
+24-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:8:9-60
+24-->/Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger2780596941396929097.xml:8:23-57
 25
 26        <activity android:name="com.ixuea.regionselector.RegionSelectActivity" />
 26-->[__tested_artifact__::RegionSelector] /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/build/intermediates/library_manifest/debug/AndroidManifest.xml:17:9-82
