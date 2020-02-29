@@ -24,6 +24,7 @@ import com.ixuea.android.downloader.DownloadService;
 import com.ixuea.android.downloader.callback.DownloadManager;
 import com.ixuea.android.downloader.config.Config;
 import com.mob.MobSDK;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -83,6 +84,8 @@ public class AppContext extends Application {
 
         //注册界面声明周期监听
         activityLifecycleCallbacks();
+
+        CrashReport.initCrashReport(getApplicationContext(), "a5f82f88c8", BuildConfig.DEBUG);
     }
 
     /**

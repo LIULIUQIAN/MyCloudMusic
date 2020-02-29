@@ -49,6 +49,7 @@ import com.example.mycloudmusic.util.Constant;
 import com.example.mycloudmusic.util.DataUtil;
 import com.example.mycloudmusic.util.ImageUtil;
 import com.example.mycloudmusic.util.PinyinUtil;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;

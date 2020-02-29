@@ -1,0 +1,53 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:1-14:12
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:1-14:12
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:1-14:12
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:1-14:12
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:1-14:12
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:1-14:12
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:1-14:12
+	package
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:3:5-39
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:1-14:12
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:1-14:12
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:2:11-69
+application
+ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:5:5-12:19
+	android:supportsRtl
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:9:9-35
+	android:label
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:8:9-41
+	android:icon
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:7:9-43
+	android:allowBackup
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:6:9-35
+	android:theme
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:10:9-52
+activity#com.ixuea.regionselector.RegionSelectActivity
+ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:11:9-58
+	android:name
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml:11:19-55
+uses-sdk
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+		ADDED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
+		INJECTED from /Users/liuliuqian/Documents/MyCloudMusic/MyCloudMusic/RegionSelector/src/main/AndroidManifest.xml
