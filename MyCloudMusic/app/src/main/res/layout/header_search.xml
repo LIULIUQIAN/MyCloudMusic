@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:paddingLeft="@dimen/padding_meddle"
+        android:gravity="center_vertical"
+        android:text="热门搜索"
+        android:background="@color/divider_color"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height_small" />
+
+    <com.nex3z.flowlayout.FlowLayout
+        android:id="@+id/fl"
+        android:layout_margin="@dimen/padding_meddle"
+        app:flChildSpacing="auto"
+        app:flChildSpacingForLastRow="align"
+        app:flRowSpacing="@dimen/padding_meddle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:paddingLeft="@dimen/padding_meddle"
+        android:gravity="center_vertical"
+        android:text="搜索历史"
+        android:background="@color/divider_color"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height_small" />
+
+
+</LinearLayout>

@@ -33,7 +33,7 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
         <activity android:name=".activity.SearchActivity"
-            android:label=""></activity>
+            android:label="@string/search"></activity>
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/about_music" />

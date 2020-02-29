@@ -15,6 +15,7 @@ import com.example.mycloudmusic.domain.Pay;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.Suggest;
 import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.Video;
@@ -463,6 +464,44 @@ public class Api {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    /**
+     * 搜索歌单
+     */
+    public Observable<ListResponse<Sheet>> searchSheets(String data) {
+        return service.searchSheets(getSearchParams(data))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 搜索用户
+     */
+    public Observable<ListResponse<User>> searchUsers(String data) {
+        return service.searchUsers(getSearchParams(data))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private Map<String, String> getSearchParams(String data) {
+        Map<String, String> map = new HashMap<>();
+        if (!TextUtils.isEmpty(data)) {
+            map.put("query", data);
+        }
+        return map;
+    }
+
+    /**
+     * 搜索建议
+     */
+    public Observable<DetailResponse<Suggest>> searchSuggest(String data) {
+        return service.searchSuggest(getSearchParams(data))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+
 
 
 }

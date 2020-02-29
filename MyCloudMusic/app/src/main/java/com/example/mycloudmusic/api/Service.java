@@ -13,6 +13,7 @@ import com.example.mycloudmusic.domain.Pay;
 import com.example.mycloudmusic.domain.Session;
 import com.example.mycloudmusic.domain.Sheet;
 import com.example.mycloudmusic.domain.Song;
+import com.example.mycloudmusic.domain.Suggest;
 import com.example.mycloudmusic.domain.Topic;
 import com.example.mycloudmusic.domain.User;
 import com.example.mycloudmusic.domain.Video;
@@ -27,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -282,5 +285,22 @@ public interface Service {
     Observable<DetailResponse<Pay>> orderPay(@Path("id") String id, @Body PayParam data);
 
 
+    /**
+     * 搜索歌单
+     */
+    @GET("v1/searches/sheets")
+    Observable<ListResponse<Sheet>> searchSheets(@QueryMap Map<String, String> data);
+
+    /**
+     * 搜索用户
+     */
+    @GET("v1/searches/users")
+    Observable<ListResponse<User>> searchUsers(@QueryMap Map<String, String> data);
+
+    /**
+     * 搜索建议
+     */
+    @GET("v1/searches/suggests")
+    Observable<DetailResponse<Suggest>> searchSuggest(@QueryMap Map<String, String> data);
 
 }

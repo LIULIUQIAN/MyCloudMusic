@@ -33,9 +33,9 @@
                     android:layout_height="@dimen/button_height_small"
                     android:layout_marginBottom="@dimen/padding_meddle"
                     app:tabIndicatorColor="@color/white"
-                    app:tabMode="scrollable"
                     app:tabSelectedTextColor="@color/white"
-                    app:tabTextColor="@color/tab_normal" />
+                    app:tabTextColor="@color/tab_normal"
+                    app:tabIndicatorFullWidth="false"/>
             </LinearLayout>
 
             <androidx.viewpager.widget.ViewPager
